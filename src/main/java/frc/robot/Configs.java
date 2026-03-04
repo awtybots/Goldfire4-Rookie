@@ -96,7 +96,9 @@ public final class Configs
                         
                         PushoutMotorConfig.closedLoop
                         .maxMotion
-                                .maxAcceleration(100000);                                
+                                .maxAcceleration(100000)
+                                .cruiseVelocity(800000)
+                                .allowedProfileError(0.1); // smooth extension                              
 
                         // PushoutRightMotorConfig.closedLoop
                         // .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
