@@ -273,9 +273,10 @@ public class RobotContainer {
           m_pushout.AgitateCommand().repeatedly()).onlyIf(shootCmd::isCASAtSpeed);
     }, java.util.Collections.emptySet()).withTimeout(8));
     NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
-    // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
+    // NamedCommands.registerCommand("aim at hub",
+    // drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
-    //     drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
+    // drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
 
     // hopper
     NamedCommands.registerCommand("transfer", m_hopper.runHopperToShooterCommand().withTimeout(6.7));
@@ -358,13 +359,15 @@ public class RobotContainer {
             return Commands.parallel(
                 shootCmd,
                 Commands.sequence(
-                    Commands.waitUntil(shootCmd::isCASAtSpeed),
+
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
-                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
+                        .onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
+                    .onlyWhile(shootCmd::isCASAtSpeed))
+
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           } else {
             // Outside alliance zone → pass to ferry
