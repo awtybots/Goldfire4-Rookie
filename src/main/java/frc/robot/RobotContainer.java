@@ -44,6 +44,7 @@ import frc.robot.utils.FuelSim;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 // import swervelib.SwerveDrive;
@@ -676,5 +677,65 @@ public class RobotContainer {
       driveAngularVelocity.aim(
           Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()));
     }
+  }
+
+  public boolean isHubActive()
+  {
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+
+    if(alliance.isEmpty()) return false;
+
+    if(DriverStation.isAutonomousEnabled()) return true; // Always enabled in auton
+
+    if(!DriverStation.isTeleopEnabled()) return false; // If we're disabled then were probably not playing
+
+    double matchTime = DriverStation.getMatchTime();
+    String gameData = DriverStation.getGameSpecificMessage();
+
+    if(gameData.isEmpty()) return true;
+
+    boolean isRedActiveFirst;
+    switch (gameData.charAt(0))
+    {
+        case 'R':
+            isRedActiveFirst = false;
+            break;
+        case 'B':
+            isRedActiveFirst = true;
+            break;
+        default:
+            return false;
+    }
+
+    boolean shiftOneActive = switch (alliance.get()) {
+        case Red -> isRedActiveFirst;
+        case Blue -> !isRedActiveFirst;
+    };
+
+    if(matchTime >= 130)  // transition shift, always active
+    {
+        return true;
+    } 
+    else if (matchTime >= 105) { // shift 1
+        return shiftOneActive;
+    } 
+    else if(matchTime >= 80)  // shift 2
+    {
+        return !shiftOneActive;
+    } 
+    else if (matchTime >= 55)  // shift 3
+    {
+        return shiftOneActive;
+    } 
+    else if(matchTime >= 30) // shift 4
+    {
+        return !shiftOneActive;
+    }
+    else return true; // Endgame, always active
+  }
+
+  public void elasticHubTracker()
+  {
+    SmartDashboard.putBoolean("Is Hub Active", isHubActive());
   }
 }
