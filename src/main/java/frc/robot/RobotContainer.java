@@ -114,7 +114,7 @@ public class RobotContainer {
       () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
       .deadband(OperatorConstants.DEADBAND)
-      .scaleTranslation(1.0)
+      .scaleTranslation(0.9)
       .allianceRelativeControl(true)
       .aim(Constants.DrivebaseConstants.getHubPose2D())
       // .aimLock(Angle.ofBaseUnits(1, Degrees))
