@@ -149,6 +149,9 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final double STOP = 0;
     public static final double IDLE = 0; // % voltage -1 --> 1
 
+    public static final double SHOOT_LATENCY_SEC = 0.15; // total system latency for shoot-on-the-move
+    public static final double RPM_TO_MPS_FACTOR = 249.665; // RPM_TO_MPS_FACTOR = 60 × gear_ratio / (π × wheel_diameter)
+
   }
 
   public static class KickerConstants {

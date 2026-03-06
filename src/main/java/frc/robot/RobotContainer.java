@@ -90,12 +90,13 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting(Constants.DrivebaseConstants.getHubPose2D(), m_shooter, drivebase.getPose());
+    return new ControlAllShooting(Constants.DrivebaseConstants.getHubPose2D(), m_shooter,
+        drivebase::getPose, drivebase::getFieldVelocity);
   }
 
   private ControllAllPassing makeVariablePass() {
     return new ControllAllPassing(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()),
-        m_shooter, drivebase.getPose());
+        m_shooter, drivebase::getPose, drivebase::getFieldVelocity);
   }
 
   public FuelSim fuelSim = new FuelSim("FuelSim"); // creates a new fuelSim of FuelSim
@@ -355,10 +356,13 @@ public class RobotContainer {
     RTtransfer_kick_shoot.whileTrue(
         Commands.defer(() -> {
           if (isInAllianceZone()) {
-            // In alliance zone → shoot at hub
+            // In alliance zone → shoot at hub with velocity compensation
             ControlAllShooting shootCmd = makeVariableShoot();
             return Commands.parallel(
                 shootCmd,
+                // Continuously update aim to virtual target (compensated for velocity)
+                Commands.run(() -> driveAngularVelocity.aim(shootCmd.getVirtualAimPose()))
+                    .finallyDo(() -> driveAngularVelocity.aim(Constants.DrivebaseConstants.getHubPose2D())),
                 Commands.sequence(
 
                     Commands.parallel(
@@ -371,10 +375,14 @@ public class RobotContainer {
 
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           } else {
-            // Outside alliance zone → pass to ferry
+            // Outside alliance zone → pass to ferry with velocity compensation
             ControllAllPassing passCmd = makeVariablePass();
             return Commands.parallel(
                 passCmd,
+                // Continuously update aim to virtual target (compensated for velocity)
+                Commands.run(() -> driveAngularVelocity.aim(passCmd.getVirtualAimPose()))
+                    .finallyDo(() -> driveAngularVelocity.aim(
+                        Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()))),
                 Commands.sequence(
                     Commands.waitUntil(passCmd::isCASAtSpeed),
                     Commands.parallel(
