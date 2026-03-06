@@ -861,6 +861,20 @@ public class SwerveSubsystem extends SubsystemBase {
     return getPose().getRotation();
   }
 
+  public Pose2d getDynamicHubLocation() {
+    Pose2d initial = Constants.DrivebaseConstants.getHubPose2D();
+    Translation2d goalLocation = initial.getTranslation();
+    Translation2d robotLocation = getPose().getTranslation();
+    Translation2d robotVelocity = new Translation2d(getRobotVelocity().vxMetersPerSecond,
+        getRobotVelocity().vyMetersPerSecond);
+    Translation2d robotVelocityVec = getPose().getTranslation().minus(robotVelocity);
+    Translation2d HubVec = goalLocation.minus(robotLocation);
+    Translation2d targetVec = HubVec.plus(robotVelocityVec);
+    Pose2d HubLoc = new Pose2d(targetVec.getX(), targetVec.getY(),new Rotation2d());
+    double        dist         = targetVec.getNorm();
+    // Currently return the static hub pose; replace with a dynamic prediction if needed.
+    return HubLoc;
+  }
   /**
    * Get the chassis speeds based on controller input of 2 joysticks. One for
    * speeds in which direction. The other for

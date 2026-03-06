@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.282809116296601,
-        "y": 1.2669161612527409
+        "x": 8.27,
+        "y": 1.2984736091298146
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.296456339947472,
-        "y": 0.7753244630216003
+        "x": 8.28364722365087,
+        "y": 0.806881910898674
       },
       "isLocked": false,
       "linkedName": "Right Neutral Intake Pos"
