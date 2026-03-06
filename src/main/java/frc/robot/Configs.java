@@ -85,9 +85,9 @@ public final class Configs
 
                         PushoutMotorConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                        .p(0.002)
+                        .p(0.01)
                         .i(0.0)
-                        .d(0.0)
+                        .d(0.0001)
                         .outputRange(-1.0, 1.0)
                          .feedForward
                         .kS(0.10)
@@ -96,7 +96,9 @@ public final class Configs
                         
                         PushoutMotorConfig.closedLoop
                         .maxMotion
-                                .maxAcceleration(100000);                                
+                                .maxAcceleration(100000)
+                                .cruiseVelocity(100000)
+                                .allowedProfileError(0.1); // smooth extension                              
 
                         // PushoutRightMotorConfig.closedLoop
                         // .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -118,8 +120,8 @@ public final class Configs
                 public static final SparkFlexConfig kickerRightMotorConfig = new SparkFlexConfig();
 
                         static {
-                                kickerLeftMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
-                                kickerRightMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).follow(13,true);
+                                kickerLeftMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12);
+                                kickerRightMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(50).voltageCompensation(12).follow(13,true);
                                 
                                 kickerLeftMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                                 // Set PID values for position control. We don't need to pass a closed
@@ -248,8 +250,8 @@ public final class Configs
 
                 static {
 
-                        TwindexerRightControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12).follow(15, true);
-                        TwindexerLeftControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+                        TwindexerRightControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(50).voltageCompensation(12).follow(15, true);
+                        TwindexerLeftControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(50).voltageCompensation(12);
 
                         TwindexerRightControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                             // Set PID values for  position control. We don't need to pass a closed

@@ -126,8 +126,7 @@ public class Robot extends LoggedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // Publish hub tracker status for all the robotPeriodics
-    // the hubtracker will pass to elastic.
+    HubTracker.publishStatus();
     if (Constants.USE_DRIVE_ONLY) {
       m_robotContainerDrive.logControllerInputs();
     } else if (Constants.USE_SHOOTER_ONLY) {

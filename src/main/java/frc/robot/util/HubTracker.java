@@ -7,17 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 
 public class HubTracker {
@@ -196,14 +186,11 @@ public class HubTracker {
         AUTO_LOSER
     }
 
-    private static final ScheduledExecutorService ELASTIC_PUBLISHER = Executors.newSingleThreadScheduledExecutor();
-
     /**
-     * Publish the hub tracker status to SmartDashboard using putNumber/putString/putBoolean.
-     * The elasticBaseUrl and index parameters are ignored to preserve compatibility with call sites.
+     * Publish the hub tracker status to SmartDashboard.
+     * Call this from robotPeriodic().
      */
-    public static void publishStatusToElastic(@SuppressWarnings("unused") String elasticBaseUrl,
-                                              @SuppressWarnings("unused") String index) {
+    public static void publishStatus() {
         try {
             Optional<Shift> current = getCurrentShift();
             Optional<Shift> next = getNextShift();
@@ -221,48 +208,18 @@ public class HubTracker {
             SmartDashboard.putString("HubTracker/alliance", alliance.map(Enum::name).orElse("null"));
             SmartDashboard.putString("HubTracker/auto_winner", autoWinner.map(Enum::name).orElse("null"));
             SmartDashboard.putBoolean("HubTracker/is_active", isActive());
+
+            SmartDashboard.putString("HubTracker/status", String.format(
+                    "t=%.2f cur=%s next=%s rem=%s ally=%s auto=%s active=%s",
+                    matchTime,
+                    current.map(Enum::name).orElse("null"),
+                    next.map(Enum::name).orElse("null"),
+                    timeRemaining == null ? "null" : String.format("%.2f", timeRemaining),
+                    alliance.map(Enum::name).orElse("null"),
+                    autoWinner.map(Enum::name).orElse("null"),
+                    isActive()));
         } catch (Exception e) {
             DriverStation.reportWarning("Failed to publish HubTracker status to SmartDashboard: " + e.getMessage(), false);
         }
-    }
-
-    /**
-     * Start periodic publishing of hub tracker status to SmartDashboard.
-     * Returns a ScheduledFuture you can cancel to stop publishing.
-     * Example: startPeriodicPublishing("ignored", "ignored", 5);
-     */
-    public static ScheduledFuture<?> startPeriodicPublishing(String elasticBaseUrl, String index, long periodSeconds) {
-        return ELASTIC_PUBLISHER.scheduleAtFixedRate(() -> {
-            try {
-                publishStatusToElastic(elasticBaseUrl, index);
-
-                // Also provide a compact human-readable status string
-                Optional<Shift> current = getCurrentShift();
-                Optional<Shift> next = getNextShift();
-                Optional<Alliance> alliance = DriverStation.getAlliance();
-                Optional<Alliance> autoWinner = getAutoWinner();
-                double matchTime = getMatchTime();
-                Double timeRemaining = current.map(s -> s.endTime - matchTime).orElse(null);
-
-                String status = String.format("t=%.2f cur=%s next=%s rem=%s ally=%s auto=%s active=%s",
-                        matchTime,
-                        current.map(Enum::name).orElse("null"),
-                        next.map(Enum::name).orElse("null"),
-                        timeRemaining == null ? "null" : String.format("%.2f", timeRemaining),
-                        alliance.map(Enum::name).orElse("null"),
-                        autoWinner.map(Enum::name).orElse("null"),
-                        isActive());
-                SmartDashboard.putString("HubTracker/status", status);
-            } catch (Exception e) {
-                DriverStation.reportWarning("Failed to publish HubTracker status to SmartDashboard: " + e.getMessage(), false);
-            }
-        }, 0, Math.max(1, periodSeconds), TimeUnit.SECONDS);
-    }
-
-    /**
-     * Stop the publisher thread. Cancels all future periodic publishes.
-     */
-    public static void stopPeriodicPublishing() {
-        ELASTIC_PUBLISHER.shutdownNow();
     }
 }
