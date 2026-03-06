@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4291726105563479,
-        "y": 0.6515406562054205
+        "x": 0.7397004279600568,
+        "y": 0.6830277940031146
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6618894312980458,
-        "y": 0.9711767854457742
+        "x": 0.9724172487017546,
+        "y": 1.0026639232434684
       },
       "isLocked": false,
       "linkedName": "Human Player"
@@ -61,7 +61,7 @@
     "rotation": -24.732211671135918
   },
   "reversed": false,
-  "folder": null,
+  "folder": "McAllen Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

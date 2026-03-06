@@ -82,7 +82,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "McAllen Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 61.31623759980989

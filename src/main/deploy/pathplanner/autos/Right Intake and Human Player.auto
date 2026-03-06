@@ -42,12 +42,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "retract intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Right Shoot to Human Player"

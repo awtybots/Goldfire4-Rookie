@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.4291726105563479,
-        "y": 0.6515406562054205
+        "x": 0.7397004279600568,
+        "y": 0.6830277940031146
       },
       "prevControl": {
-        "x": -0.026981420061894912,
-        "y": 0.6550746685133383
+        "x": 0.2835463973418139,
+        "y": 0.6865618063110325
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "McAllen Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

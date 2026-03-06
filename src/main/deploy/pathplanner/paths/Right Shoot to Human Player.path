@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9488191169180844,
-        "y": 0.6878022843890937
+        "x": 3.620424559156457,
+        "y": 0.79207209915877
       },
       "isLocked": false,
       "linkedName": "shoot 41"
     },
     {
       "anchor": {
-        "x": 0.4291726105563479,
-        "y": 0.6515406562054205
+        "x": 0.7397004279600568,
+        "y": 0.6830277940031146
       },
       "prevControl": {
-        "x": -0.3506056206758278,
-        "y": 0.6393367518008396
+        "x": 0.4507398276768695,
+        "y": 0.6975629408654733
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "McAllen Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 61.31623759980989
