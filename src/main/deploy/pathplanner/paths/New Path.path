@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.882180722891565,
-        "y": 0.7785421686746998
+        "x": 6.739532076340032,
+        "y": 0.7392632129150598
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 0.680192771084337
       },
       "prevControl": {
-        "x": 6.014207125304329,
-        "y": 0.6686484605125421
+        "x": 5.664799535225891,
+        "y": 0.629276084853812
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 92.29061004263853
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "McAllen Auto",
