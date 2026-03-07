@@ -145,6 +145,10 @@ public class SwerveSubsystem extends SubsystemBase {
     // -----------------------
     Pose2d pose = getPose();
 
+    getDynamicHubLocation();
+
+    
+
     // Robot pose in field coordinates (x/y meters, yaw degrees).
     Logger.recordOutput("Drive/Pose", pose);
     // Duplicate pose for compatibility with older dashboards.

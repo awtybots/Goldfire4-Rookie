@@ -16,6 +16,8 @@ import frc.robot.Constants.ShooterConstants;
 // import frc.robot.subsystems.Hopper;
 // import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+
 // import frc.robot.subsystems.Pushout;
 // import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 // import swervelib.SwerveDrive;
@@ -31,9 +33,10 @@ import java.util.function.BooleanSupplier;
 public class ControlAllShooting extends Command
 {
 
-  private final Pose2d goalPose;
+  // private final Pose2d goalPose;
   private final Shooter m_shooter;
   private final Pose2d robotPose;
+  private final SwerveSubsystem m_swerveSubsystem;
   // private final Hopper m_hopper;
   // private final Kicker m_kicker;
   // private final Pushout m_pushout;
@@ -59,12 +62,13 @@ public class ControlAllShooting extends Command
   
   
 
-  public ControlAllShooting(Pose2d goalPoseSupplier, Shooter shooter, Pose2d robotPoseSupplier)
+  public ControlAllShooting(Shooter shooter, Pose2d robotPoseSupplier, SwerveSubsystem swerveSubsystem)
                                
   {
    
-    this.goalPose = goalPoseSupplier;
+    // this.goalPose = goalPoseSupplier;
     this.m_shooter = shooter;
+    this.m_swerveSubsystem = swerveSubsystem;
     // this.m_hopper = hopper;
     // this.m_kicker = kicker;
     // this.m_pushout = pushout;
@@ -92,7 +96,7 @@ public class ControlAllShooting extends Command
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
 
-    addRequirements();
+    addRequirements(shooter);
   }
 
   @Override
@@ -117,7 +121,7 @@ public class ControlAllShooting extends Command
     //                                                                );
 
     // 2. GET TARGET VECTOR
-    Translation2d goalLocation = goalPose.getTranslation();
+    Translation2d goalLocation = m_swerveSubsystem.getDynamicHubLocation().getTranslation();
     Translation2d robotLocation = robotPose.getTranslation();
     Translation2d targetVec = goalLocation.minus(robotLocation);
     double        dist         = targetVec.getNorm();

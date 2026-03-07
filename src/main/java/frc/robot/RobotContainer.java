@@ -90,7 +90,7 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting(Constants.DrivebaseConstants.getHubPose2D(), m_shooter, drivebase.getPose());
+    return new ControlAllShooting( m_shooter, drivebase.getPose(), drivebase);
   }
 
   private ControllAllPassing makeVariablePass() {
