@@ -114,7 +114,7 @@ public class RobotContainer {
       () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
       .deadband(OperatorConstants.DEADBAND)
-      .scaleTranslation(0.9)
+      .scaleTranslation(1)
       .allianceRelativeControl(true)
       .aim(drivebase.getDynamicHubLocation())
       // .aimLock(Angle.ofBaseUnits(1, Degrees))
@@ -124,6 +124,9 @@ public class RobotContainer {
       .aimFeedforward(0.0001, 0.0001, 0.00013)
 
   ;
+
+  SwerveInputStream driveAngularVelocitySlow = driveAngularVelocity.copy()
+    .scaleTranslation(0.35);
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative
@@ -345,6 +348,9 @@ public class RobotContainer {
         () -> applyHeadingBias(driveAngularVelocityKeyboard.get()));
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngleKeyboard);
+
+    Command driveFieldOrientedAnglularVelocitySlow = drivebase.driveFieldOriented(
+        () -> applyHeadingBias(driveAngularVelocitySlow.get()));
     // ====================================== ALIGN TO HUB COMMANDS
     // ======================================
     // ====================================== ALL CONTROLS
@@ -386,6 +392,8 @@ public class RobotContainer {
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           }
         }, java.util.Collections.emptySet()));
+
+    RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
 
     // Hopper Commands
     PRtransfer.whileTrue(Commands.parallel(m_hopper.runHopperToShooterCommand(), m_kicker.kickCommand()));
