@@ -35,7 +35,7 @@ public class ControlAllShooting extends Command
 
   // private final Pose2d goalPose;
   private final Shooter m_shooter;
-  private final Pose2d robotPose;
+  // private final Pose2d robotPose;
   private final SwerveSubsystem m_swerveSubsystem;
   // private final Hopper m_hopper;
   // private final Kicker m_kicker;
@@ -62,7 +62,7 @@ public class ControlAllShooting extends Command
   
   
 
-  public ControlAllShooting(Shooter shooter, Pose2d robotPoseSupplier, SwerveSubsystem swerveSubsystem)
+  public ControlAllShooting(Shooter shooter, SwerveSubsystem swerveSubsystem)
                                
   {
    
@@ -72,7 +72,7 @@ public class ControlAllShooting extends Command
     // this.m_hopper = hopper;
     // this.m_kicker = kicker;
     // this.m_pushout = pushout;
-    this.robotPose = robotPoseSupplier;
+    // this.robotPose = robotPoseSupplier;
     // this.m_swerveSubsystem = swerveSubsystem;
     // this.m_hopper = hopper;
     // this.m_kicker = kicker;
@@ -122,7 +122,7 @@ public class ControlAllShooting extends Command
 
     // 2. GET TARGET VECTOR
     Translation2d goalLocation = m_swerveSubsystem.getDynamicHubLocation().getTranslation();
-    Translation2d robotLocation = robotPose.getTranslation();
+    Translation2d robotLocation = m_swerveSubsystem.getPose().getTranslation();
     Translation2d targetVec = goalLocation.minus(robotLocation);
     double        dist         = targetVec.getNorm();
     // 3. CALCULATE IDEAL SHOT (Stationary)
