@@ -155,18 +155,18 @@ public class Pushout extends SubsystemBase {
             Commands.waitSeconds(PushoutConstants.PUSHOUT_AGITATE_WAIT),
 
             runOnce(() -> {
-                PushoutRetractedAgitate -= 3.0;   // retract by 3 encoder each cycle
+                PushoutRetractedAgitate -= 1.5;   // retract by 3 encoder each cycle
 
                 if (PushoutRetractedAgitate <= 0) {
                     Commands.waitSeconds(PushoutConstants.PUSHOUT_AGITATE_WAIT*2);
-                    PushoutRetractedAgitate = 22.0;   // reset
+                    PushoutRetractedAgitate = 13.3;   // reset
                 }
             })
         ).finallyDo(interrupted -> PushIntake());
     }
 
     @Override
-    public void periodic() {
+    public void periodic() { 
         // AdvantageKit Logging
         // Commanded intake motor percent output.
         Logger.recordOutput("Pushout/DesiredPercent", desiredPercent);

@@ -98,7 +98,8 @@ public final class Configs
                         .maxMotion
                                 .maxAcceleration(100000)
                                 .cruiseVelocity(100000)
-                                .allowedProfileError(0.1); // smooth extension                              
+                                .allowedProfileError(0.5); // smooth extension 
+
 
                         // PushoutRightMotorConfig.closedLoop
                         // .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
