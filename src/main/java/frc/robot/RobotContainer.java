@@ -46,6 +46,8 @@ import static edu.wpi.first.units.Units.Seconds;
 import java.io.File;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 // import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -90,7 +92,7 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting( m_shooter, drivebase);
+    return new ControlAllShooting(m_shooter, drivebase);
   }
 
   private ControllAllPassing makeVariablePass() {
@@ -105,6 +107,35 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   private LoggedDashboardChooser<Command> loggedAutoChooser;
 
+  Supplier<Pose2d> targetPoseSupplier = () -> drivebase.getDynamicHubLocation();// that method thingy you wrote here as
+                                                                                // a lambda
+
+  DoubleSupplier xSup = () -> -driverXbox.getLeftY();
+  DoubleSupplier ySup = () -> -driverXbox.getLeftX();
+
+  DoubleSupplier headingXSup = () -> {
+    Pose2d robot = drivebase.getPose();
+    Pose2d target = targetPoseSupplier.get();
+    double dx = target.getX() - robot.getX();
+    double dy = target.getY() - robot.getY();
+    double angle = Math.atan2(dy, dx);
+    return Math.cos(angle);
+  };
+
+  DoubleSupplier headingYSup = () -> {
+    Pose2d robot = drivebase.getPose();
+    Pose2d target = targetPoseSupplier.get();
+    double dx = target.getX() - robot.getX();
+    double dy = target.getY() - robot.getY();
+    double angle = Math.atan2(dy, dx);
+    return Math.sin(angle);
+  };
+
+  SwerveInputStream driveStreamCNP = SwerveInputStream.of(drivebase.getSwerveDrive(), xSup, ySup)
+      .withControllerHeadingAxis(headingXSup, headingYSup)
+      .deadband(OperatorConstants.DEADBAND)
+      .scaleTranslation(0.8)
+      .headingWhile(driverXbox.rightTrigger());
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled
    * by angular velocity.
@@ -126,7 +157,7 @@ public class RobotContainer {
   ;
 
   SwerveInputStream driveAngularVelocitySlow = driveAngularVelocity.copy()
-    .scaleTranslation(0.35);
+      .scaleTranslation(0.35);
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative
@@ -690,63 +721,60 @@ public class RobotContainer {
     }
   }
 
-  public boolean isHubActive()
-  {
+  public boolean isHubActive() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
 
-    if(alliance.isEmpty()) return false;
+    if (alliance.isEmpty())
+      return false;
 
-    if(DriverStation.isAutonomousEnabled()) return true; // Always enabled in auton
+    if (DriverStation.isAutonomousEnabled())
+      return true; // Always enabled in auton
 
-    if(!DriverStation.isTeleopEnabled()) return false; // If we're disabled then were probably not playing
+    if (!DriverStation.isTeleopEnabled())
+      return false; // If we're disabled then were probably not playing
 
     double matchTime = DriverStation.getMatchTime();
     String gameData = DriverStation.getGameSpecificMessage();
 
-    if(gameData.isEmpty()) return true;
+    if (gameData.isEmpty())
+      return true;
 
     boolean isRedActiveFirst;
-    switch (gameData.charAt(0))
-    {
-        case 'R':
-            isRedActiveFirst = false;
-            break;
-        case 'B':
-            isRedActiveFirst = true;
-            break;
-        default:
-            return false;
+    switch (gameData.charAt(0)) {
+      case 'R':
+        isRedActiveFirst = false;
+        break;
+      case 'B':
+        isRedActiveFirst = true;
+        break;
+      default:
+        return false;
     }
 
     boolean shiftOneActive = switch (alliance.get()) {
-        case Red -> isRedActiveFirst;
-        case Blue -> !isRedActiveFirst;
+      case Red -> isRedActiveFirst;
+      case Blue -> !isRedActiveFirst;
     };
 
-    if(matchTime >= 130)  // transition shift, always active
+    if (matchTime >= 130) // transition shift, always active
     {
-        return true;
-    } 
-    else if (matchTime >= 105) { // shift 1
-        return shiftOneActive;
-    } 
-    else if(matchTime >= 80)  // shift 2
+      return true;
+    } else if (matchTime >= 105) { // shift 1
+      return shiftOneActive;
+    } else if (matchTime >= 80) // shift 2
     {
-        return !shiftOneActive;
-    } 
-    else if (matchTime >= 55)  // shift 3
+      return !shiftOneActive;
+    } else if (matchTime >= 55) // shift 3
     {
-        return shiftOneActive;
-    } 
-    else if(matchTime >= 30) // shift 4
+      return shiftOneActive;
+    } else if (matchTime >= 30) // shift 4
     {
-        return !shiftOneActive;
-    }
-    else return true; // Endgame, always active
+      return !shiftOneActive;
+    } else
+      return true; // Endgame, always active
   }
 
-  public void elasticHubTracker()
-  {
+  public void elasticHubTracker() {
     SmartDashboard.putBoolean("Is Hub Active", isHubActive());
   }
 }
