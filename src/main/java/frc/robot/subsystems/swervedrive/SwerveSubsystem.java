@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
 
 import java.io.File;
@@ -71,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // Track yaw over time to estimate yaw rate for logs.
   private double lastYawRadians = 0.0;
   private double lastYawTimeSec = 0.0;
-  public boolean useMegaTag2 = false; //set to false to use MegaTag1
+  public boolean useMegaTag2 = false; // set to false to use MegaTag1
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -79,7 +80,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param directory Directory of swerve drive config files.
    */
   public SwerveSubsystem(File directory) {
-    boolean blueAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue;
+    boolean blueAlliance = DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Blue;
     Pose2d startingPose = blueAlliance
         ? new Pose2d(Meter.of(1), Meter.of(4), Rotation2d.fromDegrees(0))
         : new Pose2d(Meter.of(16), Meter.of(4), Rotation2d.fromDegrees(180));
@@ -201,7 +203,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // Measured module positions (drive distance + angle).
     Logger.recordOutput("Drive/ModulePositions", swerveDrive.getModulePositions());
 
-
   }
 
   @Override
@@ -249,9 +250,9 @@ public class SwerveSubsystem extends SubsystemBase {
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic
               // drive trains
-              new PIDConstants(5, 0.0, 0.0), //1.5 i swear i see eople saying they shouldnt be lower than 5
+              new PIDConstants(5, 0.0, 0.0), // 1.5 i swear i see eople saying they shouldnt be lower than 5
               // Translation PID constants
-              new PIDConstants(5, 0.0, 0.0) //1
+              new PIDConstants(5, 0.0, 0.0) // 1
           // Rotation PID constants
           ),
           config,
@@ -329,6 +330,7 @@ public class SwerveSubsystem extends SubsystemBase {
           getHeading()));
     });
   }
+
   /**
    * Drive with {@link SwerveSetpointGenerator} from 254, implemented by
    * PathPlanner.
@@ -531,11 +533,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void stop() {
     swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
-    
+
     swerveDrive.setModuleStates((swerveDrive.kinematics.toSwerveModuleStates(
-      new ChassisSpeeds(0,0,0))), 
-    false);
+        new ChassisSpeeds(0, 0, 0))),
+        false);
   }
+
   /**
    * Drive the robot given a chassis field oriented velocity.
    *
@@ -612,60 +615,53 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
-    
-    
-  
+
     // boolean useMegaTag2 = false; //set to false to use MegaTag1
     boolean doRejectUpdate = false;
-    if(useMegaTag2 == false)
-    {
+    if (useMegaTag2 == false) {
       LimelightHelpers.PoseEstimate mt1bleft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-bleft");
-      
-      if(mt1bleft.tagCount == 1 && mt1bleft.rawFiducials.length == 1)
-      {
-        if(mt1bleft.rawFiducials[0].ambiguity > .7)
-        {
+
+      if (mt1bleft.tagCount == 1 && mt1bleft.rawFiducials.length == 1) {
+        if (mt1bleft.rawFiducials[0].ambiguity > .7) {
           doRejectUpdate = true;
         }
-        if(mt1bleft.rawFiducials[0].distToCamera > 3)
-        {
+        if (mt1bleft.rawFiducials[0].distToCamera > 3) {
           doRejectUpdate = true;
         }
       }
-      if(mt1bleft.tagCount == 0)
-      {
+      if (mt1bleft.tagCount == 0) {
         doRejectUpdate = true;
       }
 
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
         swerveDrive.addVisionMeasurement(
             mt1bleft.pose,
             mt1bleft.timestampSeconds);
       }
-    }
-    else if (useMegaTag2 == true)
-    {
-      LimelightHelpers.SetRobotOrientation("limelight-bleft", 
-      swerveDrive.getOdometryHeading().getDegrees(), //swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(), //swerveDrive.getOdometryHeading().getDegrees(),
-      0.0, 0.0, 0.0, 0.0, 0.0);
-      //first try raw, then delete raw, if both dont work try getHeading and stuff
+    } else if (useMegaTag2 == true) {
+      LimelightHelpers.SetRobotOrientation("limelight-bleft",
+          swerveDrive.getOdometryHeading().getDegrees(), // swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(),
+                                                         // //swerveDrive.getOdometryHeading().getDegrees(),
+          0.0, 0.0, 0.0, 0.0, 0.0);
+      // first try raw, then delete raw, if both dont work try getHeading and stuff
       LimelightHelpers.PoseEstimate mt2bleft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-bleft");
-      // double omegaDegPerSec = Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
-      //or we can do omegaDegPerSec
-      
-      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+      // double omegaDegPerSec =
+      // Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+      // or we can do omegaDegPerSec
+
+      if (Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity
+                                                                                              // is greater than 720
+                                                                                              // degrees per second,
+                                                                                              // ignore vision updates
       {
         doRejectUpdate = true;
       }
-      if(mt2bleft.tagCount == 0)
-      {
+      if (mt2bleft.tagCount == 0) {
         doRejectUpdate = true;
       }
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
         swerveDrive.addVisionMeasurement(
             mt2bleft.pose,
             mt2bleft.timestampSeconds);
@@ -673,118 +669,109 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     doRejectUpdate = false;
-    if(useMegaTag2 == false)
-    {
+    if (useMegaTag2 == false) {
       LimelightHelpers.PoseEstimate mt1bright = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-bright");
-      
-      if(mt1bright.tagCount == 1 && mt1bright.rawFiducials.length == 1)
-      {
-        if(mt1bright.rawFiducials[0].ambiguity > .7)
-        {
+
+      if (mt1bright.tagCount == 1 && mt1bright.rawFiducials.length == 1) {
+        if (mt1bright.rawFiducials[0].ambiguity > .7) {
           doRejectUpdate = true;
         }
-        if(mt1bright.rawFiducials[0].distToCamera > 3)
-        {
+        if (mt1bright.rawFiducials[0].distToCamera > 3) {
           doRejectUpdate = true;
         }
       }
-      if(mt1bright.tagCount == 0)
-      {
+      if (mt1bright.tagCount == 0) {
         doRejectUpdate = true;
       }
 
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
         swerveDrive.addVisionMeasurement(
             mt1bright.pose,
             mt1bright.timestampSeconds);
       }
-    }
-    else if (useMegaTag2 == true)
-    {
-      LimelightHelpers.SetRobotOrientation("limelight-bright", 
-      swerveDrive.getOdometryHeading().getDegrees(), //swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(), //swerveDrive.getOdometryHeading().getDegrees(),
-      0.0, 0.0, 0.0, 0.0, 0.0);
-      //first try raw, then delete raw, if both dont work try getHeading and stuff
-      LimelightHelpers.PoseEstimate mt2bright = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-bright");
-      // double omegaDegPerSec = Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
-      //or we can do omegaDegPerSec
-      
-      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+    } else if (useMegaTag2 == true) {
+      LimelightHelpers.SetRobotOrientation("limelight-bright",
+          swerveDrive.getOdometryHeading().getDegrees(), // swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(),
+                                                         // //swerveDrive.getOdometryHeading().getDegrees(),
+          0.0, 0.0, 0.0, 0.0, 0.0);
+      // first try raw, then delete raw, if both dont work try getHeading and stuff
+      LimelightHelpers.PoseEstimate mt2bright = LimelightHelpers
+          .getBotPoseEstimate_wpiBlue_MegaTag2("limelight-bright");
+      // double omegaDegPerSec =
+      // Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+      // or we can do omegaDegPerSec
+
+      if (Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity
+                                                                                              // is greater than 720
+                                                                                              // degrees per second,
+                                                                                              // ignore vision updates
       {
         doRejectUpdate = true;
       }
-      if(mt2bright.tagCount == 0)
-      {
+      if (mt2bright.tagCount == 0) {
         doRejectUpdate = true;
       }
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
         swerveDrive.addVisionMeasurement(
             mt2bright.pose,
             mt2bright.timestampSeconds);
       }
     }
-    
+
     doRejectUpdate = false;
-    if(useMegaTag2 == false)
-    {
+    if (useMegaTag2 == false) {
       LimelightHelpers.PoseEstimate mt1climber = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-climber");
-      
-      if(mt1climber.tagCount == 1 && mt1climber.rawFiducials.length == 1)
-      {
-        if(mt1climber.rawFiducials[0].ambiguity > .7)
-        {
+
+      if (mt1climber.tagCount == 1 && mt1climber.rawFiducials.length == 1) {
+        if (mt1climber.rawFiducials[0].ambiguity > .7) {
           doRejectUpdate = true;
         }
-        if(mt1climber.rawFiducials[0].distToCamera > 3)
-        {
+        if (mt1climber.rawFiducials[0].distToCamera > 3) {
           doRejectUpdate = true;
         }
       }
-      if(mt1climber.tagCount == 0)
-      {
+      if (mt1climber.tagCount == 0) {
         doRejectUpdate = true;
       }
 
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
         swerveDrive.addVisionMeasurement(
             mt1climber.pose,
             mt1climber.timestampSeconds);
       }
-    }
-    else if (useMegaTag2 == true)
-    {
-      LimelightHelpers.SetRobotOrientation("limelight-climber", 
-      swerveDrive.getOdometryHeading().getDegrees(), //swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(), //swerveDrive.getOdometryHeading().getDegrees(),
-      0.0, 0.0, 0.0, 0.0, 0.0);
-      //first try raw, then delete raw, if both dont work try getHeading and stuff
-      LimelightHelpers.PoseEstimate mt2climber = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-climber");
-      // double omegaDegPerSec = Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
-      //or we can do omegaDegPerSec
-      
-      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+    } else if (useMegaTag2 == true) {
+      LimelightHelpers.SetRobotOrientation("limelight-climber",
+          swerveDrive.getOdometryHeading().getDegrees(), // swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(),
+                                                         // //swerveDrive.getOdometryHeading().getDegrees(),
+          0.0, 0.0, 0.0, 0.0, 0.0);
+      // first try raw, then delete raw, if both dont work try getHeading and stuff
+      LimelightHelpers.PoseEstimate mt2climber = LimelightHelpers
+          .getBotPoseEstimate_wpiBlue_MegaTag2("limelight-climber");
+      // double omegaDegPerSec =
+      // Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
+      // or we can do omegaDegPerSec
+
+      if (Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity
+                                                                                              // is greater than 720
+                                                                                              // degrees per second,
+                                                                                              // ignore vision updates
       {
         doRejectUpdate = true;
       }
-      if(mt2climber.tagCount == 0)
-      {
+      if (mt2climber.tagCount == 0) {
         doRejectUpdate = true;
       }
-      if(!doRejectUpdate)
-      {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      if (!doRejectUpdate) {
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
         swerveDrive.addVisionMeasurement(
             mt2climber.pose,
             mt2climber.timestampSeconds);
       }
     }
-    
-    
+
     swerveDrive.updateOdometry();
   }
 
@@ -863,19 +850,21 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getDynamicHubLocation() {
-    Pose2d initial = Constants.DrivebaseConstants.getHubPose2D();
-    Translation2d goalLocation = initial.getTranslation();
-    Translation2d robotLocation = getPose().getTranslation();
-    Translation2d robotVelocity = new Translation2d(getRobotVelocity().vxMetersPerSecond,
-        getRobotVelocity().vyMetersPerSecond);
-    Translation2d robotVelocityVec = getPose().getTranslation().minus(robotVelocity);
-    Translation2d HubVec = goalLocation.minus(robotLocation);
-    Translation2d targetVec = HubVec.plus(robotVelocityVec);
-    Pose2d HubLoc = new Pose2d(targetVec.getX(), targetVec.getY(),new Rotation2d());
-    double        dist         = targetVec.getNorm();
-    // Currently return the static hub pose; replace with a dynamic prediction if needed.
-    return HubLoc;
+
+    Translation2d hubVec = Constants.DrivebaseConstants.getHubPose2D().getTranslation();
+    Translation2d robotVec = getPose().getTranslation();
+    ChassisSpeeds vel = getFieldVelocity();
+    Translation2d robotVel = new Translation2d(vel.vxMetersPerSecond, vel.vyMetersPerSecond);
+    Translation2d CompensatedHub = hubVec;
+    for (int i = 0; i < 4; i++) {
+      double distance = CompensatedHub.minus(robotVec).getNorm();
+      double tof = ShooterConstants.TOF.get(distance);
+      CompensatedHub = hubVec.minus(robotVel.times(tof));
+    }
+
+    return new Pose2d(CompensatedHub, new Rotation2d());
   }
+
   /**
    * Get the chassis speeds based on controller input of 2 joysticks. One for
    * speeds in which direction. The other for

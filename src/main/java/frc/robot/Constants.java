@@ -1,13 +1,20 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 
+import java.util.List;
 import java.util.Optional;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.units.measure.Angle;
@@ -43,11 +50,11 @@ public final class Constants {
   public static final double MAX_SPEED = Units.feetToMeters(16.5);
 
   // RobotContainer or a constants class
-public static final double LOOKAHEAD_BASE_SEC = 0.03;    // minimum lead
-public static final double LOOKAHEAD_K_OMEGA   = 0.4; //0.012 // seconds per (rad/s)
-public static final double LOOKAHEAD_K_V       = 0.015;  // seconds per (m/s)
-public static final double LOOKAHEAD_MIN_SEC   = 0.0;
-public static final double LOOKAHEAD_MAX_SEC   = 1.5;
+  public static final double LOOKAHEAD_BASE_SEC = 0.03; // minimum lead
+  public static final double LOOKAHEAD_K_OMEGA = 0.4; // 0.012 // seconds per (rad/s)
+  public static final double LOOKAHEAD_K_V = 0.015; // seconds per (m/s)
+  public static final double LOOKAHEAD_MIN_SEC = 0.0;
+  public static final double LOOKAHEAD_MAX_SEC = 1.5;
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
   // public static final class AutonConstants
@@ -76,7 +83,8 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
       Pose3d pose = DriverStation.getAlliance().equals(Optional.of(Alliance.Red)) ? redHubPose : blueHubPose;
       Pose2d Tdpose = pose.toPose2d();
       return Tdpose;
-    }    
+    }
+
     // should i add <Supplier> to the method signature? it compiles without it but
     // im not sure if its correct
     public static final <Supplier> Pose3d getHubPose3D() {
@@ -140,7 +148,7 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
   public static class ShooterConstants {
     public static final int SHOOTER_L1_ID = 9;
     public static final int SHOOTER_L2_ID = 10;
-    
+
     public static final int SHOOTER_R1_ID = 11;
     public static final int SHOOTER_R2_ID = 12;
 
@@ -149,6 +157,29 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final double STOP = 0;
     public static final double IDLE = 0; // % voltage -1 --> 1
 
+    public static final InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap(); 
+    {
+
+
+     for (var entry : List.of(
+      // Pair.of(Meters.of(1), RPM.of((1000))),
+                            Pair.of(Meters.of(2), Seconds.of(0.38)),
+                            Pair.of(Meters.of(3), Seconds.of(0.44)),
+                            // Pair.of(Meters.of(3.5), RPM.of(2050),
+                            Pair.of(Meters.of(4), Seconds.of(0.50)),
+                            Pair.of(Meters.of(5), Seconds.of(0.57)),
+                            Pair.of(Meters.of(6), Seconds.of(0.64))
+                            )
+    )
+    {TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));}
+
+    // static {
+    //   TOF.put(2.0, 0.35);
+    //   TOF.put(3.0, 0.42);
+    //   TOF.put(4.0, 0.50);
+    //   TOF.put(5.2, 0.60);
+    // }
+  }
   }
 
   public static class KickerConstants {
@@ -215,14 +246,13 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
   public static final boolean LIMIT_DASHBOARD_PERIODIC_UPDATES = false; // Enable throttling of dashboard updates
   public static final int DASHBOARD_UPDATE_PERIOD_CYCLES = 10; // Number of periodic loops between dashboard refreshes
 
-
   public static class Dimensions {
-        public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
-        public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
-        public static final Distance FRAME_SIZE_Y = Inches.of(26.25); // left to right (y-axis)
-        public static final Distance FRAME_SIZE_X = Inches.of(28.75); // front to back (x-axis)
+    public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
+    public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
+    public static final Distance FRAME_SIZE_Y = Inches.of(26.25); // left to right (y-axis)
+    public static final Distance FRAME_SIZE_X = Inches.of(28.75); // front to back (x-axis)
 
-        public static final Distance FULL_WIDTH = FRAME_SIZE_Y.plus(BUMPER_THICKNESS.times(2));
-        public static final Distance FULL_LENGTH = FRAME_SIZE_X.plus(BUMPER_THICKNESS.times(2));
-    }
+    public static final Distance FULL_WIDTH = FRAME_SIZE_Y.plus(BUMPER_THICKNESS.times(2));
+    public static final Distance FULL_LENGTH = FRAME_SIZE_X.plus(BUMPER_THICKNESS.times(2));
+  }
 }
