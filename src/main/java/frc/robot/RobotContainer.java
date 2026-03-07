@@ -396,17 +396,18 @@ public class RobotContainer {
             ControlAllShooting shootCmd = makeVariableShoot();
             return Commands.parallel(
                 shootCmd,
+            
                 Commands.sequence(
-
+                     Commands.waitUntil(shootCmd::isCASAtSpeed),
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
                         .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
-                    .onlyIf(shootCmd::isCASAtSpeed))
+                    
 
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+                .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
           } else {
             // Outside alliance zone → pass to ferry
             ControllAllPassing passCmd = makeVariablePass();
