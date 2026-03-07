@@ -147,7 +147,7 @@ public class RobotContainer {
       .deadband(OperatorConstants.DEADBAND)
       .scaleTranslation(1)
       .allianceRelativeControl(true)
-      .aim(drivebase.getDynamicHubLocation())
+      .aim(Constants.DrivebaseConstants.getHubPose2D())
       // .aimLock(Angle.ofBaseUnits(1, Degrees))
       .aimWhile(driverXbox.rightTrigger())
       // .aimWhile(driverXbox.leftTrigger())
