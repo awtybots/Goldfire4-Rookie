@@ -82,7 +82,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    drivebase.useMegaTag2 = false;
+    drivebase.useMegaTag2 = true;
     // LimelightHelpers.SetIMUMode("limelight-bright", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-bleft", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-climber", 1); // Seed internal IMU
@@ -142,7 +142,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void disabledInit() {
-    drivebase.useMegaTag2 = false;
+    drivebase.useMegaTag2 = true;
     // LimelightHelpers.SetIMUMode("limelight-bleft", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-bright", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-climber", 1); // Seed internal IMU
