@@ -36,7 +36,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer m_robotContainer;
   private RobotContainerShooter m_robotContainerShooter;
   private RobotContainerDrive m_robotContainerDrive;
-  private SwerveSubsystem drivebase;
+  // private SwerveSubsystem drivebase;
 
   private Timer disabledTimer;
 
@@ -82,7 +82,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotInit() {
-    drivebase.useMegaTag2 = true;
+    // drivebase.useMegaTag2 = true;
     // LimelightHelpers.SetIMUMode("limelight-bright", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-bleft", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-climber", 1); // Seed internal IMU
@@ -142,7 +142,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void disabledInit() {
-    drivebase.useMegaTag2 = true;
+    // drivebase.useMegaTag2 = true;
     // LimelightHelpers.SetIMUMode("limelight-bleft", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-bright", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-climber", 1); // Seed internal IMU
@@ -178,7 +178,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void autonomousInit() {
-    drivebase.useMegaTag2 = true;
+    // drivebase.useMegaTag2 = true;
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     LimelightHelpers.SetThrottle("limelight-bright", 0);
     LimelightHelpers.SetThrottle("limelight-climber", 0);
@@ -217,7 +217,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    drivebase.useMegaTag2 = true;
+    // drivebase.useMegaTag2 = true;
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     // LimelightHelpers.SetIMUMode("limelight-bleft", 4); // Use internal IMU + external IMU
     // // Set the complementary filter alpha (optional, default is 0.001)
