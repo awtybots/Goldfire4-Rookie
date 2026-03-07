@@ -403,8 +403,8 @@ public class RobotContainer {
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
-                        .onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
-                    .onlyWhile(shootCmd::isCASAtSpeed))
+                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
+                    .onlyIf(shootCmd::isCASAtSpeed))
 
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           } else {
