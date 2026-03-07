@@ -136,11 +136,11 @@ public final class Constants {
     public static final int PUSHOUT_ID = 17; // Unknown
     // public static final int PUSHOUT_RIGHT_ID = 17;
 
-    public static final double PUSHOUT_RETRACTED_POS = 0;
-    public static final double PUSHOUT_EXTENDED_POS = 13.3; // TUNE THIS!!!
+    public static final double PUSHOUT_RETRACTED_POS = 4.693;
+    public static final double PUSHOUT_EXTENDED_POS = 13.8; // TUNE THIS!!!
 
-    public static final double PUSHOUT_RETRACTED_AGITATE_POS = 22; // encoder rotations
-    public static final double PUSHOUT_EXTENDED_AGITATE_POS = 25.5; // TUNE THIS!!!
+    public static final double PUSHOUT_RETRACTED_AGITATE_POS = 4.693; // encoder rotations
+    public static final double PUSHOUT_EXTENDED_AGITATE_POS = 10; // TUNE THIS!!!
 
     public static final double PUSHOUT_AGITATE_WAIT = 0.2;
   }
@@ -164,12 +164,12 @@ public final class Constants {
 
      for (var entry : List.of(
       // Pair.of(Meters.of(1), RPM.of((1000))),
-                            Pair.of(Meters.of(2), Seconds.of(0.38)),
-                            Pair.of(Meters.of(3), Seconds.of(0.44)),
+                            Pair.of(Meters.of(2), Seconds.of(1.0)),
+                            Pair.of(Meters.of(3), Seconds.of(1.16)),
                             // Pair.of(Meters.of(3.5), RPM.of(2050),
-                            Pair.of(Meters.of(4), Seconds.of(0.50)),
-                            Pair.of(Meters.of(5), Seconds.of(0.57)),
-                            Pair.of(Meters.of(6), Seconds.of(0.64))
+                            Pair.of(Meters.of(4), Seconds.of(1.28)),
+                            Pair.of(Meters.of(5), Seconds.of(1.4)),
+                            Pair.of(Meters.of(6), Seconds.of(1.6))
                             )
     )
     {TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));}
