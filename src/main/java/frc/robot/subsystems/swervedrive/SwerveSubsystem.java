@@ -30,6 +30,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -78,7 +79,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param directory Directory of swerve drive config files.
    */
   public SwerveSubsystem(File directory) {
-    boolean blueAlliance = false;
+    boolean blueAlliance = DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Blue;
     Pose2d startingPose = blueAlliance
         ? new Pose2d(Meter.of(1), Meter.of(4), Rotation2d.fromDegrees(0))
         : new Pose2d(Meter.of(16), Meter.of(4), Rotation2d.fromDegrees(180));
