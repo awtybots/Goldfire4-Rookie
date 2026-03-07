@@ -157,8 +157,9 @@ public final class Constants {
     public static final double STOP = 0;
     public static final double IDLE = 0; // % voltage -1 --> 1
 
-    public static final InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap(); 
-    {
+    public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap(); 
+   
+    static {
 
 
      for (var entry : List.of(

@@ -865,7 +865,6 @@ public class SwerveSubsystem extends SubsystemBase {
       double tof = ShooterConstants.TOF.get(distance);
       CompensatedHub = hubVec.minus(robotVel.times(tof));
     }
-
     return new Pose2d(CompensatedHub, new Rotation2d());
   }
 
