@@ -82,18 +82,6 @@
           "data": {
             "name": "Control All Shooting"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Human Player Shoot to Right Climb"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climb up"
-          }
         }
       ]
     }
