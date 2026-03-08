@@ -183,6 +183,9 @@ public class RobotContainer {
       .aimWhile(true)
       .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
+
+  SwerveInputStream driveAngularVelocitySlow = driveAngularVelocity.copy()
+      .scaleTranslation(0.35);
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
   private final Trigger RTtransfer_kick_shoot = driverXbox.rightTrigger(); // twindex to kicker, kick, agitate, and
@@ -255,8 +258,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
     // pushout
-     NamedCommands.registerCommand("extend", m_pushout.PushCommand());
-  
+    NamedCommands.registerCommand("extend", m_pushout.PushCommand());
+
     NamedCommands.registerCommand("extend and intake",
         Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
     NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
@@ -275,9 +278,10 @@ public class RobotContainer {
           m_pushout.AgitateCommand().repeatedly()).onlyIf(shootCmd::isCASAtSpeed);
     }, java.util.Collections.emptySet()).withTimeout(5));
     NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
-    // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
+    // NamedCommands.registerCommand("aim at hub",
+    // drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
-    //     drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
+    // drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
 
     // hopper
     NamedCommands.registerCommand("transfer", m_hopper.runHopperToShooterCommand().withTimeout(6.7));
@@ -286,7 +290,6 @@ public class RobotContainer {
     // intake
     NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(2.5));
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
-    
 
     // climber
     NamedCommands.registerCommand("climb up", m_climber.runClimbCommand().withTimeout(4));
@@ -346,6 +349,8 @@ public class RobotContainer {
         () -> applyHeadingBias(driveAngularVelocityKeyboard.get()));
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngleKeyboard);
+    Command driveFieldOrientedAnglularVelocitySlow = drivebase.driveFieldOriented(
+        () -> applyHeadingBias(driveAngularVelocitySlow.get()));
     // ====================================== ALIGN TO HUB COMMANDS
     // ======================================
     // ====================================== ALL CONTROLS
@@ -368,7 +373,7 @@ public class RobotContainer {
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
                         .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+            ;
           } else {
             // Outside alliance zone → pass to ferry
             ControllAllPassing passCmd = makeVariablePass();
@@ -381,11 +386,11 @@ public class RobotContainer {
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
-                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))));
           }
         }, java.util.Collections.emptySet()));
 
+    RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
     // Hopper Commands
     PRtransfer.whileTrue(Commands.parallel(m_hopper.runHopperToShooterCommand(), m_kicker.kickCommand()));
     PLunjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));

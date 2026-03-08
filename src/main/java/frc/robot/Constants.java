@@ -119,8 +119,10 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final int INTAKE_ID = 18; // unknown
     // public static final int INTAKE_RIGHT_ID = 16; // unknown
 
-    public static final double OUTTAKE_SPEED = 1;
-    public static final double INTAKE_SPEED = -1;
+    public static final double OUTTAKE_SPEED = -1;
+    public static final double INTAKE_SPEED = 1;
+     public static final double OUTTAKE_RPM = -4000;
+    public static final double INTAKE_RPM = 4000;
 
   }
 

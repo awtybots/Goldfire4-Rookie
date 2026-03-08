@@ -12,8 +12,9 @@ import com.revrobotics.PersistMode;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Configs;
@@ -38,16 +39,18 @@ public class Intake extends SubsystemBase {
 
     public void runOuttake() {
         // IntakeRightMotor.set(IntakeConstants.INTAKE_SPEED);
-        desiredPercent = IntakeConstants.INTAKE_SPEED;
-        IntakeMotor.set(IntakeConstants.INTAKE_SPEED);
+        // desiredPercent = IntakeConstants.OUTTAKE_SPEED;
+        // IntakeMotor.set(IntakeConstants.OUTTAKE_SPEED);
+        intakeController.setSetpoint(IntakeConstants.OUTTAKE_RPM, ControlType.kMAXMotionVelocityControl);
 
     }
 
     public void runIntake() {
-        desiredPercent = IntakeConstants.OUTTAKE_SPEED;
-        IntakeMotor.set(IntakeConstants.OUTTAKE_SPEED);
+        // desiredPercent = IntakeConstants.INTAKE_SPEED;
+        // IntakeMotor.set(IntakeConstants.INTAKE_SPEED);
 
-        // IntakeRightMotor.set(IntakeConstants.OUTTAKE_SPEED);
+        // IntakeRightMotor.set(IntakeConstants.INTAKE_SPEED);
+         intakeController.setSetpoint(IntakeConstants.INTAKE_RPM, ControlType.kMAXMotionVelocityControl);
     }
 
     public void stopIntake() {
