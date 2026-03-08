@@ -44,7 +44,6 @@ import frc.robot.utils.FuelSim;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 // import swervelib.SwerveDrive;
@@ -90,7 +89,7 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting( m_shooter, drivebase);
+    return new ControlAllShooting(Constants.DrivebaseConstants.getHubPose2D(), m_shooter, drivebase.getPose());
   }
 
   private ControllAllPassing makeVariablePass() {
@@ -114,19 +113,16 @@ public class RobotContainer {
       () -> driverXbox.getLeftX() * -1)
       .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
       .deadband(OperatorConstants.DEADBAND)
-      .scaleTranslation(1)
+      .scaleTranslation(1.0)
       .allianceRelativeControl(true)
-      .aim(drivebase.getDynamicHubLocation())
+      .aim(Constants.DrivebaseConstants.getHubPose2D())
       // .aimLock(Angle.ofBaseUnits(1, Degrees))
       .aimWhile(driverXbox.rightTrigger())
       // .aimWhile(driverXbox.leftTrigger())
-      .aimLookahead(Time.ofBaseUnits(0.5, Seconds))
+      .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013)
 
   ;
-
-  SwerveInputStream driveAngularVelocitySlow = driveAngularVelocity.copy()
-    .scaleTranslation(0.35);
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative
@@ -177,7 +173,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(Constants.DrivebaseConstants.getHubPose2D())
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(computeDynamicLookaheadSeconds(), Seconds))
+      .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
 
   SwerveInputStream aimAtFerryStream = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -185,7 +181,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()))
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(computeDynamicLookaheadSeconds(), Seconds))
+      .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
@@ -259,6 +255,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
     // pushout
+     NamedCommands.registerCommand("extend", m_pushout.PushCommand());
+  
     NamedCommands.registerCommand("extend and intake",
         Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
     NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
@@ -275,20 +273,20 @@ public class RobotContainer {
           m_hopper.runHopperToShooterCommand().onlyIf(shootCmd::isCASAtSpeed),
           m_kicker.kickCommand().onlyIf(shootCmd::isCASAtSpeed),
           m_pushout.AgitateCommand().repeatedly()).onlyIf(shootCmd::isCASAtSpeed);
-    }, java.util.Collections.emptySet()).withTimeout(8));
+    }, java.util.Collections.emptySet()).withTimeout(5));
     NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
-    // NamedCommands.registerCommand("aim at hub",
-    // drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
+    // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
-    // drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
+    //     drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
 
     // hopper
     NamedCommands.registerCommand("transfer", m_hopper.runHopperToShooterCommand().withTimeout(6.7));
     NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
 
     // intake
-    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(4));
+    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(2.5));
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
+    
 
     // climber
     NamedCommands.registerCommand("climb up", m_climber.runClimbCommand().withTimeout(4));
@@ -348,9 +346,6 @@ public class RobotContainer {
         () -> applyHeadingBias(driveAngularVelocityKeyboard.get()));
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngleKeyboard);
-
-    Command driveFieldOrientedAnglularVelocitySlow = drivebase.driveFieldOriented(
-        () -> applyHeadingBias(driveAngularVelocitySlow.get()));
     // ====================================== ALIGN TO HUB COMMANDS
     // ======================================
     // ====================================== ALL CONTROLS
@@ -366,15 +361,13 @@ public class RobotContainer {
             return Commands.parallel(
                 shootCmd,
                 Commands.sequence(
-
+                    Commands.waitUntil(shootCmd::isCASAtSpeed),
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
                         m_intake.runIntakeCommand())
-                        .onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
-                    .onlyWhile(shootCmd::isCASAtSpeed))
-
+                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           } else {
             // Outside alliance zone → pass to ferry
@@ -392,8 +385,6 @@ public class RobotContainer {
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           }
         }, java.util.Collections.emptySet()));
-
-    RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
 
     // Hopper Commands
     PRtransfer.whileTrue(Commands.parallel(m_hopper.runHopperToShooterCommand(), m_kicker.kickCommand()));
@@ -688,65 +679,5 @@ public class RobotContainer {
       driveAngularVelocity.aim(
           Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()));
     }
-  }
-
-  public boolean isHubActive()
-  {
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-
-    if(alliance.isEmpty()) return false;
-
-    if(DriverStation.isAutonomousEnabled()) return true; // Always enabled in auton
-
-    if(!DriverStation.isTeleopEnabled()) return false; // If we're disabled then were probably not playing
-
-    double matchTime = DriverStation.getMatchTime();
-    String gameData = DriverStation.getGameSpecificMessage();
-
-    if(gameData.isEmpty()) return true;
-
-    boolean isRedActiveFirst;
-    switch (gameData.charAt(0))
-    {
-        case 'R':
-            isRedActiveFirst = false;
-            break;
-        case 'B':
-            isRedActiveFirst = true;
-            break;
-        default:
-            return false;
-    }
-
-    boolean shiftOneActive = switch (alliance.get()) {
-        case Red -> isRedActiveFirst;
-        case Blue -> !isRedActiveFirst;
-    };
-
-    if(matchTime >= 130)  // transition shift, always active
-    {
-        return true;
-    } 
-    else if (matchTime >= 105) { // shift 1
-        return shiftOneActive;
-    } 
-    else if(matchTime >= 80)  // shift 2
-    {
-        return !shiftOneActive;
-    } 
-    else if (matchTime >= 55)  // shift 3
-    {
-        return shiftOneActive;
-    } 
-    else if(matchTime >= 30) // shift 4
-    {
-        return !shiftOneActive;
-    }
-    else return true; // Endgame, always active
-  }
-
-  public void elasticHubTracker()
-  {
-    SmartDashboard.putBoolean("Is Hub Active", isHubActive());
   }
 }
