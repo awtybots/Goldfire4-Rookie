@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0277270626862727,
-        "y": 5.656950273087845
+        "x": 1.8577528297425352,
+        "y": 5.945442018908477
       },
       "isLocked": false,
       "linkedName": "Depot"
     },
     {
       "anchor": {
-        "x": 1.855433734939759,
-        "y": 5.313542168674698
+        "x": 2.1774230023448773,
+        "y": 5.943452211126962
       },
       "prevControl": {
-        "x": 0.8091001064422181,
-        "y": 5.649231137248856
+        "x": 1.4998660214699018,
+        "y": 5.94636978836764
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -24.732211671135918
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Week 3 Paths",

@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "extend"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Right Trench to Neutral"
+            "pathName": "Start-Intake Path"
           }
         },
         {
@@ -15,15 +21,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "extend and intake"
+                  "pathName": "Intake Path 1"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Intake Right"
+                  "name": "intake"
                 }
               }
             ]
@@ -32,7 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Intake to Right Shoot"
+            "pathName": "Trench to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim at hub"
           }
         },
         {
@@ -44,43 +56,50 @@
         {
           "type": "named",
           "data": {
-            "name": "retract intake"
+            "name": "extend"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Extra Intake 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Shoot to Human Player"
+            "pathName": "Shoot Depot Fuel"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Human Player Shoot"
+            "name": "aim at hub"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Control All Shooting"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Human Player Shoot to Right Climb"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "climb up"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "McAllen Climb Autos",
+  "folder": "NoClimb",
   "choreoAuto": false
 }

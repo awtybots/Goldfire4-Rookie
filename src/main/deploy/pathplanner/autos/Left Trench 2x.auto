@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "extend"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Start-Intake Path"
@@ -23,26 +29,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "extend and intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Trench to Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Control All Shooting"
+                  "name": "intake"
                 }
               }
             ]
@@ -51,13 +38,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot to Neutral"
+            "pathName": "Trench to Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "extend and intake"
+            "name": "aim at hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Control All Shooting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "extend"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Neutral"
           }
         },
         {
@@ -69,33 +74,38 @@
                 "data": {
                   "pathName": "Intake Path 1"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Trench to Shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Control All Shooting"
-                }
-              }
-            ]
+            "pathName": "Trench to Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim at hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Control All Shooting"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "NoClimb",
   "choreoAuto": false
 }
