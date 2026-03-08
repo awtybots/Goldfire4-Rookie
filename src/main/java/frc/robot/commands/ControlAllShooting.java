@@ -88,7 +88,8 @@ public class ControlAllShooting extends Command
                             Pair.of(Meters.of(3), RPM.of(1960)),
                             // Pair.of(Meters.of(3.5), RPM.of(2050),
                             Pair.of(Meters.of(4), RPM.of(2260)),
-                            Pair.of(Meters.of(5.2048), RPM.of(2556.918))
+                            Pair.of(Meters.of(5.2048), RPM.of(2556.918)),
+                            Pair.of(Meters.of(6), RPM.of(2800))
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
