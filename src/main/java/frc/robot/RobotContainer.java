@@ -399,17 +399,14 @@ public class RobotContainer {
             ControlAllShooting shootCmd = makeVariableShoot();
             return Commands.parallel(
                 shootCmd,
-            
                 Commands.sequence(
-                     Commands.waitUntil(shootCmd::isCASAtSpeed),
+                    Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                        && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
-                        m_intake.runIntakeCommand())
-                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees))))
-                    
-
+                        m_intake.runIntakeCommand()))
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
           } else {
             // Outside alliance zone → pass to ferry
@@ -417,13 +414,13 @@ public class RobotContainer {
             return Commands.parallel(
                 passCmd,
                 Commands.sequence(
-                    Commands.waitUntil(passCmd::isCASAtSpeed),
+                    Commands.waitUntil(() -> passCmd.isCASAtSpeed()
+                        && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly(),
-                        m_intake.runIntakeCommand())
-                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
+                        m_intake.runIntakeCommand())))
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           }
         }, java.util.Collections.emptySet()));
