@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.739514978601996,
-        "y": 4.701340941512126
+        "x": 8.106706461940837,
+        "y": 4.972327403499279
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.615034400461685,
-        "y": 6.601028035990312
+        "x": 8.328793853715728,
+        "y": 8.12173520923521
       },
       "isLocked": false,
       "linkedName": "Intake End 1"
-    },
-    {
-      "anchor": {
-        "x": 5.854975903614458,
-        "y": 7.357024096385541
-      },
-      "prevControl": {
-        "x": 5.391377727700035,
-        "y": 7.50972005975586
-      },
-      "nextControl": {
-        "x": 6.092497551752214,
-        "y": 7.278791267250347
-      },
-      "isLocked": false,
-      "linkedName": null
     },
     {
       "anchor": {
@@ -36,24 +20,24 @@
         "y": 7.379643366619116
       },
       "prevControl": {
-        "x": 4.237018867059296,
-        "y": 7.391576977740533
+        "x": 4.268055158930297,
+        "y": 7.401229427038026
       },
       "nextControl": {
-        "x": 3.469996465164558,
-        "y": 7.354921804841633
+        "x": 3.3872525233320365,
+        "y": 7.333507359801007
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2756776034236803,
-        "y": 7.366704707560627
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
       },
       "prevControl": {
-        "x": 4.487809817878533,
-        "y": 7.489542549731933
+        "x": 4.1461129017047895,
+        "y": 7.4263803765407435
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,11 +46,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.25,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 0.0
     }
   ],
@@ -83,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.165932156881
+    "rotation": -60.784435212185706
   },
   "reversed": false,
   "folder": "Week 3 Paths",

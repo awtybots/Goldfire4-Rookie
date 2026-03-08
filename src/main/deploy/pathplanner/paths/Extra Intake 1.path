@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2756776034236803,
-        "y": 7.366704707560627
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.800219548041703,
-        "y": 7.051967590765043
+        "x": 2.282439220952799,
+        "y": 7.042286979589957
       },
       "isLocked": false,
       "linkedName": "shoot 67"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -52.165932156881
+    "rotation": -60.784435212185706
   },
   "useDefaultConstraints": true
 }

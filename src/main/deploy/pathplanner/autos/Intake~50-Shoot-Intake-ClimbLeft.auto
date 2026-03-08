@@ -115,6 +115,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "McAllen Climb Autos",
   "choreoAuto": false
 }

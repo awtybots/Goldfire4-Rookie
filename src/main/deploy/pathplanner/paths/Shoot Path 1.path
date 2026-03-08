@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2756776034236803,
-        "y": 7.366704707560627
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3303879973732484,
-        "y": 7.634913729814565
+        "x": 2.8126076702843443,
+        "y": 7.625233118639479
       },
       "isLocked": false,
       "linkedName": "shoot 67"
     },
     {
       "anchor": {
-        "x": 1.855433734939759,
-        "y": 5.313542168674698
+        "x": 2.1774230023448773,
+        "y": 5.943452211126962
       },
       "prevControl": {
-        "x": 1.7484093353041497,
-        "y": 5.069638909495709
+        "x": 2.0703986027092682,
+        "y": 5.699548951947973
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -24.732211671135918
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -52.165932156881
+    "rotation": -60.784435212185706
   },
   "useDefaultConstraints": true
 }

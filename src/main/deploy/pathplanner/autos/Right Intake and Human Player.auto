@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "extend"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right Trench to Neutral"
@@ -17,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "extend and intake"
+                  "name": "intake"
                 }
               },
               {
@@ -33,6 +39,12 @@
           "type": "path",
           "data": {
             "pathName": "Right Intake to Right Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aim at hub"
           }
         },
         {
@@ -62,6 +74,12 @@
         {
           "type": "named",
           "data": {
+            "name": "aim at hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Control All Shooting"
           }
         },
@@ -81,6 +99,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "NoClimb",
   "choreoAuto": false
 }

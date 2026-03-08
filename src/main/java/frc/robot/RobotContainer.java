@@ -173,7 +173,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(Constants.DrivebaseConstants.getHubPose2D())
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(computeDynamicLookaheadSeconds(), Seconds))
+      .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
 
   SwerveInputStream aimAtFerryStream = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -181,7 +181,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation()))
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(computeDynamicLookaheadSeconds(), Seconds))
+      .aimLookahead(Time.ofBaseUnits(0, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
@@ -255,6 +255,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
     // pushout
+     NamedCommands.registerCommand("extend", m_pushout.PushCommand());
+  
     NamedCommands.registerCommand("extend and intake",
         Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
     NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
@@ -271,7 +273,7 @@ public class RobotContainer {
           m_hopper.runHopperToShooterCommand().onlyIf(shootCmd::isCASAtSpeed),
           m_kicker.kickCommand().onlyIf(shootCmd::isCASAtSpeed),
           m_pushout.AgitateCommand().repeatedly()).onlyIf(shootCmd::isCASAtSpeed);
-    }, java.util.Collections.emptySet()).withTimeout(8));
+    }, java.util.Collections.emptySet()).withTimeout(5));
     NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
     // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
@@ -282,8 +284,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
 
     // intake
-    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(4));
+    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(2.5));
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
+    
 
     // climber
     NamedCommands.registerCommand("climb up", m_climber.runClimbCommand().withTimeout(4));

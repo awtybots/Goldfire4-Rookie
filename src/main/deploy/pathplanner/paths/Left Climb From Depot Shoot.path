@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.855433734939759,
-        "y": 5.313542168674698
+        "x": 2.1774230023448773,
+        "y": 5.943452211126962
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0974100720357192,
-        "y": 4.72141510322333
+        "x": 1.4193993394408375,
+        "y": 5.3513251456755935
       },
       "isLocked": false,
       "linkedName": "Depot Shoot Pos"
@@ -48,7 +48,7 @@
   "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -24.732211671135918
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
