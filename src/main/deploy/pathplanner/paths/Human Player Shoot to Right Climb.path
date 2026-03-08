@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 30.761744076942353

@@ -53,7 +53,7 @@
       },
       "prevControl": {
         "x": 2.924279693143565,
-        "y": 0.5848832559225546
+        "y": 0.5848832559225545
       },
       "nextControl": null,
       "isLocked": false,
@@ -86,7 +86,7 @@
     "rotation": 61.31623759980989
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

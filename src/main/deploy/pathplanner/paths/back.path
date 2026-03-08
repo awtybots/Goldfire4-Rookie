@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4291726105563479,
-        "y": 0.6515406562054205
+        "x": 2.555,
+        "y": 4.043056129102964
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6552357089881882,
-        "y": 0.9977787083958854
-      },
-      "isLocked": false,
-      "linkedName": "Human Player"
-    },
-    {
-      "anchor": {
-        "x": 2.2535235378031384,
-        "y": 2.6052781740370903
-      },
-      "prevControl": {
-        "x": 1.9488305580073848,
-        "y": 1.5362556289153175
-      },
-      "nextControl": {
-        "x": 2.502740446554172,
-        "y": 3.4796616083354444
+        "x": 2.9773564391685046,
+        "y": 4.043056129102964
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.855433734939759,
-        "y": 5.313542168674698
+        "x": 3.5551312346916566,
+        "y": 4.043056129102964
       },
       "prevControl": {
-        "x": 1.8340094204367399,
-        "y": 5.062314173981411
+        "x": 3.3051312346916566,
+        "y": 4.043056129102964
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot End 1"
+      "linkedName": "Middle"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -24.732211671135918
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Week 3 Paths",
+  "folder": "Test",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
