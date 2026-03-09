@@ -393,7 +393,7 @@ public class RobotContainer {
     RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
 
     // New Pulling Agitate Command
-    RTtransfer_kick_shoot.whileTrue(
+    LT_shootFuel.whileTrue(
         Commands.defer(() -> {
           if (isInAllianceZone()) {
             // In alliance zone → shoot at hub

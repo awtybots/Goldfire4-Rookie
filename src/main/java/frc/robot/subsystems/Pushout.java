@@ -167,9 +167,9 @@ public class Pushout extends SubsystemBase {
 
     public Command AgitatePullCommand() {
         PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorAgitateConfig, ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters);
+                PersistMode.kNoPersistParameters);
         Commands.waitSeconds(0.5);
-        return this.runOnce(() -> PushIntake());
+        return this.runOnce(() -> RetractCommand());
                 // .finallyDo(interrupted -> StopPushout())
     }
 
