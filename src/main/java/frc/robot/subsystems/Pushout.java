@@ -74,47 +74,38 @@ public class Pushout extends SubsystemBase {
     }
 
     public void PushIntake() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         PushoutController.setSetpoint(PushoutExtended, ControlType.kMAXMotionPositionControl);
-        // PushoutRightController.setSetpoint(PushoutRightExtended,
-        // ControlType.kMAXMotionPositionControl);
 
     }
 
     public void RetractIntake() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         PushoutController.setSetpoint(PushoutRetracted, ControlType.kMAXMotionPositionControl);
-        // PushoutRightController.setSetpoint( PushoutRightRetracted,
-        // ControlType.kMAXMotionPositionControl);
     }
 
     public void SmallPush() {
-        // double leftNow = pushoutLeftEncoder.getPosition();
-        // double rightNow = pushoutRightEncoder.getPosition();
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         PushoutController.setSetpoint(PushoutExtendedAgitate, ControlType.kMAXMotionPositionControl);
-        // PushoutRightController.setSetpoint(PushoutRightExtendedAgitate,
-        // ControlType.kMAXMotionPositionControl);
     }
 
     public void SmallRetract() {
-        // double leftNow = pushoutLeftEncoder.getPosition();
-        // double rightNow = pushoutRightEncoder.getPosition();
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         PushoutController.setSetpoint(PushoutRetractedAgitate, ControlType.kMAXMotionPositionControl);
-        // PushoutRightController.setSetpoint(PushoutRightRetractedAgitate,
-        // ControlType.kMAXMotionPositionControl);
     }
 
-    // public void PushoutDutyCycle() {
-    //     PushoutMotor.set(0.3);
-    // }
 
     public void StopPushout() {
         PushoutMotor.set(0);
     }
-
-    // public void StopPushing() {
-    // // PushoutLeftController.setSetpoint(0,
-    // ControlType.kMAXMotionPositionControl);
-    // PushoutRightController.setSetpoint(0, ControlType.kMAXMotionPositionControl);
-    // }
 
     public Command homing(double threshold)
     {
@@ -134,18 +125,27 @@ public class Pushout extends SubsystemBase {
     }
 
     public Command PushCommand() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         return this.runOnce(() -> PushIntake());
                 // .finallyDo(interrupted -> StopPushout())
                 
     }
 
     public Command RetractCommand() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+
         return this.runOnce(() -> RetractIntake());
                 // .finallyDo(interrupted -> StopPushout())
                 
     }
 
     public Command AgitateCommand() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kNoPersistParameters);
+        
         Commands.waitSeconds(0.5);
         return Commands.sequence(
             runOnce(() -> SmallPush()),

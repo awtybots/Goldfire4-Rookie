@@ -405,7 +405,7 @@ public class RobotContainer {
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
-                        m_pushout.AgitatePullCommand().repeatedly(),
+                        m_pushout.AgitatePullCommand(),
                         m_intake.runIntakeCommand())
                         .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
             ;
@@ -419,7 +419,7 @@ public class RobotContainer {
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
-                        m_pushout.AgitatePullCommand().repeatedly(),
+                        m_pushout.AgitatePullCommand(),
                         m_intake.runIntakeCommand())
                         .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))));
           }
