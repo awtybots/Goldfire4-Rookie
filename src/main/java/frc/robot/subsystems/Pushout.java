@@ -165,6 +165,14 @@ public class Pushout extends SubsystemBase {
         ).finallyDo(interrupted -> PushIntake());
     }
 
+    public Command AgitatePullCommand() {
+        PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorAgitateConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        Commands.waitSeconds(0.5);
+        return this.runOnce(() -> PushIntake());
+                // .finallyDo(interrupted -> StopPushout())
+    }
+
     @Override
     public void periodic() { 
         // AdvantageKit Logging

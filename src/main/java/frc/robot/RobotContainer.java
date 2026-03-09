@@ -391,6 +391,42 @@ public class RobotContainer {
         }, java.util.Collections.emptySet()));
 
     RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
+
+    // New Pulling Agitate Command
+    RTtransfer_kick_shoot.whileTrue(
+        Commands.defer(() -> {
+          if (isInAllianceZone()) {
+            // In alliance zone → shoot at hub
+            ControlAllShooting shootCmd = makeVariableShoot();
+            return Commands.parallel(
+                shootCmd,
+                Commands.sequence(
+                    Commands.waitUntil(shootCmd::isCASAtSpeed),
+                    Commands.parallel(
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitatePullCommand().repeatedly(),
+                        m_intake.runIntakeCommand())
+                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))))
+            ;
+          } else {
+            // Outside alliance zone → pass to ferry
+            ControllAllPassing passCmd = makeVariablePass();
+            return Commands.parallel(
+                passCmd,
+                Commands.sequence(
+                    Commands.waitUntil(passCmd::isCASAtSpeed),
+                    Commands.parallel(
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitatePullCommand().repeatedly(),
+                        m_intake.runIntakeCommand())
+                        .onlyIf(driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)))));
+          }
+        }, java.util.Collections.emptySet()));
+
+    RTtransfer_kick_shoot.whileTrue(driveFieldOrientedAnglularVelocitySlow).onFalse(driveFieldOrientedAnglularVelocity);
+
     // Hopper Commands
     PRtransfer.whileTrue(Commands.parallel(m_hopper.runHopperToShooterCommand(), m_kicker.kickCommand()));
     PLunjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));

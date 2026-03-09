@@ -76,6 +76,7 @@ public final class Configs
         public static final class PushoutSubsystem {
 
             public static final SparkFlexConfig PushoutMotorConfig = new SparkFlexConfig();
+            public static final SparkFlexConfig PushoutMotorAgitateConfig = new SparkFlexConfig();
             // public static final SparkFlexConfig PushoutRightMotorConfig = new SparkFlexConfig();
 
 
@@ -89,26 +90,27 @@ public final class Configs
                         .i(0.0)
                         .d(0.001)
                         .outputRange(-1.0, 1.0);
-                    
-                        
+
                         PushoutMotorConfig.closedLoop
                         .maxMotion
                                 .allowedProfileError(0.5)
                                 .cruiseVelocity(10000)
                                 .maxAcceleration(10000);   
-                                                             
+                        
+                        PushoutMotorAgitateConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+                        PushoutMotorAgitateConfig.closedLoop
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .p(3.3)
+                        .i(0.0)
+                        .d(0.001)
+                        .outputRange(-1.0, 1.0);
 
-                        // PushoutRightMotorConfig.closedLoop
-                        // .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                        // .p(0.2)
-                        // .i(0.0)
-                        // .d(0.05)
-                        // .outputRange(-1.0, 1.0)
-                        // .maxMotion
-                        //         .maxAcceleration(3000)
-                        //         .cruiseVelocity(100)
-                        //         .allowedProfileError(0.01); // smooth extension, allow some error to prevent oscillation
-                                
+                        PushoutMotorAgitateConfig.closedLoop
+                        .maxMotion
+                                .allowedProfileError(0.5)
+                                .cruiseVelocity(3000)
+                                .maxAcceleration(10000);   
+                        
                 }
 
         };
