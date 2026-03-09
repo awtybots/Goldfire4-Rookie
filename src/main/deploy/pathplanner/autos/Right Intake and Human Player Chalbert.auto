@@ -25,12 +25,6 @@
                 "data": {
                   "name": "intake"
                 }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Intake Right"
-                }
               }
             ]
           }
