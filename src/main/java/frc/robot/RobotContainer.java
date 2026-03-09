@@ -455,22 +455,6 @@ public class RobotContainer {
     // Climb.whileTrue(m_climber.runClimbCommand());
     // ClimbDown.whileTrue(m_climber.runClimberDownCommand());
 
-    // Shooter Commands
-    // transfer + kick + shoot command, only runs if the shooter is up to speed
-    LT_shootFuel.whileTrue(
-        Commands.parallel(
-            // keep running the VariableShoot command while we wait for the shooter to reach
-            // speed
-            m_shooter.shootFuelCommand(),
-
-            // once at speed, run hopper + kicker
-            Commands.sequence(
-                Commands.waitUntil(m_shooter::isShooterFast),
-                Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
-                    m_kicker.kickCommand(),
-                    m_pushout.AgitateCommand().repeatedly()))));
-
     // ======== Operator ========
     // shooter
     RT_OP_variableshoot.whileTrue(Commands.defer(() -> makeVariableShoot(), java.util.Collections.emptySet()));
