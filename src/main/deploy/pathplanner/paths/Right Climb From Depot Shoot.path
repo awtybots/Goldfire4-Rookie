@@ -64,7 +64,7 @@
   "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -38.036905837509714
   },
   "useDefaultConstraints": true
 }
