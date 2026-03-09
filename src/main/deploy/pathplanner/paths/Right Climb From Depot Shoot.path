@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.1774230023448773,
+        "x": 1.6130241608796299,
         "y": 5.943452211126962
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3949464658107,
+        "x": 1.8305476243454524,
         "y": 5.820230691732689
       },
       "isLocked": false,
@@ -64,7 +64,7 @@
   "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -38.036905837509714
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
