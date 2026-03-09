@@ -72,7 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
   // Track yaw over time to estimate yaw rate for logs.
   private double lastYawRadians = 0.0;
   private double lastYawTimeSec = 0.0;
-  // public boolean useMegaTag2 = false; // set to false to use MegaTag1
+  public boolean useMegaTag2 = false; // MT1 during disabled, MT2 during auto/teleop
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -620,7 +620,6 @@ public class SwerveSubsystem extends SubsystemBase {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
 
-    boolean useMegaTag2 = true; //set to false to use MegaTag1
     boolean doRejectUpdate = false;
     if (useMegaTag2 == false) {
       LimelightHelpers.PoseEstimate mt1bleft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-bleft");

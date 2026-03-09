@@ -583,6 +583,10 @@ public class RobotContainer {
     drivebase.setMotorBrake(brake);
   }
 
+  public void setUseMegaTag2(boolean use) {
+    drivebase.useMegaTag2 = use;
+  }
+
   public void logControllerInputs() {
     // Driver left stick X (-1..1).
     Logger.recordOutput("Input/Driver/LeftX", driverXbox.getLeftX());

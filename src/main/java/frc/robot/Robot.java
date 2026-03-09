@@ -142,7 +142,9 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void disabledInit() {
-    // drivebase.useMegaTag2 = true;
+    if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
+      m_robotContainer.setUseMegaTag2(false); // Use MT1 during disabled to calibrate heading
+    }
     // LimelightHelpers.SetIMUMode("limelight-bleft", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-bright", 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode("limelight-climber", 1); // Seed internal IMU
@@ -178,7 +180,9 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void autonomousInit() {
-    // drivebase.useMegaTag2 = true;
+    if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
+      m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
+    }
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     LimelightHelpers.SetThrottle("limelight-bright", 0);
     LimelightHelpers.SetThrottle("limelight-climber", 0);
@@ -217,7 +221,9 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    // drivebase.useMegaTag2 = true;
+    if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
+      m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
+    }
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     // LimelightHelpers.SetIMUMode("limelight-bleft", 4); // Use internal IMU + external IMU
     // // Set the complementary filter alpha (optional, default is 0.001)
