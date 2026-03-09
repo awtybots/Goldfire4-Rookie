@@ -109,17 +109,18 @@ public class Pushout extends SubsystemBase {
 
     public Command homing(double threshold)
     {
-        Debouncer currentDebouncer = new Debouncer(0.1);
+        // Debouncer currentDebouncer = new Debouncer(0.1);
 
 
-        double runAmps = 1;
+        double runAmps = -10;
 
 
         return new RunCommand(() -> PushoutController.setSetpoint(runAmps, ControlType.kCurrent), this)
-                .until(() -> currentDebouncer.calculate((PushoutMotor.getOutputCurrent() >= threshold)))
+                .until(() -> PushoutMotor.getEncoder().getVelocity() < 0)
                 .finallyDo(() ->
                 {
                     StopPushout();
+                    pushoutEncoder.setPosition(0);
                 });
 
     }
