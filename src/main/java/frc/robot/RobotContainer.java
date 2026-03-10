@@ -584,6 +584,9 @@ public class RobotContainer {
   }
 
   public void setUseMegaTag2(boolean use) {
+    if (use && !drivebase.useMegaTag2) {
+      drivebase.seedHeadingFromMT1();
+    }
     drivebase.useMegaTag2 = use;
   }
 
