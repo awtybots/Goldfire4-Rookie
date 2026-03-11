@@ -72,6 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
   private double lastYawRadians = 0.0;
   private double lastYawTimeSec = 0.0;
   public boolean useMegaTag2 = false; // MT1 during disabled, MT2 during auto/teleop
+  private Rotation2d lastMT1Heading = null; // Last valid MT1 heading for seeding MT2 on enable
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -611,6 +612,17 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive.getPose();
   }
 
+  /**
+   * Seeds odometry heading from the last valid MT1 observation.
+   * Call this when switching from MT1 to MT2 so MT2 starts with an accurate heading.
+   */
+  public void seedHeadingFromMT1() {
+    if (lastMT1Heading != null) {
+      Pose2d current = getPose();
+      resetOdometry(new Pose2d(current.getTranslation(), lastMT1Heading));
+    }
+  }
+
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
 
@@ -637,6 +649,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
       if(!doRejectUpdate)
       {
+        lastMT1Heading = mt1bleft.pose.getRotation();
         swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
         swerveDrive.addVisionMeasurement(
             mt1bleft.pose,
@@ -693,6 +706,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
       if(!doRejectUpdate)
       {
+        lastMT1Heading = mt1bright.pose.getRotation();
         swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
         swerveDrive.addVisionMeasurement(
             mt1bright.pose,
@@ -749,6 +763,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
       if(!doRejectUpdate)
       {
+        lastMT1Heading = mt1climber.pose.getRotation();
         swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
         swerveDrive.addVisionMeasurement(
             mt1climber.pose,
