@@ -182,7 +182,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
-      m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
+      m_robotContainer.setUseMegaTag2(false); // Switch to MT2 for accurate x/y with calibrated gyro
     }
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     LimelightHelpers.SetThrottle("limelight-bright", 0);
@@ -223,7 +223,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
-      m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
+      m_robotContainer.setUseMegaTag2(false); // Switch to MT2 for accurate x/y with calibrated gyro
     }
     LimelightHelpers.SetThrottle("limelight-bleft", 0);
     // LimelightHelpers.SetIMUMode("limelight-bleft", 4); // Use internal IMU + external IMU
