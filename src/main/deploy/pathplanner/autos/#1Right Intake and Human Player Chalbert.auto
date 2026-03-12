@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "extend"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Right Trench to Neutral"
@@ -38,12 +44,6 @@
           "type": "path",
           "data": {
             "pathName": "Right Shoot to Human Player"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
