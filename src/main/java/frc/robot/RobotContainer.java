@@ -300,7 +300,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
 
     // intake
-    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(4));
+    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(6));
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
 
     // climber
