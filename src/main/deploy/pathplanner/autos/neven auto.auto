@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "neven"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "neven"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "extend and intake"
+                }
+              }
+            ]
           }
         },
         {
