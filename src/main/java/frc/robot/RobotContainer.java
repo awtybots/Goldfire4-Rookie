@@ -119,7 +119,7 @@ public class RobotContainer {
       .deadband(OperatorConstants.DEADBAND)
       .scaleTranslation(1.0)
       .allianceRelativeControl(true)
-      .aim(() -> drivebase.getDynamicHubLocation())
+      .aim(()-> isInAllianceZone() ? drivebase.getDynamicHubLocation() : drivebase.getDynamicFerryLocation())
       // .aimLock(Angle.ofBaseUnits(1, Degrees))
       .aimWhile(driverXbox.rightTrigger())
       // .aimWhile(driverXbox.leftTrigger())
@@ -197,7 +197,7 @@ public class RobotContainer {
   private final Trigger PLunjam = driverXbox.povLeft(); // run hopper in reverse and kick backwards to unjam
 
   // Shooter
-  private final Trigger LT_shootFuel = driverXbox.leftTrigger();
+  private final Trigger LT_Intake = driverXbox.leftTrigger();
 
   // Intake
   private final Trigger X_runIntake = driverXbox.x();
@@ -383,7 +383,7 @@ public class RobotContainer {
                 shootCmd,
                 // Continuously update aim target for shoot-on-the-move
                 // Commands.run(() -> driveAngularVelocity.aim(drivebase.getDynamicHubLocation())),
-                Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicHubLocation())),
+                // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicHubLocation())),
                 Commands.sequence(
                       Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
                         && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
@@ -399,7 +399,7 @@ public class RobotContainer {
           ControllAllPassing passCmd = makeVariablePass();
             return Commands.parallel(
                 passCmd,
-                Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())),
+                // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())),
                 Commands.sequence(
                     Commands.waitUntil(() -> passCmd.isCASAtSpeed()
                         && driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
@@ -414,7 +414,7 @@ public class RobotContainer {
       RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
       RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
       
-    LT_shootFuel.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
+    LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
 
 
     // Hopper Commands
