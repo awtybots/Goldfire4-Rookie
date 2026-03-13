@@ -700,57 +700,92 @@ public class SwerveSubsystem extends SubsystemBase {
     boolean doRejectUpdate = false;
     if(!useMegaTag2) // If using mega tag 1
     {
-      LimelightHelpers.PoseEstimate mt1bleft = LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraName);
-      
-      if(mt1bleft.tagCount == 1 && mt1bleft.rawFiducials.length == 1)
+      LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraName);
+
+      if(poseEstimate.tagCount == 1 && poseEstimate.rawFiducials.length == 1)
       {
-        if(mt1bleft.rawFiducials[0].ambiguity > .7)
+        if(poseEstimate.rawFiducials[0].ambiguity > .7)
         {
           doRejectUpdate = true;
         }
-        if(mt1bleft.rawFiducials[0].distToCamera > 3)
+        if(poseEstimate.rawFiducials[0].distToCamera > 3)
         {
           doRejectUpdate = true;
         }
       }
-      if(mt1bleft.tagCount == 0)
+      if(poseEstimate.tagCount == 0)
+      {
+        doRejectUpdate = true;
+      }
+      // Reject if spinning too fast (blurry image)
+      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360)
+      {
+        doRejectUpdate = true;
+      }
+      // Reject if vision pose is too far from current estimate (outlier)
+      if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > 1.0)
       {
         doRejectUpdate = true;
       }
 
       if(!doRejectUpdate)
       {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.6,.6,9999999));
+        double xyStdDev = calculateStdDev(poseEstimate.tagCount, poseEstimate.avgTagDist);
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(xyStdDev, xyStdDev, 9999999));
         swerveDrive.addVisionMeasurement(
-            mt1bleft.pose,
-            mt1bleft.timestampSeconds);
+            poseEstimate.pose,
+            poseEstimate.timestampSeconds);
       }
     }
     else  // If using mega tag 2
     {
-      LimelightHelpers.SetRobotOrientation(cameraName, 
-      swerveDrive.getOdometryHeading().getDegrees(), //swerveDrive.getGyro().getRotation3d().getRotation2d().getDegrees(), //swerveDrive.getOdometryHeading().getDegrees(),
+      LimelightHelpers.SetRobotOrientation(cameraName,
+      swerveDrive.getOdometryHeading().getDegrees(),
       0.0, 0.0, 0.0, 0.0, 0.0);
-      //first try raw, then delete raw, if both dont work try getHeading and stuff
-      LimelightHelpers.PoseEstimate mt2bleft = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
-      // double omegaDegPerSec = Units.radiansToDegrees(swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
-      //or we can do omegaDegPerSec
-      
-      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+      LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(cameraName);
+
+      if(Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) > 360) // if our angular velocity is greater than 360 degrees per second, ignore vision updates
       {
         doRejectUpdate = true;
       }
-      if(mt2bleft.tagCount == 0)
+      if(poseEstimate.tagCount == 0)
+      {
+        doRejectUpdate = true;
+      }
+      // Reject if average tag distance is too far (noisy estimate)
+      if(poseEstimate.avgTagDist > 4)
+      {
+        doRejectUpdate = true;
+      }
+      // Reject if vision pose is too far from current estimate (outlier)
+      if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > 1.0)
       {
         doRejectUpdate = true;
       }
       if(!doRejectUpdate)
       {
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(.6,.6,9999999));
+        double xyStdDev = calculateStdDev(poseEstimate.tagCount, poseEstimate.avgTagDist);
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(xyStdDev, xyStdDev, 9999999));
         swerveDrive.addVisionMeasurement(
-            mt2bleft.pose,
-            mt2bleft.timestampSeconds);
+            poseEstimate.pose,
+            poseEstimate.timestampSeconds);
       }
+    }
+  }
+
+  /**
+   * Calculate dynamic standard deviation based on tag count and distance.
+   * Closer tags and more tags = more trust (lower std dev).
+   */
+  private double calculateStdDev(int tagCount, double avgTagDist)
+  {
+    if(tagCount >= 2)
+    {
+      return 0.2 * avgTagDist; // multi-tag: more trust
+    }
+    else
+    {
+      return 0.5 * avgTagDist * avgTagDist; // single-tag: much less trust when far
     }
   }
 
