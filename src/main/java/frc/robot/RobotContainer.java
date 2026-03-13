@@ -231,9 +231,9 @@ public class RobotContainer {
 
   // Climber
   private final Trigger POVUP_OP_ClimberLimelight = operatorXbox.povUp();
-  private final Trigger POVUP_OP_BLeftLimelight = operatorXbox.povLeft();
-  private final Trigger POVUP_OP_BRightLimelight = operatorXbox.povRight();
-  private final Trigger PD_OP_ToggleVision = operatorXbox.povDown(); // toggle vision
+  private final Trigger POVLEFT_OP_LeftLimelight = operatorXbox.povLeft();
+  private final Trigger POVRIGHT_OP_RightLimelight = operatorXbox.povRight();
+  private final Trigger POVDOwn_OP_ToggleVision = operatorXbox.povDown(); // toggle vision
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -300,7 +300,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
 
     // intake
-    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand().withTimeout(6));
+    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
 
     // climber
@@ -414,20 +414,7 @@ public class RobotContainer {
       RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
       RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
       
-    LT_shootFuel.whileTrue(
-        Commands.parallel(
-            // keep running the VariableShoot command while we wait for the shooter to reach
-            // speed
-            m_shooter.shootFuelCommand(),
-
-            // once at speed, run hopper + kicker
-            Commands.sequence(
-                Commands.waitUntil(m_shooter::isShooterFast),
-                Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
-                    m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand(),
-                    m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()))));
+    LT_shootFuel.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
 
 
     // Hopper Commands
@@ -443,7 +430,6 @@ public class RobotContainer {
     // Swerve Drive Commands
     driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-    RBpushout_and_intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
     LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.runIntakeCommand()));
 
     // Pushout Commands
@@ -463,7 +449,19 @@ public class RobotContainer {
 
     // ======== Operator ========
     // shooter
-    RT_OP_variableshoot.whileTrue(Commands.defer(() -> makeVariableShoot(), java.util.Collections.emptySet()));
+    RT_OP_variableshoot.whileTrue( Commands.parallel(
+            // keep running the VariableShoot command while we wait for the shooter to reach
+            // speed
+            m_shooter.shootFuelCommand(),
+
+            // once at speed, run hopper + kicker
+            Commands.sequence(
+                Commands.waitUntil(m_shooter::isShooterFast),
+                Commands.parallel(
+                    m_hopper.runHopperToShooterCommand(),
+                    m_intake.runIntakeCommand(),
+                    m_kicker.kickCommand(),
+                    m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()))));
     LT_OPshootFuel.whileTrue(m_shooter.shootFuelCommand());
 
     // get to shooter
@@ -477,13 +475,13 @@ public class RobotContainer {
     // pushout
     Y_OP_extendIntake.whileTrue(m_pushout.PushCommand());
     B_OP_reteactIntake.whileTrue(m_pushout.RetractCommand());
-    POVLEFT_OP_agitate.whileTrue(m_pushout.AgitateCommand());
+    //POVLEFT_OP_agitate.whileTrue(m_pushout.AgitateCommand());
 
     // vision
     POVUP_OP_ClimberLimelight.onTrue(drivebase.ClimberToggle());
-    POVUP_OP_BLeftLimelight.onTrue(drivebase.BLeftToggle());
-    POVUP_OP_BRightLimelight.onTrue(drivebase.BRightToggle());
-    PD_OP_ToggleVision.onTrue(drivebase.VisionToggle());
+    POVLEFT_OP_LeftLimelight.onTrue(drivebase.BLeftToggle());
+    POVRIGHT_OP_RightLimelight.onTrue(drivebase.BRightToggle());
+    POVDOwn_OP_ToggleVision.onTrue(drivebase.VisionToggle());
 
     // ========================
 

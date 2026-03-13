@@ -3,61 +3,61 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.757897276334776,
-        "y": 7.357024096385541
+        "x": 5.848839420180723,
+        "y": 4.548891466601701
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.547166418650794,
-        "y": 7.403274316829004
+        "x": 6.1974072689490445,
+        "y": 6.250818348848923
       },
       "isLocked": false,
-      "linkedName": "shoot 67"
+      "linkedName": "wiggle end"
     },
     {
       "anchor": {
-        "x": 3.850900579455267,
-        "y": 7.488959967983406
+        "x": 5.615950146424882,
+        "y": 7.357024096385541
       },
       "prevControl": {
-        "x": 2.651322594507297,
-        "y": 7.356327713495889
+        "x": 6.212759960159137,
+        "y": 7.031928695831097
       },
       "nextControl": {
-        "x": 4.6217135642135645,
-        "y": 7.5741854933261195
+        "x": 5.133636918146227,
+        "y": 7.61975069459422
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.6558718885281385,
-        "y": 7.488959967983406
+        "x": 3.2859791537285967,
+        "y": 7.472730278688739
       },
       "prevControl": {
-        "x": 5.406598090508686,
-        "y": 7.469918601935847
+        "x": 3.7848758062074146,
+        "y": 7.467453369661591
       },
       "nextControl": {
-        "x": 6.50737218838325,
-        "y": 7.5540038234867515
+        "x": 2.572264693989689,
+        "y": 7.480279349737201
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.826745468073593,
-        "y": 6.906133939844877
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
       },
       "prevControl": {
-        "x": 7.071525635822511,
-        "y": 7.360635991612554
+        "x": 3.3607623668834483,
+        "y": 7.434725090130758
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Start Path"
+      "linkedName": "shoot 67"
     }
   ],
   "rotationTargets": [
@@ -66,7 +66,7 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 2,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 0.0
     }
   ],
@@ -83,13 +83,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -60.784435212185706
   },
   "reversed": false,
   "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -60.784435212185706
+    "rotation": -73.37453603903384
   },
   "useDefaultConstraints": true
 }

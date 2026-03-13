@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8427534388965907,
-        "y": 7.410385087663733
+        "x": 4.6363320825579395,
+        "y": 7.275634343892638
       },
       "isLocked": false,
       "linkedName": null
@@ -20,28 +20,28 @@
         "y": 7.400734939759036
       },
       "prevControl": {
-        "x": 5.732616829835638,
-        "y": 7.461255661710713
+        "x": 5.650961122725006,
+        "y": 7.42082638454938
       },
       "nextControl": {
-        "x": 6.99035166515956,
-        "y": 7.1474454762845285
+        "x": 6.5540307062007646,
+        "y": 7.364864398694974
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.826745468073593,
-        "y": 6.906133939844877
+        "x": 8.072562344968109,
+        "y": 6.729446148564848
       },
       "prevControl": {
-        "x": 7.452994687756443,
-        "y": 7.211064227457387
+        "x": 7.749849435498326,
+        "y": 7.412439487661317
       },
       "nextControl": {
-        "x": 8.159899933164619,
-        "y": 6.634324776601407
+        "x": 8.828645891475372,
+        "y": 5.129262174166862
       },
       "isLocked": false,
       "linkedName": "Start Path"
@@ -52,12 +52,12 @@
         "y": 5.4993132530120485
       },
       "prevControl": {
-        "x": 8.549275180040354,
-        "y": 5.748815180999381
+        "x": 8.300224320664855,
+        "y": 6.1875320123142945
       },
       "nextControl": {
-        "x": 8.580821205501817,
-        "y": 5.249811325024716
+        "x": 8.654829686165472,
+        "y": 5.2659909792277535
       },
       "isLocked": false,
       "linkedName": null
@@ -68,24 +68,105 @@
         "y": 4.417469879518072
       },
       "prevControl": {
-        "x": 8.010497754912398,
-        "y": 4.663112300657274
+        "x": 8.44850627779223,
+        "y": 4.371413028232397
+      },
+      "nextControl": {
+        "x": 7.207378207674495,
+        "y": 4.4893997223682245
+      },
+      "isLocked": false,
+      "linkedName": "Intake End 1"
+    },
+    {
+      "anchor": {
+        "x": 5.536450803959915,
+        "y": 7.357024096385541
+      },
+      "prevControl": {
+        "x": 6.769525602805738,
+        "y": 6.929820291892447
+      },
+      "nextControl": {
+        "x": 5.300226217890812,
+        "y": 7.438865069843101
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.012233059088264,
+        "y": 7.400734939759036
+      },
+      "prevControl": {
+        "x": 3.751370602332659,
+        "y": 7.40474603899523
+      },
+      "nextControl": {
+        "x": 2.736107374321596,
+        "y": 7.399236480462272
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
+      },
+      "prevControl": {
+        "x": 2.5812530568703176,
+        "y": 7.533933168311749
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Intake End 1"
+      "linkedName": "shoot 67"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": -78.6522455826842
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": -84.84550732155034
+    },
+    {
+      "waypointRelativePos": 4,
+      "rotationDegrees": -100.80529852567611
+    },
+    {
+      "waypointRelativePos": 5,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 6,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Slow for Intake",
+      "minWaypointRelativePos": 2.0313062050359734,
+      "maxWaypointRelativePos": 4.066576086956521,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
-    {
-      "name": "extend",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
     {
       "name": "intake",
       "waypointRelativePos": 1.9238995016611298,
@@ -108,7 +189,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": -60.784435212185706
   },
   "reversed": false,
   "folder": "Week 3 Paths",

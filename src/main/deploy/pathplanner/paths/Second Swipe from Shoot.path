@@ -1,0 +1,135 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.757897276334776,
+        "y": 7.357024096385541
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.440161177543252,
+        "y": 7.4745341650830355
+      },
+      "isLocked": false,
+      "linkedName": "shoot 67"
+    },
+    {
+      "anchor": {
+        "x": 3.850900579455267,
+        "y": 7.488959967983406
+      },
+      "prevControl": {
+        "x": 2.6447153673091837,
+        "y": 7.5689465535421565
+      },
+      "nextControl": {
+        "x": 4.664601154944564,
+        "y": 7.435000484775369
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.712827892452163,
+        "y": 7.357024096385541
+      },
+      "prevControl": {
+        "x": 5.503360025876947,
+        "y": 7.9290044884643915
+      },
+      "nextControl": {
+        "x": 5.90443501118172,
+        "y": 6.833814896387902
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.848839420180723,
+        "y": 6.28999440777817
+      },
+      "prevControl": {
+        "x": 5.4997193649086,
+        "y": 6.777102007104061
+      },
+      "nextControl": {
+        "x": 6.087986007996374,
+        "y": 5.956326609212255
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.5573036078136075,
+        "y": 5.348159494596031
+      },
+      "prevControl": {
+        "x": 6.575828806767305,
+        "y": 5.7854489772129325
+      },
+      "nextControl": {
+        "x": 6.522350526795369,
+        "y": 4.523087939222437
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.848839420180723,
+        "y": 4.548891466601701
+      },
+      "prevControl": {
+        "x": 5.746762553162892,
+        "y": 4.783897557476195
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "wiggle end"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": -72.41493479614493
+    },
+    {
+      "waypointRelativePos": 4,
+      "rotationDegrees": -104.48738201471386
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -73.37453603903384
+  },
+  "reversed": false,
+  "folder": "Week 3 Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -60.784435212185706
+  },
+  "useDefaultConstraints": true
+}

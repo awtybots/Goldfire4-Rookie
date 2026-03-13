@@ -3,48 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5732667617689007,
-        "y": 5.943452211126962
+        "x": 3.5356462160232933,
+        "y": 4.0699051762379
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.112892317679455,
-        "y": 5.961961962353453
+        "x": 2.707570708097821,
+        "y": 4.101476608969739
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.6442636065898955,
-        "y": 5.938496333607106
+        "x": 2.3565708106308905,
+        "y": 4.0699051762379
       },
       "prevControl": {
-        "x": 1.1125046486426307,
-        "y": 5.962706568270642
+        "x": 2.7777018522036774,
+        "y": 4.057027297062975
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "extend",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "intake",
-      "waypointRelativePos": 0.6890527950310559,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -55,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Week 3 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

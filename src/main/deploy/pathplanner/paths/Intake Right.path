@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.9454168415079,
-        "y": 3.907094977283923
+        "y": 3.6642543247847685
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.752592659742353,
-        "y": 3.6642829248959283
+        "y": 3.421442272396774
       },
       "isLocked": false,
       "linkedName": "Right Neutral Intake Pos"

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.676429418742587,
-        "y": 0.6189561091340454
+        "x": 4.29186469404117,
+        "y": 0.7065759229706573
       },
       "isLocked": false,
       "linkedName": "Right Trench Start Pos"
@@ -20,44 +20,60 @@
         "y": 0.6228364972741429
       },
       "prevControl": {
-        "x": 5.419772142068095,
-        "y": 0.589639304524881
+        "x": 5.417705085994101,
+        "y": 0.6142688020834833
       },
       "nextControl": {
-        "x": 6.764300658128195,
-        "y": 0.7697727910573615
+        "x": 6.872020523343377,
+        "y": 0.6641386219135034
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.270163906811053,
-        "y": 0.9983784515383616
+        "x": 7.2788216869212965,
+        "y": 1.0154064670138894
       },
       "prevControl": {
-        "x": 7.048693607198978,
-        "y": 0.8824004088331245
+        "x": 6.988652776165104,
+        "y": 0.8990013413656934
       },
       "nextControl": {
-        "x": 7.5598067469370065,
-        "y": 1.1500566212082166
+        "x": 7.826641036975766,
+        "y": 1.2351715001093326
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.563912000831975,
-        "y": 2.3713962917066613
+        "x": 7.815938487753003,
+        "y": 1.255980578741909
       },
       "prevControl": {
-        "x": 8.45760974284447,
-        "y": 1.7678043752000359
+        "x": 7.345690462069383,
+        "y": 1.0067280390937294
       },
       "nextControl": {
-        "x": 8.699784195866906,
-        "y": 3.142888451456797
+        "x": 8.12563162510376,
+        "y": 1.420131828253422
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.459345450113286,
+        "y": 2.398183959404963
+      },
+      "prevControl": {
+        "x": 8.374731081206356,
+        "y": 2.1629385373995986
+      },
+      "nextControl": {
+        "x": 8.786124340798366,
+        "y": 3.3066967691643967
       },
       "isLocked": false,
       "linkedName": null
@@ -65,20 +81,84 @@
     {
       "anchor": {
         "x": 7.9454168415079,
-        "y": 3.907094977283923
+        "y": 3.6642543247847685
       },
       "prevControl": {
-        "x": 8.442147093712931,
-        "y": 3.5992526690391458
+        "x": 8.37095070806623,
+        "y": 3.705511488982194
+      },
+      "nextControl": {
+        "x": 6.972455077214027,
+        "y": 3.569921895754031
+      },
+      "isLocked": false,
+      "linkedName": "Right Neutral Intake Pos"
+    },
+    {
+      "anchor": {
+        "x": 6.685571252893519,
+        "y": 1.255980578741909
+      },
+      "prevControl": {
+        "x": 7.4361823015943225,
+        "y": 1.8521457716884782
+      },
+      "nextControl": {
+        "x": 6.04894010778777,
+        "y": 0.750342765236916
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.6993418691958926,
+        "y": 0.6228364972741429
+      },
+      "prevControl": {
+        "x": 4.101440528952492,
+        "y": 0.6175745679504439
+      },
+      "nextControl": {
+        "x": 3.1293731225597683,
+        "y": 0.6302952022181786
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1542093555295945,
+        "y": 0.6830277940031146
+      },
+      "prevControl": {
+        "x": 3.5797763216524014,
+        "y": 0.6036904659966416
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Neutral Intake Pos"
+      "linkedName": "shoot 41"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": 61.70318102150388
+    },
+    {
+      "waypointRelativePos": 4,
+      "rotationDegrees": 77.34628675709038
+    },
+    {
+      "waypointRelativePos": 5,
+      "rotationDegrees": 86.78110225294353
+    },
+    {
+      "waypointRelativePos": 7,
       "rotationDegrees": 0.0
     }
   ],
@@ -93,8 +173,8 @@
     },
     {
       "name": "intake",
-      "waypointRelativePos": 1.6737907761529824,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 3.1607142857142856,
+      "endWaypointRelativePos": 5.347049689440992,
       "command": {
         "type": "named",
         "data": {
@@ -113,7 +193,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 61.31623759980989
   },
   "reversed": false,
   "folder": "Week 3 Paths",
