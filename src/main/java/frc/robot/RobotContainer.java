@@ -577,6 +577,10 @@ public class RobotContainer {
     drivebase.useMegaTag2 = use;
   }
 
+  public void setEnabledTimestamp() {
+    drivebase.setEnabledTimestamp();
+  }
+
   public void logControllerInputs() {
     // Driver left stick X (-1..1).
     Logger.recordOutput("Input/Driver/LeftX", driverXbox.getLeftX());

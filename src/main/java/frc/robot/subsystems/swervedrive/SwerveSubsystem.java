@@ -82,6 +82,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean visionToggleAll = false;
 
+  private double enabledTimestamp = 0.0;
+
   private final SendableChooser<Boolean> megaTagChooser = new SendableChooser<Boolean>();
   private LoggedDashboardChooser<Boolean> loggedMegaTagChooser;
 
@@ -723,10 +725,17 @@ public class SwerveSubsystem extends SubsystemBase {
         doRejectUpdate = true;
       }
       // Reject if vision pose is too far from current estimate (outlier)
-      if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > 1.0)
+      // No outlier rejection while disabled — let vision fully correct pose
+      if(DriverStation.isEnabled())
       {
-        doRejectUpdate = true;
+        double timeSinceEnabled = Timer.getFPGATimestamp() - enabledTimestamp;
+        double maxJump = timeSinceEnabled < 2.0 ? 3.0 : 1.0;
+        if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > maxJump)
+        {
+          doRejectUpdate = true;
+        }
       }
+      Logger.recordOutput("Vision/" + cameraName + "/rejected", doRejectUpdate);
 
       if(!doRejectUpdate)
       {
@@ -758,10 +767,17 @@ public class SwerveSubsystem extends SubsystemBase {
         doRejectUpdate = true;
       }
       // Reject if vision pose is too far from current estimate (outlier)
-      if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > 1.0)
+      // No outlier rejection while disabled — let vision fully correct pose
+      if(DriverStation.isEnabled())
       {
-        doRejectUpdate = true;
+        double timeSinceEnabled = Timer.getFPGATimestamp() - enabledTimestamp;
+        double maxJump = timeSinceEnabled < 2.0 ? 3.0 : 1.0;
+        if(poseEstimate.pose.getTranslation().getDistance(swerveDrive.getPose().getTranslation()) > maxJump)
+        {
+          doRejectUpdate = true;
+        }
       }
+      Logger.recordOutput("Vision/" + cameraName + "/rejected", doRejectUpdate);
       if(!doRejectUpdate)
       {
         double xyStdDev = calculateStdDev(poseEstimate.tagCount, poseEstimate.avgTagDist);
@@ -860,6 +876,13 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void setMotorBrake(boolean brake) {
     swerveDrive.setMotorIdleMode(brake);
+  }
+
+  /**
+   * Record the timestamp when the robot becomes enabled, used for vision outlier rejection.
+   */
+  public void setEnabledTimestamp() {
+    enabledTimestamp = Timer.getFPGATimestamp();
   }
 
   /**
