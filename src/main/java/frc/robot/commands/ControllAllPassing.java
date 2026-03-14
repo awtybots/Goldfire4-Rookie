@@ -31,7 +31,7 @@ import java.util.function.BooleanSupplier;
 public class ControllAllPassing extends Command
 {
 
-  private final Pose2d goalPose;
+  private final Supplier<Pose2d> goalPoseSupplier;
   private final Shooter m_shooter;
   private final Supplier<Pose2d> robotPoseSupplier;
   // private final Hopper m_hopper;
@@ -59,11 +59,11 @@ public class ControllAllPassing extends Command
   
   
 
-  public ControllAllPassing(Pose2d goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
+  public ControllAllPassing(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
 
   {
 
-    this.goalPose = goalPoseSupplier;
+    this.goalPoseSupplier = goalPoseSupplier;
     this.m_shooter = shooter;
     this.robotPoseSupplier = robotPoseSupplier;
     // this.m_swerveSubsystem = swerveSubsystem;
@@ -114,7 +114,7 @@ public class ControllAllPassing extends Command
     //                                                                );
 
     // 2. GET TARGET VECTOR
-    Translation2d goalLocation = goalPose.getTranslation();
+    Translation2d goalLocation = goalPoseSupplier.get().getTranslation();
     Translation2d robotLocation = robotPoseSupplier.get().getTranslation();
     Translation2d targetVec = goalLocation.minus(robotLocation);
     double        dist         = targetVec.getNorm();

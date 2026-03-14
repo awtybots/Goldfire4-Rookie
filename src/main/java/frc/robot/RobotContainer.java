@@ -89,11 +89,11 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting(drivebase.getDynamicHubLocation(), m_shooter, drivebase::getPose);
+    return new ControlAllShooting(drivebase::getDynamicHubLocation, m_shooter, drivebase::getPose);
   }
 
   private ControllAllPassing makeVariablePass() {
-    return new ControllAllPassing(drivebase.getDynamicFerryLocation(),
+    return new ControllAllPassing(drivebase::getDynamicFerryLocation,
         m_shooter, drivebase::getPose);
   }
 
@@ -177,7 +177,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(() -> drivebase.getDynamicHubLocation())
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(0, Seconds))
+      .aimLookahead(Time.ofBaseUnits(0.2, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
 
   SwerveInputStream aimAtFerryStream = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -185,7 +185,7 @@ public class RobotContainer {
       .withControllerRotationAxis(() -> 0.0)
       .aim(() -> drivebase.getDynamicFerryLocation())
       .aimWhile(true)
-      .aimLookahead(Time.ofBaseUnits(0, Seconds))
+      .aimLookahead(Time.ofBaseUnits(0.2, Seconds))
       .aimFeedforward(0.0001, 0.0001, 0.00013);
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
