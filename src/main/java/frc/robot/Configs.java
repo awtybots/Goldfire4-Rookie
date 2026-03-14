@@ -31,8 +31,12 @@ public final class Configs
                             // loop slot, as it will default to slot 0.
                             .p(0.0002155)
                             .i(0)
-                            .d(0)
-                            .outputRange(-1, 1);
+                            .d(0.0001)
+                            .outputRange(-1, 1)
+                            .feedForward
+                            .kS(0.0001)
+                            .kV(0.0001)
+                            .kA(0.0001);
                         IntakeMotorConfig.closedLoop
                         .maxMotion.maxAcceleration(1000000);
 
