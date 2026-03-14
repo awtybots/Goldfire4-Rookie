@@ -3,45 +3,61 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.411319227430556,
-        "y": 3.5775633680555554
+        "x": 6.80793152639087,
+        "y": 3.5886162624821685
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.118662998719486,
-        "y": 2.5852796156734423
+        "x": 6.487636751943823,
+        "y": 2.6485513167181978
       },
       "isLocked": false,
-      "linkedName": "right wiggle"
+      "linkedName": "end wiggy"
     },
     {
       "anchor": {
-        "x": 5.805077907986112,
+        "x": 5.915164051355206,
         "y": 0.7399640301130432
       },
       "prevControl": {
-        "x": 6.730214066637302,
-        "y": 1.2798992137348018
+        "x": 6.759010149387447,
+        "y": 1.1959175971701959
       },
       "nextControl": {
-        "x": 5.265821720931787,
-        "y": 0.425239126482803
+        "x": 5.545902414706055,
+        "y": 0.5404416755034115
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6100670688711647,
-        "y": 0.7399640301130432
+        "x": 4.634099741168267,
+        "y": 0.6589954724271812
       },
       "prevControl": {
-        "x": 4.065192010422802,
-        "y": 0.8321815928919912
+        "x": 5.076047781905997,
+        "y": 0.7021258124683101
       },
       "nextControl": {
-        "x": 3.0066942580637477,
-        "y": 0.6177084361435127
+        "x": 4.3486506725750935,
+        "y": 0.631138090432013
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.508573466476462,
+        "y": 0.6589954724271812
+      },
+      "prevControl": {
+        "x": 4.109835830979054,
+        "y": 0.7348622319678036
+      },
+      "nextControl": {
+        "x": 3.082318794101407,
+        "y": 0.6052110304907597
       },
       "isLocked": false,
       "linkedName": null
@@ -52,22 +68,22 @@
         "y": 0.7399640301130432
       },
       "prevControl": {
-        "x": 2.7797676007557355,
-        "y": 0.8634544931711923
+        "x": 2.7905629539259897,
+        "y": 0.8807707982541659
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot 41"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 2,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -83,7 +99,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 61.31623759980989
+    "rotation": 63.897628047632324
   },
   "reversed": false,
   "folder": "Week 3 Paths",

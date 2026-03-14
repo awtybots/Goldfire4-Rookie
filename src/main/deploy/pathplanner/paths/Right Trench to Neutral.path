@@ -188,7 +188,7 @@
       "minWaypointRelativePos": 3.2236295681063085,
       "maxWaypointRelativePos": 5.151967400332225,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 1.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -201,7 +201,7 @@
       "minWaypointRelativePos": 6.4865033222591375,
       "maxWaypointRelativePos": 8.25938278654487,
       "constraints": {
-        "maxVelocity": 2.2,
+        "maxVelocity": 2.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -225,8 +225,8 @@
     },
     {
       "name": "intake",
-      "waypointRelativePos": 3.1607142857142856,
-      "endWaypointRelativePos": 5.347049689440992,
+      "waypointRelativePos": 1.5313977042539053,
+      "endWaypointRelativePos": 6.0283592167453985,
       "command": {
         "type": "named",
         "data": {
