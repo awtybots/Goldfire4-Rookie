@@ -82,11 +82,11 @@ public class ControlAllShooting extends Command
     for (var entry : List.of(
       // Pair.of(Meters.of(1), RPM.of((1000))),
                             Pair.of(Meters.of(2), RPM.of(1700)),
-                            Pair.of(Meters.of(2.5), RPM.of(1815)),
-                            Pair.of(Meters.of(3), RPM.of(1930)),
+                            Pair.of(Meters.of(2.5), RPM.of(1835)),
+                            Pair.of(Meters.of(3), RPM.of(1950)),
                             Pair.of(Meters.of(3.5), RPM.of(2090)),
                             // Pair.of(Meters.of(3.5), RPM.of(2050),
-                            Pair.of(Meters.of(4), RPM.of(2260)),
+                            Pair.of(Meters.of(4), RPM.of(2220)),
                             Pair.of(Meters.of(5.2048), RPM.of(2456.918)),
                             Pair.of(Meters.of(6), RPM.of(2600))
                             
