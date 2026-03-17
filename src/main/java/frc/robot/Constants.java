@@ -266,6 +266,13 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
   public static final boolean LIMIT_DASHBOARD_PERIODIC_UPDATES = false; // Enable throttling of dashboard updates
   public static final int DASHBOARD_UPDATE_PERIOD_CYCLES = 10; // Number of periodic loops between dashboard refreshes
 
+  // Object Detection
+  public static final double X_FUEL_SETPOINT = 0.5;
+  public static final double Y_FUEL_SETPOINT = 0.0;
+
+  public static final double X_FUEL_TOLERANCE = 0.1;
+  public static final double Y_FUEL_TOLERANCE = 0.1;
+
 
   public static class Dimensions {
         public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
