@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
@@ -413,6 +414,20 @@ public class SwerveSubsystem extends SubsystemBase {
         edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
     );
   }
+
+  public Command antiPushDefense() {
+    return run(() -> {
+        // put all swerve modules facing inwards
+        SwerveModuleState[] states = new SwerveModuleState[] {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45)), // FL
+            new SwerveModuleState(0, Rotation2d.fromDegrees(135)), // FR
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), //BL
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-135)) // BR
+        };
+        swerveDrive.setModuleStates(states, false);
+    }).finallyDo(interrupted -> stop()); // when David trys to drive -> stop
+  }
+
 
   public Command aimAtPose(Pose2d targetPose) {
     return run(() -> {

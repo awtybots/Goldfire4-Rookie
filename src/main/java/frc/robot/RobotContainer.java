@@ -394,7 +394,7 @@ public class RobotContainer {
         if(isInAllianceZone()) // In alliance zone → shoot at hub
         {
 
-        
+    
          ControlAllShooting shootCmd = makeVariableShoot();
         return Commands.parallel(
                 shootCmd,
@@ -406,6 +406,7 @@ public class RobotContainer {
                         && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                       Commands.waitSeconds(0.5),
                     Commands.parallel(
+                        drivebase.antiPushDefense(),
                         m_hopper.runHopperToShooterCommand(),
                         m_funnel.runFunnelCommand(),
                         m_kicker.kickCommand(),
