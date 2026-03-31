@@ -81,10 +81,10 @@ public class RobotContainer {
 
   // Instantiate Subsystems
   private final Intake m_intake = new Intake();
-  // private final Hopper m_hopper = new Hopper();
-  // private final Shooter m_shooter = new Shooter();
-  // private final Climber m_climber = new Climber();
-  // private final Kicker m_kicker = new Kicker();
+  private final Hopper m_hopper = new Hopper();
+  private final Shooter m_shooter = new Shooter();
+  private final Climber m_climber = new Climber();
+  private final Kicker m_kicker = new Kicker();
   private final Pushout m_pushout = new Pushout();
 
   // Helper Subsystems
@@ -94,14 +94,14 @@ public class RobotContainer {
 
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
-  // private ControlAllShooting makeVariableShoot() {
-  //   return new ControlAllShooting(drivebase::getDynamicHubLocation, m_shooter, drivebase::getPose);
-  // }
+  private ControlAllShooting makeVariableShoot() {
+    return new ControlAllShooting(drivebase::getDynamicHubLocation, m_shooter, drivebase::getPose);
+  }
 
-  // private ControllAllPassing makeVariablePass() {
-  //   return new ControllAllPassing(drivebase::getDynamicFerryLocation,
-  //       m_shooter, drivebase::getPose);
-  // }
+  private ControllAllPassing makeVariablePass() {
+    return new ControllAllPassing(drivebase::getDynamicFerryLocation,
+        m_shooter, drivebase::getPose);
+  }
 
    
 
@@ -199,7 +199,7 @@ public class RobotContainer {
   // Parallel Commands
   private final Trigger RTtransfer_kick_shoot = driverXbox.rightTrigger(); // twindex to kicker, kick, agitate, and
                                                                            // shoot only when up to speed
-  private final Trigger RBShootAgitatePull = driverXbox.rightBumper(); // pushout the intake and intake fuel
+  private final Trigger RBpushout_and_intake = driverXbox.rightBumper(); // pushout the intake and intake fuel
   private final Trigger LBretract_and_stop = driverXbox.leftBumper(); // retract 4 bar and stop intake
   private final Trigger PRtransfer = driverXbox.povRight(); // transfers with hopper to kicker and kicks
   private final Trigger PLunjam = driverXbox.povLeft(); // run hopper in reverse and kick backwards to unjam
@@ -266,69 +266,69 @@ public class RobotContainer {
     // SmartDashboard.putNumber("Heading Bias Gain", 0);
 
     // Create the NamedCommands that will be used in PathPlanner
-    // NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
-    // // pushout
-    // NamedCommands.registerCommand("extend", m_pushout.PushCommand());
-    // NamedCommands.registerCommand("extend and intake",
-    //     Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
-    // NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
+    // pushout
+    NamedCommands.registerCommand("extend", m_pushout.PushCommand());
+    NamedCommands.registerCommand("extend and intake",
+        Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
+    NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
 
-    // // kicker
-    // NamedCommands.registerCommand("kick", m_kicker.kickCommand().withTimeout(8));
-    // NamedCommands.registerCommand("kick backwards", m_kicker.kickBackwardsCommand().withTimeout(8));
+    // kicker
+    NamedCommands.registerCommand("kick", m_kicker.kickCommand().withTimeout(8));
+    NamedCommands.registerCommand("kick backwards", m_kicker.kickBackwardsCommand().withTimeout(8));
 
-    // // shooter
-    // NamedCommands.registerCommand("Control All Shooting", Commands.defer(() -> {
-    //   ControlAllShooting shootCmd = makeVariableShoot();
-    //   return Commands.parallel(
-    //       shootCmd,
-    //       drivebase.driveFieldOriented(aimAtHubStream),
-    //       // Continuously update aim target for shoot-on-the-move
-    //       // Commands.run(() -> aimAtHubStream.aim(drivebase.getDynamicHubLocation())),
-    //       Commands.sequence(
-    //           Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-    //               && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-    //           Commands.parallel(
-    //               m_hopper.runHopperToShooterCommand(),
-    //               m_kicker.kickCommand(),
-    //               m_pushout.AgitateCommand().repeatedly(),
+    // shooter
+    NamedCommands.registerCommand("Control All Shooting", Commands.defer(() -> {
+      ControlAllShooting shootCmd = makeVariableShoot();
+      return Commands.parallel(
+          shootCmd,
+          drivebase.driveFieldOriented(aimAtHubStream),
+          // Continuously update aim target for shoot-on-the-move
+          // Commands.run(() -> aimAtHubStream.aim(drivebase.getDynamicHubLocation())),
+          Commands.sequence(
+              Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                  && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
+              Commands.parallel(
+                  m_hopper.runHopperToShooterCommand(),
+                  m_kicker.kickCommand(),
+                  m_pushout.AgitateCommand().repeatedly(),
                   
-    //               m_intake.runIntakeCommand()
-    //           ).onlyWhile(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)))
-    //       ).finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(4.75))
-    //   );
-    // }, java.util.Collections.emptySet()).withTimeout(5));
-    // NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
-    // // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
-    // // NamedCommands.registerCommand("aim at ferry",
-    // //     drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
-
-    // // hopper
-    // NamedCommands.registerCommand("transfer", m_hopper.runHopperToShooterCommand().withTimeout(6.7));
-    // NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
-
-    // // intake
-    // NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
-    // NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
-
-    // // climber
-    // NamedCommands.registerCommand("climb up", m_climber.runClimbCommand().withTimeout(4));
-    // NamedCommands.registerCommand("climb down", m_climber.runClimberDownCommand().withTimeout(4));
-
-    // NamedCommands.registerCommand("aim at hub",
-    //         Commands.sequence
-    //         (Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = true),
-    //         Commands.waitUntil(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees))),(Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = false))));
-
-
-    //         // Commands.sequence
-    //         // (Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = true), drivebase.driveFieldOriented(aimAtHubStream)
-    //         // .until(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees))),(Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = false))));
-
+                  m_intake.runIntakeCommand()
+              ).onlyWhile(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)))
+          ).finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(4.75))
+      );
+    }, java.util.Collections.emptySet()).withTimeout(5));
+    NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
+    // NamedCommands.registerCommand("aim at hub", drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
-    //     drivebase.driveFieldOriented(aimAtFerryStream)
-    //         .until(aimAtFerryStream.aimLock(Angle.ofBaseUnits(1, Degrees))));
+    //     drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
+
+    // hopper
+    NamedCommands.registerCommand("transfer", m_hopper.runHopperToShooterCommand().withTimeout(6.7));
+    NamedCommands.registerCommand("reverse hopper", m_hopper.runReverseHopperCommand().withTimeout(6.7));
+
+    // intake
+    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
+    NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
+
+    // climber
+    NamedCommands.registerCommand("climb up", m_climber.runClimbCommand().withTimeout(4));
+    NamedCommands.registerCommand("climb down", m_climber.runClimberDownCommand().withTimeout(4));
+
+    NamedCommands.registerCommand("aim at hub",
+            Commands.sequence
+            (Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = true),
+            Commands.waitUntil(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees))),(Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = false))));
+
+
+            // Commands.sequence
+            // (Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = true), drivebase.driveFieldOriented(aimAtHubStream)
+            // .until(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees))),(Commands.runOnce(() -> drivebase.shouldAimAtHubAuto = false))));
+
+    NamedCommands.registerCommand("aim at ferry",
+        drivebase.driveFieldOriented(aimAtFerryStream)
+            .until(aimAtFerryStream.aimLock(Angle.ofBaseUnits(1, Degrees))));
 
     // Have the autoChooser pull in all PathPlanner autos as options
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -386,142 +386,122 @@ public class RobotContainer {
 
     // ======= Driver =======
     // transfer + kick + shoot/pass command, switches based on zone
-    // RTtransfer_kick_shoot.whileTrue(
+    RTtransfer_kick_shoot.whileTrue(
 
-    //   Commands.defer(() -> { 
-    //     if(isInAllianceZone()) // In alliance zone → shoot at hub
-    //     {
+      Commands.defer(() -> { 
+        if(isInAllianceZone()) // In alliance zone → shoot at hub
+        {
 
     
-    //      ControlAllShooting shootCmd = makeVariableShoot();
-    //     return Commands.parallel(
-    //             shootCmd,
-    //             // Continuously update aim target for shoot-on-the-move
-    //             // Commands.run(() -> driveAngularVelocity.aim(drivebase.getDynamicHubLocation())),
-    //             // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicHubLocation())),
-    //             Commands.sequence(
-    //                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-    //                     && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-    //                   Commands.waitSeconds(0.5),
-    //                 Commands.parallel(
-    //                     drivebase.antiPushDefense(
-    //                         driverXbox::getLeftX,
-    //                         driverXbox::getLeftY,
-    //                         driverXbox::getRightX,
-    //                         driveAngularVelocity::get),
-    //                     m_hopper.runHopperToShooterCommand(),
-    //                     m_kicker.kickCommand(),
-    //                     m_pushout.AgitateCommand().onlyWhile(() -> !LT_Intake.getAsBoolean()),
-    //                     m_intake.runIntakeCommand()).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees))))
-    //             .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
-    //     }
-    //     else
-    //     {
-    //       ControllAllPassing passCmd = makeVariablePass();
-    //         return Commands.parallel(
-    //             passCmd,
-    //             // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())),
-    //             Commands.sequence(
-    //                 Commands.waitUntil(() -> passCmd.isCASAtSpeed()
-    //                     && driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
-    //                 Commands.parallel(
-    //                     m_hopper.runHopperToShooterCommand(),
-    //                     m_kicker.kickCommand(),
-    //                     m_pushout.AgitateCommand().repeatedly().onlyWhile(() -> !LT_Intake.getAsBoolean()),
-    //                     m_intake.runIntakeCommand()).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))))
-    //             .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
-    //     }
-    //         }, java.util.Collections.emptySet()));
-    //   RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
-    //   RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
-      
-    // RBShootAgitatePull.whileTrue(
-    //     Commands.parallel(
-    //       // keep running the VariableShoot command while we wait for the shooter to reach
-    //       // speed
-    //       m_shooter.shootFuelCommand(),
-
-    //       // once at speed, run hopper + kicker
-    //       Commands.sequence(
-    //           Commands.waitUntil(m_shooter::isShooterFast),
-    //           Commands.parallel(
-    //               m_hopper.runHopperToShooterCommand(),
-    //               m_intake.runIntakeCommand(),
-    //               m_kicker.kickCommand(),
-    //               m_pushout.PullCommand()))));
-
+         ControlAllShooting shootCmd = makeVariableShoot();
+        return Commands.parallel(
+                shootCmd,
+                // Continuously update aim target for shoot-on-the-move
+                // Commands.run(() -> driveAngularVelocity.aim(drivebase.getDynamicHubLocation())),
+                // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicHubLocation())),
+                Commands.sequence(
+                      Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                        && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
+                      Commands.waitSeconds(0.5),
+                    Commands.parallel(
+                        Commands.runOnce(drivebase::lock,drivebase).repeatedly().onlyWhile(A_OP_outtake)),                       
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitateCommand().onlyWhile(() -> !LT_Intake.getAsBoolean()),
+                        m_intake.runIntakeCommand()).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees))))
+                .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+        }
+        else
+        {
+          ControllAllPassing passCmd = makeVariablePass();
+            return Commands.parallel(
+                passCmd,
+                // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())),
+                Commands.sequence(
+                    Commands.waitUntil(() -> passCmd.isCASAtSpeed()
+                        && driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
+                    Commands.parallel(
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitateCommand().repeatedly().onlyWhile(() -> !LT_Intake.getAsBoolean()),
+                        m_intake.runIntakeCommand()).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))))
+                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+        }
+            }, java.util.Collections.emptySet()));
+      RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
+      RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
       
     LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
-    A_runOuttake.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-    // // Hopper Commands
-    // PRtransfer.whileTrue(m_hopper.runHopperToShooterCommand());//,
-    //   // m_kicker.kickCommand()));
+
+    // Hopper Commands
+    PRtransfer.whileTrue(Commands.parallel(
+      m_hopper.runHopperToShooterCommand(), 
+      m_kicker.kickCommand()));
     
-    // PLunjam.whileTrue(Commands.parallel(
-    //   m_hopper.runReverseHopperCommand(),
-    //   m_kicker.kickBackwardsCommand()));
+    PLunjam.whileTrue(Commands.parallel(
+      m_hopper.runReverseHopperCommand(),
+      m_kicker.kickBackwardsCommand()));
 
-    // // speedUpShooter.whileTrue(m_shooter.SpeedUpShooterCommand());
+    // speedUpShooter.whileTrue(m_shooter.SpeedUpShooterCommand());
 
-    // // driverXbox.povDown().whileTrue(drivebase.driveToPose(new Pose2d(new Translation2d(2.6, 3.379),
-    //     // Rotation2d.fromDegrees(0))));
-    // // driverXbox.povUp().whileTrue(driveFieldOrientedDirectAngle).toggleOnFalse(driveFieldOrientedAnglularVelocity);
+    // driverXbox.povDown().whileTrue(drivebase.driveToPose(new Pose2d(new Translation2d(2.6, 3.379),
+        // Rotation2d.fromDegrees(0))));
+    // driverXbox.povUp().whileTrue(driveFieldOrientedDirectAngle).toggleOnFalse(driveFieldOrientedAnglularVelocity);
 
     // Swerve Drive Commands
     driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
 
-    // // Pushout Commands
-    // // Y_extendIntake.whileTrue(m_pushout.PushCommand());
-    // B_agitate.whileTrue((m_pushout.AgitateCommand().repeatedly()));
+    // Pushout Commands
+    // Y_extendIntake.whileTrue(m_pushout.PushCommand());
+    B_agitate.whileTrue((m_pushout.AgitateCommand().repeatedly()));
 
-    // // Intake Commands
-    // // X_runIntake.whileTrue(m_intake.runIntakeCommand());
-    // A_runOuttake.whileTrue(m_intake.runOuttakeCommand());
+    // Intake Commands
+    // X_runIntake.whileTrue(m_intake.runIntakeCommand());
+    A_runOuttake.whileTrue(m_intake.runOuttakeCommand());
 
-    // // ======== Operator ========
-    // // shooter
-    // RT_OP_1900Shot.whileTrue( Commands.parallel(
-    //         // keep running the VariableShoot command while we wait for the shooter to reach
-    //         // speed
-    //         m_shooter.shootFuelCommand(),
+    // ======== Operator ========
+    // shooter
+    RT_OP_1900Shot.whileTrue( Commands.parallel(
+            // keep running the VariableShoot command while we wait for the shooter to reach
+            // speed
+            m_shooter.shootFuelCommand(),
 
-    //         // once at speed, run hopper + kicker
-    //         Commands.sequence(
-    //             Commands.waitUntil(m_shooter::isShooterFast),
-    //             Commands.parallel(
-    //                 m_hopper.runHopperToShooterCommand(),
-    //                 m_intake.runIntakeCommand(),
-    //                 m_kicker.kickCommand(),
-    //                 m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()))));
+            // once at speed, run hopper + kicker
+            Commands.sequence(
+                Commands.waitUntil(m_shooter::isShooterFast),
+                Commands.parallel(
+                    m_hopper.runHopperToShooterCommand(),
+                    m_intake.runIntakeCommand(),
+                    m_kicker.kickCommand(),
+                    m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()))));
+    LT_OPshootFuel.whileTrue(m_shooter.shootFuelCommand());
 
-    // LT_OPshootFuel.whileTrue(m_shooter.shootFuelCommand());
+    // get to shooter
+    RB_OP_kickIndex.whileTrue(Commands.parallel(
+              m_hopper.runHopperToShooterCommand(),
+              m_intake.runIntakeCommand(),
+              m_kicker.kickCommand(),
+              m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()));
 
-    // // get to shooter
-    // RB_OP_kickIndex.whileTrue(Commands.parallel(
-    //           m_hopper.runHopperToShooterCommand(),
-    //           m_intake.runIntakeCommand(),
-    //           m_kicker.kickCommand(),
-    //           m_pushout.AgitateCommand().beforeStarting(Commands.waitSeconds(2.5)).repeatedly()));
+    LB_OP_unjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));
 
-    // LB_OP_unjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));
+    // intake
+    X_OP_intake.whileTrue(m_intake.runIntakeCommand());
+    A_OP_outtake.whileTrue(m_intake.runOuttakeCommand());
 
-    // // intake
-    // X_OP_intake.whileTrue(m_intake.runIntakeCommand());
-    // A_OP_outtake.whileTrue(m_intake.runOuttakeCommand());
+    // pushout
+    Y_OP_extendIntake.whileTrue(m_pushout.PushCommand());
+    B_OP_reteactIntake.whileTrue(m_pushout.RetractCommand());
+    //POVLEFT_OP_agitate.whileTrue(m_pushout.AgitateCommand());
 
-    // // pushout
-    // Y_OP_extendIntake.whileTrue(m_pushout.PushCommand());
-    // B_OP_reteactIntake.whileTrue(m_pushout.RetractCommand());
-    // //POVLEFT_OP_agitate.whileTrue(m_pushout.AgitateCommand());
-
-    // // vision
-    // POVUP_OP_ClimberLimelight.onTrue(drivebase.ClimberToggle());
-    // POVLEFT_OP_LeftLimelight.onTrue(drivebase.BLeftToggle());
-    // POVRIGHT_OP_RightLimelight.onTrue(drivebase.BRightToggle());
-    // POVDOwn_OP_ToggleVision.onTrue(drivebase.VisionToggle());
+    // vision
+    POVUP_OP_ClimberLimelight.onTrue(drivebase.ClimberToggle());
+    POVLEFT_OP_LeftLimelight.onTrue(drivebase.BLeftToggle());
+    POVRIGHT_OP_RightLimelight.onTrue(drivebase.BRightToggle());
+    POVDOwn_OP_ToggleVision.onTrue(drivebase.VisionToggle());
 
     // ========================
  
@@ -534,7 +514,7 @@ public class RobotContainer {
     // // SysId: run shooter dynamic reverse.
     // operatorXbox.y().whileTrue(m_shooter.sysIdDynamicReverse());
 
-    // new Trigger(() -> isInAllianceZone() && !m_shooter.isShooterFast()).onTrue(m_shooter.setAllianceIdle());
+    new Trigger(() -> isInAllianceZone() && !m_shooter.isShooterFast()).onTrue(m_shooter.setAllianceIdle());
 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
@@ -544,7 +524,7 @@ public class RobotContainer {
             drivebase.run(() -> drivebase.drive(driveRobotOriented.get())));
       } else {
         drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-        // m_shooter.setDefaultCommand(m_shooter.SpeedUpShooterCommand());
+        m_shooter.setDefaultCommand(m_shooter.SpeedUpShooterCommand());
       }
     }
 

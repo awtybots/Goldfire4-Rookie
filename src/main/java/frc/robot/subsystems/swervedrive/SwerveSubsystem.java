@@ -5,7 +5,6 @@
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -27,11 +26,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -295,6 +292,8 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.kinematics.toSwerveModuleStates(lastCommandedRobotVelocity));
     // Measured module positions (drive distance + angle).
     Logger.recordOutput("Drive/ModulePositions", swerveDrive.getModulePositions());
+
+
   }
 
   @Override
@@ -414,38 +413,6 @@ public class SwerveSubsystem extends SubsystemBase {
         edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
     );
   }
-
-  // public Command antiPushDefense(DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, Supplier<ChassisSpeeds> fieldOrientedSpeeds) {
-  //     return run(() -> {
-  //         double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
-  //         double rightMag = Math.abs(rightX.getAsDouble());
-  //         if ((leftMag + rightMag) > Constants.OperatorConstants.DEADBAND) {
-  //             driveFieldOriented(fieldOrientedSpeeds.get());
-  //         } else {
-  //             swerveDrive.setModuleStates(new SwerveModuleState[]{
-  //                 new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-  //                 new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
-  //                 new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-  //                 new SwerveModuleState(0, Rotation2d.fromDegrees(-135))
-  //             }, false);
-  //         }
-  //     }).finallyDo(interrupted -> stop());
-  // }
-    public Command antiPushDefense() {
-    return run(() -> {
-        // put all swerve modules facing inwards
-        SwerveModuleState[] states = new SwerveModuleState[] {
-            new SwerveModuleState(0, Rotation2d.fromDegrees(45)), // FL
-            new SwerveModuleState(0, Rotation2d.fromDegrees(135)), // FR
-            new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), //BL
-            new SwerveModuleState(0, Rotation2d.fromDegrees(-135)) // BR
-        };
-        swerveDrive.setModuleStates(states, false);
-    }).finallyDo(interrupted -> stop()); // when David trys to drive -> stop
-  }
-
-
-
 
   public Command aimAtPose(Pose2d targetPose) {
     return run(() -> {
