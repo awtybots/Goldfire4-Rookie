@@ -44,6 +44,7 @@ import frc.robot.LimelightHelpers;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.VarHandle.VarHandleDesc;
 import java.net.http.HttpResponse.PushPromiseHandler;
 import java.util.Arrays;
 import java.util.Optional;
@@ -937,6 +938,20 @@ public class SwerveSubsystem extends SubsystemBase {
   public void lock() {
     swerveDrive.lockPose();
   }
+
+  public Command lockCommand(DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, Supplier<ChassisSpeeds> fieldOrientedSpeeds) {
+      return run(() -> {
+          double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
+          double rightMag = Math.abs(rightX.getAsDouble());
+          if ((leftMag + rightMag) > Constants.OperatorConstants.DEADBAND) {
+              driveFieldOriented(fieldOrientedSpeeds.get());
+          } 
+          else {
+            lock();
+          }
+      }).finallyDo(interrupted -> stop());
+  }
+
 
   /**
    * Gets the current pitch angle of the robot, as reported by the imu.
