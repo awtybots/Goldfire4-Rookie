@@ -125,10 +125,21 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final int INTAKE_ID = 18; // unknown
     public static final int INTAKE_RIGHT_ID = 19; // unknown
 
+    // PID Constants
+    public static final double p = 0.006155;
+    public static final double i = 0.000;
+    public static final double d = 0.01;
+
+    // Feed-Forward Constants
+    public static final double s = 1.25;
+    public static final double v = 0.5;
+    public static final double a = 0.75;
+
     public static final double OUTTAKE_SPEED = -1;
     public static final double INTAKE_SPEED = 1;
-     public static final double OUTTAKE_RPM = -6000;
-    public static final double INTAKE_RPM = 6000;
+     public static final double INTAKE_RPM = -10000;
+    public static final double OUTTAKE_RPM = 10000;
+
 
   }
 
