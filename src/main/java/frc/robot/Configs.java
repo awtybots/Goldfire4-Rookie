@@ -16,17 +16,19 @@ public final class Configs
 
         public static final class IntakeSubsystem {
                 
-            public static final SparkFlexConfig IntakeMotorConfig = new SparkFlexConfig();
+            public static final SparkFlexConfig IntakeLeftMotorConfig = new SparkFlexConfig();
+            public static final SparkFlexConfig IntakeRightMotorConfig = new SparkFlexConfig();
+
             // public static final SparkFlexConfig IntakeRightMotorConfig = new SparkFlexConfig();
 
                 static {
 
-                        IntakeMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(53).voltageCompensation(12);
-                        // IntakeRightMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+                        IntakeLeftMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(53).voltageCompensation(12);
+                        IntakeRightMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(53).voltageCompensation(12).follow(18).inverted(true);
 
 
 
-                        IntakeMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        IntakeLeftMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                             // Set PID values for position control. We don't need to pass a closed
                             // loop slot, as it will default to slot 0.
                             .p(0.0002155)
@@ -37,7 +39,7 @@ public final class Configs
                             .kS(0.0001)
                             .kV(0.0001)
                             .kA(0.0001);
-                        IntakeMotorConfig.closedLoop
+                        IntakeLeftMotorConfig.closedLoop
                         .maxMotion.maxAcceleration(1000000);
 
 
