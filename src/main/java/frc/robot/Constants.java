@@ -68,7 +68,7 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
 
     public static final Pose3d redHubPose = new Pose3d(Units.inchesToMeters(469.09488), Units.inchesToMeters(158.6614),
         Units.inchesToMeters(72.0), new Rotation3d());
-    public static final Pose3d blueHubPose = new Pose3d(Units.inchesToMeters(181.102), Units.inchesToMeters(158.6614),
+    public static final Pose3d blueHubPose = new Pose3d(Units.inchesToMeters(182.12598), Units.inchesToMeters(158.6614),
         Units.inchesToMeters(72.0), new Rotation3d());
 
     public static final Pose3d redFerryPoseDepot = new Pose3d(14.3, 6, 0, Rotation3d.kZero);
@@ -112,6 +112,13 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
 
+  public static class LimelightConstants
+  {
+    public static final String LIMELIGHT_FRONT = "limelight-front";
+    public static final String LIMELIGHT_BACK = "limelight-back";
+    public static final String LIMELIGHT_LEFT = "limelight-left";
+  }
+
   public static class OperatorConstants {
 
     // Joystick Deadband
@@ -122,7 +129,7 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
   }
 
   public static class IntakeConstants {
-    public static final int INTAKE_ID = 18; // unknown
+    public static final int INTAKE_LEFT_ID = 18; // unknown
     public static final int INTAKE_RIGHT_ID = 19; // unknown
 
     // PID Constants
@@ -140,18 +147,16 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
      public static final double INTAKE_RPM = -10000;
     public static final double OUTTAKE_RPM = 10000;
 
-
   }
 
   public static class PushoutConstants {
-    public static final int PUSHOUT_ID = 17; // Unknown
-    // public static final int PUSHOUT_RIGHT_ID = 17;
+    public static final int PUSHOUT_ID = 17; // Correct
 
-    public static final double PUSHOUT_RETRACTED_POS = 4.693;
-    public static final double PUSHOUT_EXTENDED_POS = 13.8; // TUNE THIS!!!
+    public static final double PUSHOUT_RETRACTED_POS = 2; // 
+    public static final double PUSHOUT_EXTENDED_POS = 14; // TUNE THIS!!!
 
-    public static final double PUSHOUT_RETRACTED_AGITATE_POS = 4.693; // encoder rotations
-    public static final double PUSHOUT_EXTENDED_AGITATE_POS = 10; // TUNE THIS!!!
+    public static final double PUSHOUT_RETRACTED_AGITATE_POS = 2; // it was 4.693
+    public static final double PUSHOUT_EXTENDED_AGITATE_POS = 11; // TUNE THIS!!!
 
     public static final double PUSHOUT_AGITATE_WAIT = 0.2;
   }
@@ -163,10 +168,13 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final int SHOOTER_R1_ID = 11;
     public static final int SHOOTER_R2_ID = 12;
 
-    public static final double SHOOTER_SPEED = 1900; // RPM 3 meters 1900 4 meters 2200
+    public static final double SHOOTER_SPEED = -1735; // RPM 3 meters 1900 4 meters 2200
     public static final double ERROR_MARGIN = 100; // RPM
     public static final double STOP = 0;
-    public static final double IDLE = 0; // % voltage -1 --> 1
+    public static final double IDLE = 0.1; // % voltage -1 --> 1
+
+    public static final double ALLIANCE_IDLE_RPM = -1000;
+    public static final double NEUTRAL_IDLE_RPM = -500;
 
     // PID Constants For Shooter
     public static final double p = 0.0002355;
@@ -176,18 +184,17 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     // Feed-Forward Constants for Shooter
     public static final double s = 0.0;
     public static final double v = 0.0019;
-    public static final double leftv = 0.0021;
     public static final double a = 0.0;
 
     public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
 
     static {
       for (var entry : List.of(
-          Pair.of(Meters.of(2), Seconds.of(1.0)),
-          Pair.of(Meters.of(3), Seconds.of(1.16)),
-          Pair.of(Meters.of(4), Seconds.of(1.28)),
-          Pair.of(Meters.of(5), Seconds.of(1.4)),
-          Pair.of(Meters.of(6), Seconds.of(1.6)))) {
+          Pair.of(Meters.of(2), Seconds.of(0.85)),
+          Pair.of(Meters.of(3), Seconds.of(0.9)),
+          Pair.of(Meters.of(4), Seconds.of(1.08)),
+          Pair.of(Meters.of(5), Seconds.of(1.2)),
+          Pair.of(Meters.of(6), Seconds.of(1.4)))) {
         TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
       }
     }
@@ -238,6 +245,26 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
     public static final int six_seven = 67; // <---------- HISTORICAL MONUMENT
 
   }
+  
+  public static class FunnelConstants {
+    // IDEAL mapping from motor_can_ids.csv: left=18, right=19
+    public static final int FUNNEL_ID = 15;
+
+    public static final double FUNNEL_RPM = -9000;
+    public static final double REVERSE_FUNNEL_RPM = 9000;
+
+    // PID Constants
+    public static final double p = 0.0002;
+    public static final double i = 0.000;
+    public static final double d = 0.000;
+
+    // Feed-Forward Constants
+    public static final double s = 0.100;
+    public static final double v = 0.00177;
+    public static final double a = 0.00017;
+
+  }
+
 
   public static class ClimberConstants {
     public static final int CLIMBER_LEFT_ID = 19; // placeholder
@@ -254,7 +281,6 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
                                                                                   // speed to PID control
   public static final double AUTO_ALIGNMENT_FAST_APPROACH_SPEED = 1.2; // Fast approach speed in m/s when far from the
                                                                        // reef
-
   // Shift these setpoints when the robot stops short, crashes the reef, or parks
   // off-center.
   public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0; // Desired robot heading when aligned to the reef
@@ -276,6 +302,13 @@ public static final double LOOKAHEAD_MAX_SEC   = 1.5;
   // Dashboard throttling
   public static final boolean LIMIT_DASHBOARD_PERIODIC_UPDATES = false; // Enable throttling of dashboard updates
   public static final int DASHBOARD_UPDATE_PERIOD_CYCLES = 10; // Number of periodic loops between dashboard refreshes
+
+  // Object Detection
+  public static final double X_FUEL_SETPOINT = 0.5;
+  public static final double Y_FUEL_SETPOINT = 0.0;
+
+  public static final double X_FUEL_TOLERANCE = 0.1;
+  public static final double Y_FUEL_TOLERANCE = 0.1;
 
 
   public static class Dimensions {
