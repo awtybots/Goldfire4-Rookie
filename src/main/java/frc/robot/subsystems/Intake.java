@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
+import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Configs;
 import org.littletonrobotics.junction.Logger;
@@ -25,37 +26,35 @@ public class Intake extends SubsystemBase {
     // AdvantageKit logging
     private double desiredPercent = 0.0;
 
-    private SparkFlex IntakeLeftMotor = new SparkFlex(IntakeConstants.INTAKE_ID, MotorType.kBrushless);
-    private SparkClosedLoopController intakeleftController = IntakeLeftMotor.getClosedLoopController();
+    private SparkFlex IntakeLeftMotor = new SparkFlex(IntakeConstants.INTAKE_LEFT_ID, MotorType.kBrushless);
+    private SparkClosedLoopController IntakeLeftController = IntakeLeftMotor.getClosedLoopController();
+
+    private SparkFlex IntakeRightMotor = new SparkFlex(IntakeConstants.INTAKE_RIGHT_ID, MotorType.kBrushless);
+    private SparkClosedLoopController IntakeRightController = IntakeRightMotor.getClosedLoopController();
   
 
     public Intake() {
-        IntakeLeftMotor.configure(Configs.IntakeSubsystem.IntakeLeftMotorConfig, ResetMode.kResetSafeParameters,
+        IntakeLeftMotor.configure(Configs.IntakeSubsystem.IntakeMotorLeftConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
-        // IntakeRightMotor.configure(Configs.IntakeSubsystem.IntakeRightMotorConfig,
-        // ResetMode.kResetSafeParameters,
-        // PersistMode.kPersistParameters);
+        IntakeRightMotor.configure(Configs.IntakeSubsystem.IntakeMotorRightConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        // THE RIGHT INTAKE MOTOR IS FOLLOWING THE LEFT ONE!!!
     }
 
     public void runOuttake() {
-        // IntakeRightMotor.set(IntakeConstants.INTAKE_SPEED);
-        // desiredPercent = IntakeConstants.OUTTAKE_SPEED;
-        // IntakeMotor.set(IntakeConstants.OUTTAKE_SPEED);
-        intakeleftController.setSetpoint(IntakeConstants.OUTTAKE_RPM, ControlType.kMAXMotionVelocityControl);
+        IntakeLeftController.setSetpoint(IntakeConstants.INTAKE_RPM,
+                ControlType.kMAXMotionVelocityControl);
 
     }
 
     public void runIntake() {
-        // desiredPercent = IntakeConstants.INTAKE_SPEED;
-        // IntakeMotor.set(IntakeConstants.INTAKE_SPEED);
-
-        // IntakeRightMotor.set(IntakeConstants.INTAKE_SPEED);
-         intakeleftController.setSetpoint(IntakeConstants.INTAKE_RPM, ControlType.kMAXMotionVelocityControl);
+        IntakeLeftController.setSetpoint(IntakeConstants.OUTTAKE_RPM,
+                ControlType.kMAXMotionVelocityControl);
     }
 
     public void stopIntake() {
+        desiredPercent = 0.0;
         IntakeLeftMotor.set(0);
-        // IntakeRightMotor.set(0);
     }
 
     public Command runIntakeCommand() {
@@ -76,8 +75,16 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // AdvantageKit Logging
         // Commanded intake motor percent output.
+        double RightRPM = IntakeRightMotor.getEncoder().getVelocity();
+        double LeftRPM = IntakeLeftMotor.getEncoder().getVelocity();
+
         Logger.recordOutput("Intake/DesiredPercent", desiredPercent);
         // Applied voltage to intake motor.
         Logger.recordOutput("Intake/AppliedVolts", IntakeLeftMotor.getAppliedOutput() * IntakeLeftMotor.getBusVoltage());
+        Logger.recordOutput("IntakeRightRPM", RightRPM);
+        Logger.recordOutput("IntakeLeftRPM", LeftRPM);
+        Logger.recordOutput("IntakeTargetRPM", IntakeConstants.INTAKE_RPM);
+
+
     }
 }
