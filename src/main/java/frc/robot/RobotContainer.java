@@ -510,16 +510,18 @@ public class RobotContainer {
             );
         }, java.util.Collections.emptySet())
     );
-    RBFerry.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
-    RBFerry.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
-    RBFerry.onTrue(Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())));
-    RBFerry.onFalse(Commands.runOnce(() -> 
-        driveAngularVelocity.aim(() -> isInAllianceZone() 
-            ? drivebase.getDynamicHubLocation() 
-            : drivebase.getDynamicFerryLocation())
-    ));
-
-    // Intake
+    RBFerry.onTrue(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(0.4);
+        driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation());
+    }));
+    RBFerry.onFalse(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(1);
+        driveAngularVelocity.aim(() -> isInAllianceZone()
+            ? drivebase.getDynamicHubLocation()
+            : drivebase.getDynamicFerryLocation());
+    }));   
+    
+   // Intake
     LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
     LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
    
