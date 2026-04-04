@@ -587,7 +587,7 @@ public class RobotContainer {
     new Trigger(() -> isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
     new Trigger(() -> !isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
 
-    m_shooter.setDefaultCommand(m_shooter.setAllianceIdle());
+    m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() -> DriverStation.isTeleopEnabled()));
 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
