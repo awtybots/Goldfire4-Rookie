@@ -584,8 +584,8 @@ public class RobotContainer {
     // // SysId: run shooter dynamic reverse.
     // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
-    new Trigger(() -> isInAllianceZone()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
-    new Trigger(() -> !isInAllianceZone()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
+    new Trigger(() -> isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
+    new Trigger(() -> !isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
 
     m_shooter.setDefaultCommand(m_shooter.setAllianceIdle());
 
