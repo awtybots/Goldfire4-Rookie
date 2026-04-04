@@ -147,7 +147,7 @@ public class RobotContainer {
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
   private Trigger RTtransfer_kick_shoot; // index to kicker, kick, agitate, and shoot only when up to speed
-  private Trigger RBunjam;              // Run hopper and kicker in reverse
+  private Trigger RBFerry;              // Run hopper and kicker in reverse
   private Trigger LBretract_and_stop;   // retract 4 bar and stop intake
   private Trigger PRDrivetoRightTrench; // Drive to right trench
   private Trigger PLDriveToPose;        // run hopper in reverse and kick backwards to unjam
@@ -354,7 +354,7 @@ public class RobotContainer {
         .aimFeedforward(0.0001, 0.0001, 0.00013)
         .aimHeadingOffset(Rotation2d.fromDegrees(180))
         .aimHeadingOffset(true);
-
+            
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
         .headingWhile(true);
@@ -403,7 +403,7 @@ public class RobotContainer {
     // ========= DRIVER TRIGGERS ===========
     // Parallel Commands
     RTtransfer_kick_shoot = dc().rightTrigger(); // index to kicker, kick, agitate, and shoot only when up to speed
-    RBunjam               = dc().rightBumper();  // Run hopper and kicker in reverse
+    RBFerry               = dc().rightBumper();  // Run hopper and kicker in reverse
     LBretract_and_stop    = dc().leftBumper();   // retract 4 bar and stop intake
     PRDrivetoRightTrench  = dc().povRight();     // Drive to right trench
     PLDriveToPose         = dc().povLeft();      // run hopper in reverse and kick backwards to unjam
@@ -470,39 +470,33 @@ public class RobotContainer {
 
     // Shooter
     // transfer + kick + shoot/pass command, switches based on zone
+    
     RTtransfer_kick_shoot.whileTrue(
+        Commands.defer(() -> {
+            ControlAllShooting shootCmd = makeVariableShoot();
+            return Commands.parallel(
+                shootCmd,
+                Commands.sequence(
+                    Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                        && driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
+                    Commands.parallel(
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitateCommand().repeatedly().onlyWhile(() -> !LT_Intake.getAsBoolean()),
+                        m_intake.runIntakeCommand()
+                    ).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))
+                ).finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1))
+            );
+        }, java.util.Collections.emptySet())
+    );
+    RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
+    RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
 
-      Commands.defer(() -> {
-        if (isInAllianceZone()) // In alliance zone → shoot at hub
-        {
-          ControlAllShooting shootCmd = makeVariableShoot();
-          return Commands.parallel(
-                  shootCmd,
-                  // Continuously update aim target for shoot-on-the-move
-                  // Commands.run(() -> driveAngularVelocity.aim(drivebase.getDynamicHubLocation())),
-                  // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicHubLocation())),
-                  Commands.sequence(
-                        Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                          && driveAngularVelocity.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-                        Commands.waitSeconds(0.5),
-                      Commands.parallel(
-                          // drivebase.lockCommand(
-                          //     dc()::getLeftX,
-                          //     dc()::getLeftY,
-                          //     dc()::getRightX,
-                          //     driveAngularVelocity::get),
-                          m_hopper.runHopperToShooterCommand(),
-                          m_kicker.kickCommand(),
-                          m_pushout.AgitateCommand().repeatedly().onlyWhile(() -> !LT_Intake.getAsBoolean()),
-                          m_intake.runIntakeCommand())).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))
-                  .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
-        }
-        else
-        {
-          ControllAllPassing passCmd = makeVariablePass();
+      RBFerry.whileTrue(
+        Commands.defer(() -> {
+            ControllAllPassing passCmd = makeVariablePass();
             return Commands.parallel(
                 passCmd,
-                // Commands.runOnce(() -> driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation())),
                 Commands.sequence(
                     Commands.waitUntil(() -> passCmd.isCASAtSpeed()
                         && driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
@@ -510,24 +504,27 @@ public class RobotContainer {
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand().repeatedly().onlyWhile(() -> !LT_Intake.getAsBoolean()),
-                        m_intake.runIntakeCommand()).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
-        }
-            }, java.util.Collections.emptySet()));
-    RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
-    RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
-
-    // Intake
+                        m_intake.runIntakeCommand()
+                    ).onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))
+                ).finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1))
+            );
+        }, java.util.Collections.emptySet())
+    );
+    RBFerry.onTrue(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(0.4);
+        driveAngularVelocity.aim(() -> drivebase.getDynamicFerryLocation());
+    }));
+    RBFerry.onFalse(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(1);
+        driveAngularVelocity.aim(() -> isInAllianceZone()
+            ? drivebase.getDynamicHubLocation()
+            : drivebase.getDynamicFerryLocation());
+    }));   
+    
+   // Intake
     LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
     LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
-
-    // A_runOuttake.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
-    // Hopper
-    RBunjam.whileTrue(Commands.parallel(
-      m_hopper.runReverseHopperCommand(),
-      m_kicker.kickBackwardsCommand()));
-
+   
     // Drive to Pose
     PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
 
@@ -608,10 +605,10 @@ public class RobotContainer {
     // // SysId: run shooter dynamic reverse.
     // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
-    // new Trigger(() -> isInAllianceZone()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
-    // new Trigger(() -> !isInAllianceZone()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
+    new Trigger(() -> isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
+    new Trigger(() -> !isInAllianceZone() && DriverStation.isTeleopEnabled()).onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
 
-    // m_shooter.setDefaultCommand(m_shooter.setAllianceIdle());
+    m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() -> DriverStation.isTeleopEnabled()));
 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);

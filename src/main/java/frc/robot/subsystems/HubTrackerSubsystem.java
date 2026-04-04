@@ -35,7 +35,7 @@ public class HubTrackerSubsystem extends SubsystemBase
     final CommandXboxController driverController;
 
     private Pose2d hubPose;
-    private double radius = 1; // radius to represent time left (circle gets smaller when shift ending)
+    private double radius = 0.5; // radius to represent time left (circle gets smaller when shift ending)
 
     boolean show = false;
     
@@ -77,8 +77,7 @@ public class HubTrackerSubsystem extends SubsystemBase
         {
             int seconds = (20 - (int)matchTime);
             SmartDashboard.putNumber("TimeLeft", seconds);
-            radius = seconds / 20.0;
-            vibrate(radius);
+            vibrate(seconds / 20.0);
             return true;
         }
 
@@ -135,12 +134,10 @@ public class HubTrackerSubsystem extends SubsystemBase
         {
             int seconds = (int)matchTime;
             SmartDashboard.putNumber("TimeLeft", seconds);
-            radius = seconds / 30.0;
-            vibrate(radius);
+            vibrate(seconds / 30.0);
             return true; // Endgame, always active
         }
   }
-
 
   private void publish(int time, int matchTime, double shiftTime)
   {
@@ -195,8 +192,8 @@ public class HubTrackerSubsystem extends SubsystemBase
     // essentially, the circle will be shown either when it is an INACTIVE hub, or every other frame of active shift
     // this way, if it is active, it blinks. this is my workaround for not being able to change color of circle
     SmartDashboard.putBoolean("HubActivity", active);
-    // if(!active || x == 0) circle.setPoses(createCircle(hubPose, radius, 10));
-    // else circle.setPoses(); // clears circle when not showing
+    if(!active || x == 0) circle.setPoses(createCircle(drivebase.getDynamicHubLocation(), radius, 20));
+    else circle.setPoses(); // clears circle when not showing
 
     Translation2d goalLocation = drivebase.getDynamicHubLocation().getTranslation();
     Translation2d robotLocation = robotPose.getTranslation();
