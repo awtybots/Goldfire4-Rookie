@@ -170,8 +170,8 @@ public class RobotContainer {
 
   // ========= OPERATOR TRIGGERS ===========
   // Shooter
-  private Trigger LT_OPshootFuel; // just shoot
-  private Trigger RT_OP_1900Shot; // Shoot, Kick, Index, Agitate, and Run Intake
+  private Trigger LT_OP_FixedShoot; // just shoot
+  private Trigger RT_OP_VariableShoot; // Shoot, Kick, Index, Agitate, and Run Intake
 
   // Get to Shooter
   private Trigger RB_OP_kickIndex; // kick, index
@@ -522,7 +522,7 @@ public class RobotContainer {
 
     // ======== Operator ========
     // shooter
-    RT_OP_1900Shot.whileTrue(Commands.parallel(
+    LT_OP_FixedShoot.whileTrue(Commands.parallel(
         // keep running the VariableShoot command while we wait for the shooter to reach
         // speed
         m_shooter.shootFuelCommand(),
@@ -535,7 +535,7 @@ public class RobotContainer {
             m_kicker.kickCommand(),
             m_pushout.AgitateCommand().repeatedly().beforeStarting(Commands.waitSeconds(1)))));
 
-    LT_OPshootFuel.whileTrue(
+    RT_OP_VariableShoot.whileTrue(
         Commands.defer(() -> {
           ControlAllShooting shootCmd = makeVariableShoot();
           return Commands.parallel(
