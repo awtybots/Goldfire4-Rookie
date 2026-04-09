@@ -1190,12 +1190,12 @@ public class SwerveSubsystem extends SubsystemBase {
       {
           if(IsOnLeftSide)
           {
-            return new Pose2d(new Translation2d(3.478, 7.432),
+            return new Pose2d(new Translation2d(5.789, 7.432),
               Rotation2d.fromDegrees(108.773));
           }
           else
           {
-            return new Pose2d(new Translation2d(3.478, 0.432),
+            return new Pose2d(new Translation2d(5.789, 0.432),
               Rotation2d.fromDegrees(-108.773));
           }
       }
@@ -1204,12 +1204,12 @@ public class SwerveSubsystem extends SubsystemBase {
       {
         if(IsOnLeftSide)
         {
-          return new Pose2d(new Translation2d(5.789, 7.432),
+          return new Pose2d(new Translation2d(3.478, 7.432),
               new Rotation2d());
         }
         else
         {
-          return new Pose2d(new Translation2d(5.789, 0.432),
+          return new Pose2d(new Translation2d(3.478, 0.432),
               new Rotation2d());
         }
       }
