@@ -97,17 +97,6 @@
           "name": "extend"
         }
       }
-    },
-    {
-      "name": "Shoot and Aim",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 3.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "intake"
-        }
-      }
     }
   ],
   "globalConstraints": {
