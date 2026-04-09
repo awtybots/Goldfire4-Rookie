@@ -576,7 +576,11 @@ public class RobotContainer {
                         Commands.runOnce(() -> {
                           aimAtHub.readyToLock = true;
                           Logger.recordOutput("Aim/DynamicAimLockTolerance", aimTolerance(shootCmd.distance));
-                        }),
+                        }).onlyWhile(
+                          () -> aimAtHub.swerveInputStream
+                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
+                            && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance)
+                        ),
                         m_hopper.runHopperToShooterCommand(),
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand()
