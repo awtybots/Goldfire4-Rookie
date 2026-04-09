@@ -606,7 +606,8 @@ public class RobotContainer {
                 shootCmd,
                 Commands.sequence(
                     Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                        && aimAtHub.swerveInputStream.aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()),
+                        && aimAtHub.swerveInputStream.aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
+                        && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance)),
                     Commands.parallel(
                         Commands.runOnce(() -> {
                           aimAtHub.readyToLock = true;
@@ -624,7 +625,8 @@ public class RobotContainer {
                               aimAtHub.readyToLock = false;
                             }
                             )
-                        .onlyWhile(() -> aimAtHub.swerveInputStream.aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean())));
+                        .onlyWhile(() -> aimAtHub.swerveInputStream.aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
+                            && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance))));
           } else {
             ControllAllPassing passCmd = makeVariablePass();
             return Commands.parallel(

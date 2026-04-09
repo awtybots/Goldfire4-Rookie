@@ -80,6 +80,8 @@ public class SwerveSubsystem extends SubsystemBase {
   // Auton Pose tracking for Correction
   private Pose2d targetPathPose = new Pose2d();
 
+  private double hubAimErrorDeg = Double.MAX_VALUE;
+
   // AdvantageKit: last commanded chassis speeds (used for logging)
   private volatile ChassisSpeeds lastCommandedRobotVelocity = new ChassisSpeeds();
   private volatile ChassisSpeeds lastCommandedFieldVelocity = new ChassisSpeeds();
@@ -323,6 +325,7 @@ public class SwerveSubsystem extends SubsystemBase {
       Translation2d robotToHub = dynamicHub.getTranslation().minus(pose.getTranslation());
       Rotation2d targetAngle = robotToHub.getAngle().plus(Rotation2d.fromDegrees(180));
       double aimError = targetAngle.minus(getHeading()).getDegrees();
+      hubAimErrorDeg = aimError;
       double distanceToHub = robotToHub.getNorm();
 
       Logger.recordOutput("Drive/Aim/DynamicHubPose", dynamicHub);
@@ -485,7 +488,9 @@ public class SwerveSubsystem extends SubsystemBase {
       return getPathFollowingError() > thresholdMeters;
   }
 
-
+  public double getHubAimErrorDeg() {
+      return hubAimErrorDeg;
+  }
 
   public Command aimAtPose(Pose2d targetPose) {
     return run(() -> {
