@@ -125,6 +125,11 @@ public class Kicker extends SubsystemBase {
         return sysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse);
     }
 
+    public Command runDefaultCommand()
+    {
+        return stopKickingCommand();
+    }
+
     @Override
     public void periodic() {
         // AdvantageKit Logging

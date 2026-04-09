@@ -751,14 +751,20 @@ public class RobotContainer {
     // // SysId: run shooter dynamic reverse.
     // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
-    new Trigger(() -> isInAllianceZone() &&
-        DriverStation.isTeleopEnabled())
+    new Trigger(() -> isInAllianceZone()
+        // && DriverStation.isTeleopEnabled()
+        )
         .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
-    new Trigger(() -> !isInAllianceZone() &&
-        DriverStation.isTeleopEnabled())
+    new Trigger(() -> !isInAllianceZone()
+        // && DriverStation.isTeleopEnabled()
+        )
         .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
-
     m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() -> DriverStation.isTeleopEnabled()));
+
+    m_intake.setDefaultCommand(m_intake.runDefaultCommand());
+    m_kicker.setDefaultCommand(m_kicker.runDefaultCommand());
+    m_pushout.setDefaultCommand(m_pushout.runDefaultCommand());
+    m_hopper.setDefaultCommand(m_hopper.runDefaultCommand());
 
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
