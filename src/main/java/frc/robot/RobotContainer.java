@@ -352,8 +352,8 @@ public class RobotContainer {
     }, java.util.Collections.<edu.wpi.first.wpilibj2.command.Subsystem>emptySet()).withTimeout(5.75));
 
     NamedCommands.registerCommand("speed up shooter", m_shooter.SpeedUpShooterCommand().withTimeout(15));
-    // NamedCommands.registerCommand("aim at hub",
-    // drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
+    NamedCommands.registerCommand("aim at hub",
+    drivebase.aimAtPose(Constants.DrivebaseConstants.getHubPose2D()));
     // NamedCommands.registerCommand("aim at ferry",
     // drivebase.aimAtPose(Constants.DrivebaseConstants.getFerryPose(drivebase.getPose().getTranslation())));
 
