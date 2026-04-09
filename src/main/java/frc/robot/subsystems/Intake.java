@@ -29,15 +29,15 @@ public class Intake extends SubsystemBase {
     private SparkFlex IntakeLeftMotor = new SparkFlex(IntakeConstants.INTAKE_LEFT_ID, MotorType.kBrushless);
     private SparkClosedLoopController IntakeLeftController = IntakeLeftMotor.getClosedLoopController();
 
-    private SparkFlex IntakeRightMotor = new SparkFlex(IntakeConstants.INTAKE_RIGHT_ID, MotorType.kBrushless);
-    private SparkClosedLoopController IntakeRightController = IntakeRightMotor.getClosedLoopController();
+    // private SparkFlex IntakeRightMotor = new SparkFlex(IntakeConstants.INTAKE_RIGHT_ID, MotorType.kBrushless);
+    // private SparkClosedLoopController IntakeRightController = IntakeRightMotor.getClosedLoopController();
   
 
     public Intake() {
         IntakeLeftMotor.configure(Configs.IntakeSubsystem.IntakeMotorLeftConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
-        IntakeRightMotor.configure(Configs.IntakeSubsystem.IntakeMotorRightConfig, ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters);
+        // IntakeRightMotor.configure(Configs.IntakeSubsystem.IntakeMotorRightConfig, ResetMode.kResetSafeParameters,
+        //         PersistMode.kPersistParameters);
         // THE RIGHT INTAKE MOTOR IS FOLLOWING THE LEFT ONE!!!
     }
 
@@ -80,13 +80,13 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         // AdvantageKit Logging
         // Commanded intake motor percent output.
-        double RightRPM = IntakeRightMotor.getEncoder().getVelocity();
+        // double RightRPM = IntakeRightMotor.getEncoder().getVelocity();
         double LeftRPM = IntakeLeftMotor.getEncoder().getVelocity();
 
         Logger.recordOutput("Intake/DesiredPercent", desiredPercent);
         // Applied voltage to intake motor.
         Logger.recordOutput("Intake/AppliedVolts", IntakeLeftMotor.getAppliedOutput() * IntakeLeftMotor.getBusVoltage());
-        Logger.recordOutput("IntakeRightRPM", RightRPM);
+        // Logger.recordOutput("IntakeRightRPM", RightRPM);
         Logger.recordOutput("IntakeLeftRPM", LeftRPM);
         Logger.recordOutput("IntakeTargetRPM", IntakeConstants.INTAKE_RPM);
 
