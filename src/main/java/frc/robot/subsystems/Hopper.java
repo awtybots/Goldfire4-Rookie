@@ -72,6 +72,11 @@ public class Hopper extends SubsystemBase {
         TwindexerLeftController.setSetpoint(0, ControlType.kMAXMotionVelocityControl);
     }
 
+    public Command runDefaultCommand()
+    {
+        return new RunCommand(() -> stopHopper(), this);
+    }
+
     public Command runHopperToShooterCommand() {
         return new RunCommand(() -> HopperToShooter(), this)
                 .finallyDo(interrupted -> stopHopper());

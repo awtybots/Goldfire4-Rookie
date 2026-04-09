@@ -71,6 +71,11 @@ public class Intake extends SubsystemBase {
         return new RunCommand(() -> stopIntake(), this);
     }
 
+    public Command runDefaultCommand()
+    {
+        return stopIntakeCommand();
+    }
+
     @Override
     public void periodic() {
         // AdvantageKit Logging
