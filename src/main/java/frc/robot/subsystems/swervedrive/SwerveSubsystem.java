@@ -488,6 +488,10 @@ public class SwerveSubsystem extends SubsystemBase {
       return getPathFollowingError() > thresholdMeters;
   }
 
+  public void resetPathTracking() {
+      targetPathPose = getPose();
+  }
+
   public double getHubAimErrorDeg() {
       return hubAimErrorDeg;
   }

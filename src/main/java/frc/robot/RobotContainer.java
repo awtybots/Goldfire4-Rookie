@@ -234,6 +234,7 @@ public class RobotContainer {
 
         return AutoBuilder.followPath(path)
             .beforeStarting(() -> {
+              drivebase.resetPathTracking();
               Logger.recordOutput("Auto/CurrentPath", pathName);
               Logger.recordOutput("Auto/RecoveryPath", recoveryPathName);
               Logger.recordOutput("Auto/RecoveryTriggered", false);
