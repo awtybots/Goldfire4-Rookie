@@ -296,28 +296,6 @@
       "waypointRelativePos": 1.3884966777408616,
       "endWaypointRelativePos": 6.590220099667782,
       "command": null
-    },
-    {
-      "name": "aim at hub",
-      "waypointRelativePos": 9.07,
-      "endWaypointRelativePos": 9.712780315614616,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "aim at hub"
-        }
-      }
-    },
-    {
-      "name": "Control All Shooting",
-      "waypointRelativePos": 9.07,
-      "endWaypointRelativePos": 9.71,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Control All Shooting"
-        }
-      }
     }
   ],
   "globalConstraints": {
