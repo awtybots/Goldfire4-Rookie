@@ -340,25 +340,22 @@ public class RobotContainer {
                         && aimAtHub.swerveInputStream.aimLock(Angle.ofBaseUnits(
                             aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
                         && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance)),
-                    Commands.runOnce(() -> {
-                      aimAtHub.readyToLock = true;
-                      Logger.recordOutput("Aim/DynamicAimLockTolerance", aimTolerance(shootCmd.distance));
-                    }),
-                    m_hopper.runHopperToShooterCommand(),
-                    m_kicker.kickCommand(),
-                    m_pushout.AgitateCommand()
-                        .beforeStarting(Commands.waitSeconds(2.25))
-                        .onlyWhile(() -> !LT_Intake.getAsBoolean()),
-                    m_intake.runIntakeCommand())
-                    .finallyDo(
-                        () -> {
-                          m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
-                          aimAtHub.readyToLock = false;
-                        })
-                    .onlyWhile(() -> aimAtHub.swerveInputStream
-                        .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
-                        && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance))),
-            m_pushout.RetractCommand());
+                    Commands.parallel(
+                        m_hopper.runHopperToShooterCommand(),
+                        m_kicker.kickCommand(),
+                        m_pushout.AgitateCommand()
+                            .beforeStarting(Commands.waitSeconds(2.25))
+                            .onlyWhile(() -> !LT_Intake.getAsBoolean()),
+                        m_intake.runIntakeCommand())
+                        .finallyDo(
+                            () -> {
+                              m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
+                              aimAtHub.readyToLock = false;
+                            })
+                        .onlyWhile(() -> aimAtHub.swerveInputStream
+                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()
+                            && Math.abs(drivebase.getHubAimErrorDeg()) <= aimTolerance(shootCmd.distance))),
+                m_pushout.RetractCommand()));
       } else {
         // Not in alliance zone: no-op command to satisfy return type
         return Commands.none();
@@ -610,8 +607,8 @@ public class RobotContainer {
                             .beforeStarting(Commands.waitSeconds(1.5)),
                         m_intake.runIntakeCommand())
                         .finallyDo(
-                          () -> m_shooter.setTargetRPMCommand(
-                            passCmd.RecordedidealHorizontalSpeed).withTimeout(1))
+                            () -> m_shooter.setTargetRPMCommand(
+                                passCmd.RecordedidealHorizontalSpeed).withTimeout(1))
                         .onlyWhile(() -> aimAtFerry.swerveInputStream
                             .aimLock(Angle.ofBaseUnits(3, Degrees))
                             .getAsBoolean())));
