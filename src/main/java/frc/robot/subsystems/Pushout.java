@@ -53,7 +53,6 @@ public class Pushout extends SubsystemBase {
     // private final RelativeEncoder pushoutRightEncoder =
     // PushoutRightMotor.getEncoder();
 
-
     public Pushout() {
         PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
@@ -72,64 +71,69 @@ public class Pushout extends SubsystemBase {
         PushoutMotor.set(0);
     }
 
-    public Command HomingCommand(double threshold)
-    {
+    public Command HomingCommand(double threshold) {
         Debouncer currentDebouncer = new Debouncer(0.2);
 
         return new RunCommand(() -> PushoutController.setSetpoint(minVelocity, ControlType.kCurrent), this)
                 .until(() -> currentDebouncer.calculate((PushoutMotor.getEncoder().getVelocity() >= threshold)))
-                .finallyDo(() ->
-                {
+                .finallyDo(() -> {
                     StopPushout();
                 });
     }
 
     public Command PushCommand() {
         return this.runOnce(() -> PushIntake());
-                // .finallyDo(interrupted -> StopPushout())
-                
+        // .finallyDo(interrupted -> StopPushout())
+
     }
 
     public Command RetractCommand() {
         return this.runOnce(() -> RetractIntake());
-                // .finallyDo(interrupted -> StopPushout())
-                
+        // .finallyDo(interrupted -> StopPushout())
+
     }
 
     public Command AgitateCommand() {
-        final double[] pushPositions = { 11, 9, 7}; // each time it pushes less far in
+        final double[] pushPositions = { 11, 9, 7 }; // each time it pushes less far in
         final double[] pullPositions = { 8, 6, 4 }; // each time it pulls further out
         final double finalPos = 1; // pull to this position and idle there after agitation done
         final double waitTime = PushoutConstants.PUSHOUT_AGITATE_WAIT;
+        final double betweenAgitateCycles = PushoutConstants.PUSHOUT_AGITATE_BETWEEN_CYCLES_WAIT;
 
         return Commands.sequence(
-            // push to 11 & pull to 8
-            runOnce(() -> PushoutController.setSetpoint(pushPositions[0], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
-            runOnce(() -> PushoutController.setSetpoint(pullPositions[0], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
+                // push to 11 & pull to 8
+                runOnce(() -> PushoutController.setSetpoint(pushPositions[0], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
+                runOnce(() -> PushoutController.setSetpoint(pullPositions[0], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
 
-            // push to 9 & pull to 6
-            runOnce(() -> PushoutController.setSetpoint(pushPositions[1], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
-            runOnce(() -> PushoutController.setSetpoint(pullPositions[1], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
+                Commands.waitSeconds(betweenAgitateCycles),
 
-            // push to 7 & pull to 4
-            runOnce(() -> PushoutController.setSetpoint(pushPositions[2], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
-            runOnce(() -> PushoutController.setSetpoint(pullPositions[2], ControlType.kMAXMotionPositionControl)),
-            Commands.waitSeconds(waitTime),
+                // push to 9 & pull to 6
+                runOnce(() -> PushoutController.setSetpoint(pushPositions[1], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
+                runOnce(() -> PushoutController.setSetpoint(pullPositions[1], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
 
-            // end pos
-            runOnce(() -> PushoutController.setSetpoint(finalPos, ControlType.kMAXMotionPositionControl)),
-            Commands.idle(this)
+                Commands.waitSeconds(betweenAgitateCycles),
+
+                // push to 7 & pull to 4
+                runOnce(() -> PushoutController.setSetpoint(pushPositions[2], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
+                runOnce(() -> PushoutController.setSetpoint(pullPositions[2], ControlType.kMAXMotionPositionControl)),
+                Commands.waitSeconds(waitTime),
+
+                Commands.waitSeconds(betweenAgitateCycles),
+
+                // end pos
+                runOnce(() -> PushoutController.setSetpoint(finalPos, ControlType.kMAXMotionPositionControl)),
+                Commands.idle(this)
 
         ).finallyDo(interrupted -> PushIntake());
     }
 
     @Override
-    public void periodic() { 
+    public void periodic() {
         // AdvantageKit Logging
         // Commanded intake motor percent output.
         Logger.recordOutput("Pushout/DesiredPercent", desiredPercent);

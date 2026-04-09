@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.Time;
@@ -11,6 +13,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveInputStream;
+import frc.robot.Constants.DrivebaseConstants;
 
 public class AimAtHub extends Command {
 
@@ -18,6 +21,7 @@ public class AimAtHub extends Command {
     public final SwerveInputStream swerveInputStream;
 
     public boolean readyToLock = false;
+    final double lockDelay = DrivebaseConstants.AIM_LOCK_DELAY;
 
     private final DoubleSupplier leftX;
     private final DoubleSupplier leftY;
@@ -57,7 +61,9 @@ public class AimAtHub extends Command {
         if ((leftMag + rightMag) > (Constants.OperatorConstants.DEADBAND + 0.2) && !readyToLock) {
             SmartDashboard.putBoolean("Wheel Lock", false);
         } else {
-            // swerveSubsystem.lock();
+            Commands.waitSeconds(lockDelay);
+            readyToLock = true;
+            swerveSubsystem.lock();
             SmartDashboard.putBoolean("Wheel Lock", true);
         }
     }

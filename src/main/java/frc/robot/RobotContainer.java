@@ -609,8 +609,12 @@ public class RobotContainer {
                         m_pushout.AgitateCommand()
                             .beforeStarting(Commands.waitSeconds(1.5)),
                         m_intake.runIntakeCommand())
-                        .onlyWhile(driveAngularVelocity.aimLock(Angle.ofBaseUnits(3, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+                        .finallyDo(
+                          () -> m_shooter.setTargetRPMCommand(
+                            passCmd.RecordedidealHorizontalSpeed).withTimeout(1))
+                        .onlyWhile(() -> aimAtFerry.swerveInputStream
+                            .aimLock(Angle.ofBaseUnits(3, Degrees))
+                            .getAsBoolean())));
           }
         }, java.util.Collections.emptySet()));
     RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));

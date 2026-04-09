@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import static edu.wpi.first.units.Units.Seconds;
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
@@ -24,22 +26,20 @@ public class AimAtFerry extends Command {
     swerveInputStream
         .aimHeadingOffset(Rotation2d.fromDegrees(180))
         .aimHeadingOffset(true)
-        .aimWhile(true);
+        .aimWhile(true)
+        .aimLookahead(Time.ofBaseUnits(0.2, Seconds));
+
   }
 
   @Override
   public void execute() {
     // shoot at the nearest ferry pos
-    Pose2d ferry = swerveSubsystem.getCachedDynamicFerryLocation();
-    swerveInputStream.aim(() -> ferry)
-        .aimFeedforward(0.00045, 0.0001, 0.00022);
-
-    swerveSubsystem.getField()
-        .getObject("AimTarget")
-        .setPose(ferry);
-
+    swerveInputStream
+            .aim(swerveSubsystem::getCachedDynamicFerryLocation) // supplier, updates each loop
+            .aimFeedforward(0.00045, 0.0001, 0.00022);
     swerveSubsystem.driveFieldOriented(swerveInputStream.get());
   }
+  
 
   @Override
   public boolean isFinished() {
