@@ -58,6 +58,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 // import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -206,6 +207,8 @@ public class RobotContainer {
   private Trigger POVLEFT_OP_LeftLimelight;
   private Trigger POVRIGHT_OP_VisionToggle;
   private Trigger POVDown_OP_BackLimelight; // toggle vision
+
+  private Trigger joystickmoving = new Trigger(() -> drivebase.Joystickmove(dc()::getLeftX, dc()::getLeftY));
 
   // -----------------------------------------------------------------------
   // Helpers: resolve which physical controller acts as "driver" vs "operator"
@@ -437,16 +440,30 @@ public class RobotContainer {
         .scaleTranslation(1.0)
         .allianceRelativeControl(true);
 
-    dc().rightTrigger().whileTrue(Commands.defer(() -> {
-      if (isInAllianceZone()) {
-        aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
-            dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
-        return aimAtHub;
-      } else {
-        aimAtFerry = new AimAtFerry(drivebase, driveAngularVelocity);
-        return aimAtFerry;
-      }
-    }, Set.of(drivebase)));
+    dc().rightTrigger().whileTrue(
+        Commands.defer(() -> {
+          if (isInAllianceZone()) {
+            AimAtHub aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
+                dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
+
+            Supplier<Angle> tolerance = () -> {
+              double dist = drivebase.getCachedDynamicHubLocation()
+                  .getTranslation()
+                  .getDistance(drivebase.getPose().getTranslation());
+              return Angle.ofBaseUnits(aimTolerance(dist), Degrees);
+            };
+
+            return aimAtHub
+                .until(() -> aimAtHub.swerveInputStream.aimLock(tolerance.get()).getAsBoolean())
+                .andThen(
+                    Commands.run(drivebase::lock, drivebase).repeatedly()
+                        .until(() -> drivebase.Joystickmove(dc()::getLeftX, dc()::getLeftY)
+                            || !aimAtHub.swerveInputStream.aimLock(tolerance.get()).getAsBoolean()))
+                .repeatedly();
+          } else {
+            return new AimAtFerry(drivebase, driveAngularVelocity);
+          }
+        }, Set.of(drivebase)));
 
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
@@ -716,12 +733,12 @@ public class RobotContainer {
     // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
     new Trigger(() -> isInAllianceZone()
-        // && DriverStation.isTeleopEnabled()
-        )
+    // && DriverStation.isTeleopEnabled()
+    )
         .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
     new Trigger(() -> !isInAllianceZone()
-        // && DriverStation.isTeleopEnabled()
-        )
+    // && DriverStation.isTeleopEnabled()
+    )
         .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
     m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() -> DriverStation.isTeleopEnabled()));
 

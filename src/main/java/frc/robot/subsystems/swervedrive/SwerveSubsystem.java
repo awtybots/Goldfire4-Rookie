@@ -1086,7 +1086,17 @@ public class SwerveSubsystem extends SubsystemBase {
     }).finallyDo(interrupted -> stop());
   }
 
-
+public boolean Joystickmove(DoubleSupplier leftX, DoubleSupplier leftY) {
+      
+        double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
+        // double rightMag = Math.abs(rightX.getAsDouble());
+        if ((leftMag) > Constants.OperatorConstants.DEADBAND) {
+           return locked = false;
+        } 
+        else {
+          return  locked = true;
+        }
+}
   /**
    * Gets the current pitch angle of the robot, as reported by the imu.
    *
