@@ -456,7 +456,7 @@ public class RobotContainer {
             return aimAtHub
                 .until(() -> aimAtHub.swerveInputStream.aimLock(tolerance.get()).getAsBoolean())
                 .andThen(
-                    Commands.run(drivebase::lock, drivebase).repeatedly()
+                    Commands.runOnce(drivebase::lock, drivebase).repeatedly()
                         .until(() -> drivebase.Joystickmove(dc()::getLeftX, dc()::getLeftY)
                             || !aimAtHub.swerveInputStream.aimLock(tolerance.get()).getAsBoolean()))
                 .repeatedly();
