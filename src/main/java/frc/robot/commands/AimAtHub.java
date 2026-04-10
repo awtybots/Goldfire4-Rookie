@@ -22,18 +22,18 @@ public class AimAtHub extends Command {
 
     public boolean readyToLock = false;
     final double lockDelay = DrivebaseConstants.AIM_LOCK_DELAY;
+ 
+    // private final DoubleSupplier leftX;
+    // private final DoubleSupplier leftY;
+    // private final DoubleSupplier rightX;
 
-    private final DoubleSupplier leftX;
-    private final DoubleSupplier leftY;
-    private final DoubleSupplier rightX;
-
-    public AimAtHub(SwerveSubsystem swerveSubsystem, SwerveInputStream swerveInputStream,
-            DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX) {
+    public AimAtHub(SwerveSubsystem swerveSubsystem, SwerveInputStream swerveInputStream
+            ) {
         this.swerveSubsystem = swerveSubsystem;
         this.swerveInputStream = swerveInputStream.copy();
-        this.leftX = leftX;
-        this.leftY = leftY;
-        this.rightX = rightX;
+        // this.leftX = leftX;
+        // this.leftY = leftY;
+        // this.rightX = rightX;
         addRequirements(this.swerveSubsystem);
     }
 

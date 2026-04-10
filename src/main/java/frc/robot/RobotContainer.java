@@ -443,8 +443,8 @@ public class RobotContainer {
     dc().rightTrigger().whileTrue(
         Commands.defer(() -> {
           if (isInAllianceZone()) {
-            AimAtHub aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
-                dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
+            AimAtHub aimAtHub = new AimAtHub(drivebase, driveAngularVelocity
+               );
 
             Supplier<Angle> tolerance = () -> {
               double dist = drivebase.getCachedDynamicHubLocation()
