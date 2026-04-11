@@ -80,11 +80,18 @@ public class ControllAllPassing extends Command
     // Test Results
     for (var entry : List.of(
       // Pair.of(Meters.of(1), RPM.of((1000))),
-                            Pair.of(Meters.of(2), RPM.of(-1622.8225)),
-                            Pair.of(Meters.of(3), RPM.of(-1900)),
+                            Pair.of(Meters.of(2), RPM.of(-1500)),
+                            Pair.of(Meters.of(2.5), RPM.of(-1735)),
+                            Pair.of(Meters.of(3), RPM.of(-1810)),
+                            Pair.of(Meters.of(3.5), RPM.of(-1950)),
                             // Pair.of(Meters.of(3.5), RPM.of(2050),
-                            Pair.of(Meters.of(4), RPM.of(-2200)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2296.918))
+                            Pair.of(Meters.of(4), RPM.of(-2080)),
+                            Pair.of(Meters.of(5.2048), RPM.of(-2317)),
+                            Pair.of(Meters.of(6), RPM.of(-2460)),
+                            Pair.of(Meters.of(7), RPM.of(-2600)),
+                            Pair.of(Meters.of(8), RPM.of(-2800)),
+                            Pair.of(Meters.of(9), RPM.of(-3000)),
+                            Pair.of(Meters.of(10), RPM.of(-4000))
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}

@@ -49,7 +49,7 @@ public class Pushout extends SubsystemBase {
 
     private RelativeEncoder pushoutEncoder = PushoutMotor.getEncoder();
 
-    double minVelocity = 1000.0;
+    double minVelocity = -1000.0;
     // private final RelativeEncoder pushoutRightEncoder =
     // PushoutRightMotor.getEncoder();
 
@@ -74,10 +74,10 @@ public class Pushout extends SubsystemBase {
     public Command HomingCommand(double threshold) {
         Debouncer currentDebouncer = new Debouncer(0.2);
 
-        return new RunCommand(() -> PushoutController.setSetpoint(minVelocity, ControlType.kCurrent), this)
-                .until(() -> currentDebouncer.calculate((PushoutMotor.getEncoder().getVelocity() >= threshold)))
+        return new RunCommand(() -> PushoutController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl), this)
+                .until(() -> currentDebouncer.calculate((PushoutMotor.getEncoder().getVelocity() <= threshold)))
                 .finallyDo(() -> {
-                    StopPushout();
+                    PushIntake();
                 });
     }
 

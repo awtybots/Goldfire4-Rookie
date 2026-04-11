@@ -599,6 +599,7 @@ public class RobotContainer {
                         m_pushout.AgitateCommand()
                             .beforeStarting(Commands.waitSeconds(2.25))
                             .onlyWhile(() -> !LT_Intake.getAsBoolean()),
+                        // m_pushout.HomingCommand(-10),    
                         m_intake.runIntakeCommand())
                         .finallyDo(
                             () -> {
