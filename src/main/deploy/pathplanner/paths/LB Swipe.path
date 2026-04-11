@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.548746582690756,
-        "y": 7.63998327472066
+        "x": 5.27098761154595,
+        "y": 7.415653496144089
       },
       "isLocked": false,
       "linkedName": "LT Start Spc"
@@ -20,124 +20,92 @@
         "y": 7.510700753904882
       },
       "prevControl": {
-        "x": 4.609598841011374,
-        "y": 7.629396678391799
+        "x": 5.091377702053753,
+        "y": 7.504715665826597
       },
       "nextControl": {
-        "x": 6.45456453741722,
-        "y": 7.4109313394226275
+        "x": 6.025399521672859,
+        "y": 7.515453206034751
       },
       "isLocked": false,
       "linkedName": "LT Exit Spc"
     },
     {
       "anchor": {
-        "x": 7.611539467917275,
-        "y": 6.8563514964953525
+        "x": 8.08413634183114,
+        "y": 6.762139742667215
       },
       "prevControl": {
-        "x": 7.192090199577939,
-        "y": 7.510455419737498
+        "x": 7.754053457277225,
+        "y": 7.187860948933933
       },
       "nextControl": {
-        "x": 8.075270747259092,
-        "y": 6.133192649780695
+        "x": 8.525011122829794,
+        "y": 6.193525760051997
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.816005772948934,
-        "y": 5.630465519715326
+        "x": 8.300256036275416,
+        "y": 5.432278766173753
       },
       "prevControl": {
-        "x": 7.633121433952766,
-        "y": 6.029131190784364
+        "x": 8.132454978948486,
+        "y": 5.7853345474970475
       },
       "nextControl": {
-        "x": 7.920246021471808,
-        "y": 5.403234424598725
+        "x": 8.516237681307876,
+        "y": 4.97785035163844
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.879310061433426,
-        "y": 4.4446479205362195
+        "x": 7.973046730324075,
+        "y": 4.4007787181712965
       },
       "prevControl": {
-        "x": 8.261180743050726,
-        "y": 4.402278918161408
+        "x": 8.234624868466227,
+        "y": 4.490203245353519
       },
       "nextControl": {
-        "x": 7.478707820906816,
-        "y": 4.489095211457696
+        "x": 6.535866779407971,
+        "y": 3.909456551497719
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.693391668137346,
-        "y": 5.407822637204072
+        "x": 5.953751374421297,
+        "y": 5.483614945023148
       },
       "prevControl": {
-        "x": 7.903400869592113,
-        "y": 5.1916046813240655
+        "x": 6.466738899210065,
+        "y": 5.288200404492229
       },
       "nextControl": {
-        "x": 6.2470621766486625,
-        "y": 5.4875777747539525
+        "x": 5.313756238072117,
+        "y": 5.727411040382767
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Bump Swipe End"
     },
     {
       "anchor": {
-        "x": 5.930918909143519,
-        "y": 5.469508680555556
+        "x": 4.557612312610852,
+        "y": 5.603509265351149
       },
       "prevControl": {
-        "x": 6.994739896389075,
-        "y": 5.355642798135928
-      },
-      "nextControl": {
-        "x": 5.080705622626202,
-        "y": 5.5605111022739395
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.847,
-        "y": 5.623
-      },
-      "prevControl": {
-        "x": 4.6375384187539215,
-        "y": 5.820827496977087
-      },
-      "nextControl": {
-        "x": 3.365568001932649,
-        "y": 5.502524530518753
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.071743127893519,
-        "y": 5.341699363425926
-      },
-      "prevControl": {
-        "x": 3.328657197819438,
-        "y": 5.3779631134100825
+        "x": 5.221900786975195,
+        "y": 5.48508845875021
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LB Shoot Spc"
+      "linkedName": "LB"
     }
   ],
   "rotationTargets": [
@@ -147,34 +115,26 @@
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": -71.3237175567921
+      "rotationDegrees": -105.9
     },
     {
       "waypointRelativePos": 3,
-      "rotationDegrees": -73.0
+      "rotationDegrees": -107.78357746328201
     },
     {
       "waypointRelativePos": 4,
-      "rotationDegrees": -80.0
+      "rotationDegrees": -156.58
     },
     {
       "waypointRelativePos": 5,
-      "rotationDegrees": -0.226565611979962
-    },
-    {
-      "waypointRelativePos": 6,
-      "rotationDegrees": -0.3198745918140474
-    },
-    {
-      "waypointRelativePos": 7,
-      "rotationDegrees": 137.0
+      "rotationDegrees": 44.90678109472881
     }
   ],
   "constraintZones": [
     {
       "name": "Slow for intake",
-      "minWaypointRelativePos": 2.407288205980065,
-      "maxWaypointRelativePos": 4.418293189368772,
+      "minWaypointRelativePos": 2.112579345703125,
+      "maxWaypointRelativePos": 4.15,
       "constraints": {
         "maxVelocity": 2.25,
         "maxAcceleration": 2.25,
@@ -189,7 +149,7 @@
   "eventMarkers": [
     {
       "name": "extend",
-      "waypointRelativePos": 1.416735880398671,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -200,9 +160,14 @@
     },
     {
       "name": "intake",
-      "waypointRelativePos": 1.6806478405315617,
-      "endWaypointRelativePos": 8.0,
-      "command": null
+      "waypointRelativePos": 1.3884966777408616,
+      "endWaypointRelativePos": 7.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "intake"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -214,8 +179,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 135.44299999999998
+    "velocity": 2.5,
+    "rotation": 54.9050572399867
   },
   "reversed": false,
   "folder": "Space City Paths",
@@ -223,5 +188,5 @@
     "velocity": 0.0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

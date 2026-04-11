@@ -13,6 +13,12 @@
                 "data": {
                   "pathName": "Auto SOTM Path"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot and Aim"
+                }
               }
             ]
           }
