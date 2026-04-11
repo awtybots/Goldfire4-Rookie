@@ -1131,12 +1131,6 @@ public boolean Joystickmove(DoubleSupplier leftX, DoubleSupplier leftY) {
    * @return A Pose2d representing the compensated aim point.
    */
   private Pose2d getDynamicHubLocation() {
-
-    if(locked)
-    {
-      return new Pose2d(Constants.DrivebaseConstants.getHubPose2D().getTranslation(), new Rotation2d(0));
-    }
-
     Translation2d hubVec = Constants.DrivebaseConstants.getHubPose2D().getTranslation();
     Translation2d robotVec = getPose().getTranslation();
     ChassisSpeeds vel = getFieldVelocity();
@@ -1151,7 +1145,7 @@ public boolean Joystickmove(DoubleSupplier leftX, DoubleSupplier leftY) {
 
     Rotation2d aimRotation = CompensatedHub.minus(robotVec).getAngle();
 
-    return new Pose2d(CompensatedHub, aimRotation);
+    return new Pose2d(CompensatedHub, new Rotation2d());
   }
 
   /**

@@ -83,9 +83,7 @@ import frc.robot.subsystems.ObjectDetection;
  * trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private AimAtHub aimAtHub;
-  private AimAtFerry aimAtFerry;
-  private PathConstraints autoConstraints;
+ 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
@@ -161,6 +159,9 @@ public class RobotContainer {
   SwerveInputStream aimAtHubStream;
   SwerveInputStream aimAtFerryStream;
 
+   private AimAtHub aimAtHub;
+  private AimAtFerry aimAtFerry;
+  private PathConstraints autoConstraints;
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
   private Trigger RTtransfer_kick_shoot; // index to kicker, kick, agitate, and shoot only when up to speed
