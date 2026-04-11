@@ -41,8 +41,7 @@ public class AimAtHub extends Command {
     public void initialize() {
         swerveSubsystem.isAiming = true;
         swerveInputStream
-                .aim(swerveSubsystem::getCachedDynamicHubLocation) // supplier, updates each loop
-                .aimFeedforward(0.00045, 0.0001, 0.00022)
+
                 .aimHeadingOffset(Rotation2d.fromDegrees(180))
                 .aimHeadingOffset(true)
                 .aimWhile(true)
@@ -51,8 +50,9 @@ public class AimAtHub extends Command {
 
     @Override
     public void execute() {
-   
-     
+        swerveInputStream
+                .aim(swerveSubsystem::getCachedDynamicHubLocation) // supplier, updates each loop
+                .aimFeedforward(0.00045, 0.0001, 0.00022);
         // double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
         // double rightMag = Math.abs(rightX.getAsDouble());
         swerveSubsystem.driveFieldOriented(swerveInputStream.get());
