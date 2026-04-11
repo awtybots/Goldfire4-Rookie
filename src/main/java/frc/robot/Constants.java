@@ -150,8 +150,8 @@ public final class Constants {
 
     public static final double OUTTAKE_SPEED = -1;
     public static final double INTAKE_SPEED = 1;
-    public static final double INTAKE_RPM = -10000;
-    public static final double OUTTAKE_RPM = 10000;
+    public static final double INTAKE_RPM = -12500;
+    public static final double OUTTAKE_RPM = 12500;
 
   }
 
