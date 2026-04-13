@@ -52,11 +52,11 @@ public class AimAtHub extends Command {
         double rightMag = Math.abs(rightX.getAsDouble());
         swerveSubsystem.driveFieldOriented(swerveInputStream.get());
 
-        if ((leftMag + rightMag) > (Constants.OperatorConstants.DEADBAND + 0.2) && !readyToLock) {
-            SmartDashboard.putBoolean("Wheel Lock", false);
-        } else {
-            // swerveSubsystem.lock();
+        if ((leftMag + rightMag) < (Constants.OperatorConstants.DEADBAND + 0.2) && readyToLock) {
             SmartDashboard.putBoolean("Wheel Lock", true);
+            swerveSubsystem.lock();
+        } else {
+            SmartDashboard.putBoolean("Wheel Lock", false);
         }
     }
 
