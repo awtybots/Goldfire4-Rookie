@@ -731,7 +731,7 @@ public class RobotContainer {
 
     // pushout
     Y_OP_extendIntake.whileTrue(m_pushout.PushCommand());
-    B_OP_reteactIntake.whileTrue(m_pushout.RetractCommand());
+    B_OP_reteactIntake.whileTrue(m_pushout.FullyRetractCommand());
 
     // vision
     POVUP_OP_FrontLimelight.onTrue(drivebase.FrontToggle());
