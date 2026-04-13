@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LT Safe Swipe"
+            "pathName": "LT Swipe"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Second Swipe no Turn"
+            "pathName": "LT Second Swipe"
           }
         },
         {
