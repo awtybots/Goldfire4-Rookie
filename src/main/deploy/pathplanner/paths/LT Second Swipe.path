@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.81910128388017,
-        "y": 7.327888730385164
+        "x": 3.9943835396956926,
+        "y": 7.32
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.106990677479654,
-        "y": 7.417637770473687
+        "x": 4.2805018334480485,
+        "y": 7.367992501768835
       },
       "isLocked": false,
       "linkedName": "LT Shoot Spc"
     },
     {
       "anchor": {
-        "x": 4.675186359579717,
-        "y": 7.422596150426125
+        "x": 4.6369820783620455,
+        "y": 7.318276842911256
       },
       "prevControl": {
-        "x": 3.703386360867089,
-        "y": 7.450539767349762
+        "x": 4.208956320196246,
+        "y": 7.332930366873212
       },
       "nextControl": {
-        "x": 5.744089420396266,
-        "y": 7.39186038411667
+        "x": 5.010105354319846,
+        "y": 7.305502913397199
       },
       "isLocked": false,
-      "linkedName": "Trench Turn"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.600931793591635,
-        "y": 7.334807364437236
+        "x": 6.008883159558248,
+        "y": 7.268910148016907
       },
       "prevControl": {
-        "x": 4.792775941019149,
-        "y": 7.583927383022651
+        "x": 5.710766580774444,
+        "y": 7.5161917809028465
       },
       "nextControl": {
-        "x": 5.880594645692057,
-        "y": 7.248599221922227
+        "x": 6.201302665534202,
+        "y": 7.109302085188083
       },
       "isLocked": false,
       "linkedName": null
@@ -52,28 +52,28 @@
         "y": 6.105549063104263
       },
       "prevControl": {
-        "x": 5.861028345724986,
-        "y": 6.39387397505926
+        "x": 6.063951656981528,
+        "y": 6.436691458226619
       },
       "nextControl": {
-        "x": 5.838908385240277,
-        "y": 5.855760013443515
+        "x": 5.475619536456635,
+        "y": 5.52959607919838
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.742561601757092,
-        "y": 4.724470253867069
+        "x": 5.7933035010810014,
+        "y": 4.677614399841599
       },
       "prevControl": {
-        "x": 5.735136425603304,
-        "y": 5.045400099887954
+        "x": 5.773971808004831,
+        "y": 5.2102838359354235
       },
       "nextControl": {
-        "x": 5.762126841038702,
-        "y": 3.878824426756905
+        "x": 5.818737777913581,
+        "y": 3.9767931192387187
       },
       "isLocked": false,
       "linkedName": null
@@ -84,12 +84,12 @@
         "y": 4.029958989994264
       },
       "prevControl": {
-        "x": 6.344068506279678,
-        "y": 3.6938940250522396
+        "x": 6.286044632337535,
+        "y": 3.7118697792776216
       },
       "nextControl": {
-        "x": 6.528971289087426,
-        "y": 4.384284752572476
+        "x": 6.67183260799698,
+        "y": 4.540857483603427
       },
       "isLocked": false,
       "linkedName": null
@@ -100,12 +100,12 @@
         "y": 4.984304953907133
       },
       "prevControl": {
-        "x": 6.680614827850883,
-        "y": 4.566321665200805
+        "x": 6.667171134491869,
+        "y": 3.8761629511418887
       },
       "nextControl": {
-        "x": 6.374586380567459,
-        "y": 5.588848236632362
+        "x": 6.4138924258029,
+        "y": 6.389920479438444
       },
       "isLocked": false,
       "linkedName": null
@@ -116,24 +116,24 @@
         "y": 6.156037864659725
       },
       "prevControl": {
-        "x": 6.71927886000426,
-        "y": 5.393975935795082
+        "x": 6.4885576710244,
+        "y": 5.6726132516843135
       },
       "nextControl": {
-        "x": 5.990303380202036,
-        "y": 6.846007781970341
+        "x": 6.142719617913455,
+        "y": 6.773517363981605
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.863409415121255,
-        "y": 7.2890727532097
+        "x": 5.8476496110882685,
+        "y": 7.24065977933114
       },
       "prevControl": {
-        "x": 6.171948897264462,
-        "y": 6.546757947779801
+        "x": 5.989650995923137,
+        "y": 6.722149549178058
       },
       "nextControl": null,
       "isLocked": false,
@@ -143,11 +143,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 43.10039421424374
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": -21.734992678509805
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 3,
@@ -172,19 +172,6 @@
   ],
   "constraintZones": [
     {
-      "name": "Intake Slow",
-      "minWaypointRelativePos": 3.0,
-      "maxWaypointRelativePos": 4.3,
-      "constraints": {
-        "maxVelocity": 2.5,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
       "name": "Little Bit Slow for Trench",
       "minWaypointRelativePos": 7.6,
       "maxWaypointRelativePos": 7.85,
@@ -193,19 +180,6 @@
         "maxAcceleration": 3.125,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
-      "name": "Slow Turn",
-      "minWaypointRelativePos": 2.017555705604335,
-      "maxWaypointRelativePos": 3.8406482106684545,
-      "constraints": {
-        "maxVelocity": 3.5,
-        "maxAcceleration": 3.5,
-        "maxAngularVelocity": 340.0,
-        "maxAngularAcceleration": 300.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -252,7 +226,7 @@
   "folder": "Space City Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 103.34100000000001
+    "rotation": 100.489
   },
   "useDefaultConstraints": false
 }
