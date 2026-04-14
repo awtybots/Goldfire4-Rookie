@@ -626,7 +626,6 @@ public class RobotContainer {
                         .finallyDo(
                             () -> {
                               m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
-                              aimAtHub.readyToLock = false;
                             })
                         .onlyWhile(() -> aimAtHub.swerveInputStream
                             .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean())));
@@ -650,6 +649,9 @@ public class RobotContainer {
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           }
         }, java.util.Collections.emptySet()));
+    RTtransfer_kick_shoot.onTrue(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(0.4)));
+    RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> driveAngularVelocity.scaleTranslation(1)));
+    RTtransfer_kick_shoot.onFalse(Commands.runOnce(() -> aimAtHub.readyToLock = false));
 
     // Intake
     LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
@@ -730,7 +732,7 @@ public class RobotContainer {
 
     // pushout
     Y_OP_extendIntake.whileTrue(m_pushout.PushCommand());
-    B_OP_reteactIntake.whileTrue(m_pushout.RetractCommand());
+    B_OP_reteactIntake.whileTrue(m_pushout.FullyRetractCommand());
 
     // vision
     POVUP_OP_FrontLimelight.onTrue(drivebase.FrontToggle());

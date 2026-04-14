@@ -157,6 +157,7 @@ public final class Constants {
 
     public static final double PUSHOUT_RETRACTED_POS = 2; //
     public static final double PUSHOUT_EXTENDED_POS = 14; // TUNE THIS!!!
+    public static final double FULLY_IN_POS = 0.25; // TUNE THIS!!!
 
     public static final double PUSHOUT_RETRACTED_AGITATE_POS = 2; // it was 4.693
     public static final double PUSHOUT_EXTENDED_AGITATE_POS = 11; // TUNE THIS!!!

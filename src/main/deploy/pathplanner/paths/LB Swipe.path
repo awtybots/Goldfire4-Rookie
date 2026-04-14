@@ -8,72 +8,72 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.27098761154595,
-        "y": 7.415653496144089
+        "x": 5.435312436286007,
+        "y": 7.486006730903245
       },
       "isLocked": false,
       "linkedName": "LT Start Spc"
     },
     {
       "anchor": {
-        "x": 5.612,
-        "y": 7.510700753904882
+        "x": 5.575492242015148,
+        "y": 7.498364850786958
       },
       "prevControl": {
-        "x": 5.091377702053753,
-        "y": 7.504715665826597
+        "x": 5.194613775569655,
+        "y": 7.529305861743357
       },
       "nextControl": {
-        "x": 6.025399521672859,
-        "y": 7.515453206034751
+        "x": 5.921801368869602,
+        "y": 7.47023211178414
       },
       "isLocked": false,
       "linkedName": "LT Exit Spc"
     },
     {
       "anchor": {
-        "x": 8.08413634183114,
-        "y": 6.762139742667215
+        "x": 7.712900969328704,
+        "y": 6.737235387731483
       },
       "prevControl": {
-        "x": 7.754053457277225,
-        "y": 7.187860948933933
+        "x": 7.201812692638667,
+        "y": 7.322460676934778
       },
       "nextControl": {
-        "x": 8.525011122829794,
-        "y": 6.193525760051997
+        "x": 8.083832587029168,
+        "y": 6.31249748403847
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.300256036275416,
-        "y": 5.432278766173753
+        "x": 7.927578631365741,
+        "y": 5.548897424768517
       },
       "prevControl": {
-        "x": 8.132454978948486,
-        "y": 5.7853345474970475
+        "x": 7.978862405415507,
+        "y": 5.8130925151159145
       },
       "nextControl": {
-        "x": 8.516237681307876,
-        "y": 4.97785035163844
+        "x": 7.84513660075395,
+        "y": 5.1241864878400305
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.973046730324075,
-        "y": 4.4007787181712965
+        "x": 7.700894241898148,
+        "y": 4.6909741030092595
       },
       "prevControl": {
-        "x": 8.234624868466227,
-        "y": 4.490203245353519
+        "x": 7.910699929649922,
+        "y": 4.826921053644444
       },
       "nextControl": {
-        "x": 6.535866779407971,
-        "y": 3.909456551497719
+        "x": 7.491088554146374,
+        "y": 4.555027152374075
       },
       "isLocked": false,
       "linkedName": null
@@ -84,12 +84,12 @@
         "y": 5.483614945023148
       },
       "prevControl": {
-        "x": 6.466738899210065,
-        "y": 5.288200404492229
+        "x": 6.2196562220464635,
+        "y": 5.487981127658688
       },
       "nextControl": {
-        "x": 5.313756238072117,
-        "y": 5.727411040382767
+        "x": 5.409794196792461,
+        "y": 5.4746831169476105
       },
       "isLocked": false,
       "linkedName": "Bump Swipe End"
@@ -100,8 +100,8 @@
         "y": 5.603509265351149
       },
       "prevControl": {
-        "x": 5.221900786975195,
-        "y": 5.48508845875021
+        "x": 5.390757470150718,
+        "y": 5.757791145910594
       },
       "nextControl": null,
       "isLocked": false,
@@ -115,7 +115,7 @@
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": -105.9
+      "rotationDegrees": -85.26228803277797
     },
     {
       "waypointRelativePos": 3,
@@ -123,28 +123,14 @@
     },
     {
       "waypointRelativePos": 4,
-      "rotationDegrees": -156.58
+      "rotationDegrees": 169.22713978540023
     },
     {
-      "waypointRelativePos": 5,
+      "waypointRelativePos": 5.0,
       "rotationDegrees": 44.90678109472881
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Slow for intake",
-      "minWaypointRelativePos": 2.112579345703125,
-      "maxWaypointRelativePos": 4.15,
-      "constraints": {
-        "maxVelocity": 2.25,
-        "maxAcceleration": 2.25,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
