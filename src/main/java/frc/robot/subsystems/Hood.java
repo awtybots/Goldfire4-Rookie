@@ -14,7 +14,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants.HoodConstants;
@@ -25,7 +25,7 @@ import frc.robot.Configs;
 public class Hood extends SubsystemBase 
 {
 
-    private SparkFlex HoodMotor = new SparkFlex(HoodConstants.HOOD_ID, MotorType.kBrushless);
+    private SparkMax HoodMotor = new SparkMax(HoodConstants.HOOD_ID, MotorType.kBrushless);
     private SparkClosedLoopController HoodController = HoodMotor.getClosedLoopController();
 
     private RelativeEncoder hoodEncoder = HoodMotor.getEncoder();

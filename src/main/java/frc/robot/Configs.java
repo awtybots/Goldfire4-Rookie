@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.config.SparkBaseConfig.*;
 
@@ -407,7 +408,7 @@ public final class Configs
 
         public static final class HoodSubsystem {
                 
-            public static final SparkFlexConfig HoodControllerConfig = new SparkFlexConfig();
+            public static final SparkMaxConfig HoodControllerConfig = new SparkMaxConfig();
 
                 static {
 
