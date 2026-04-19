@@ -173,7 +173,7 @@ public final class Constants {
     // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
     // PID Constants For Hood
     public static final double p = 0.00024;
-    public static final double i = 0.000;
+    public static final double i = 0;
     public static final double d = 0;
 
     // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER

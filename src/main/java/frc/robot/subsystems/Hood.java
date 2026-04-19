@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.ResetMode;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 // import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -27,6 +30,9 @@ public class Hood extends SubsystemBase
 
     private RelativeEncoder hoodEncoder = HoodMotor.getEncoder();
 
+    private double currentAngle = 0;
+    private double currentEncoderTarget = 0;
+
     public Hood() {
         HoodMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
@@ -41,7 +47,9 @@ public class Hood extends SubsystemBase
     
     public void SetHoodPosition(double angle)
     {
-        HoodController.setSetpoint(angleToEncoderTicks(angle), ControlType.kMAXMotionPositionControl);
+        currentAngle = angle;
+        currentEncoderTarget = angleToEncoderTicks(currentAngle);
+        HoodController.setSetpoint(currentEncoderTarget, ControlType.kMAXMotionPositionControl);
     }
 
     public void StopHood()
@@ -56,7 +64,10 @@ public class Hood extends SubsystemBase
     }
 
     @Override
-    public void periodic() {
-
+    public void periodic() 
+    {
+        Logger.recordOutput("Hood/CurrentAngleDeg", currentAngle);
+        Logger.recordOutput("Hood/CurrentEncoderTarget", currentEncoderTarget);
+        Logger.recordOutput("Hood/CurrentEncoderPosition", hoodEncoder.getPosition());
     }
 }
