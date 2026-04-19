@@ -1,5 +1,6 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
@@ -164,6 +165,35 @@ public final class Constants {
 
     public static final double PUSHOUT_AGITATE_WAIT = 0.1; // seconds to wait between agitate cycles, TUNE THIS!!!\
     public static final double PUSHOUT_BETWEEN = 0.8;
+  }
+
+  public static class HoodConstants {
+    public static final int PUSHOUT_ID = 24; // idk yet
+
+    // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
+    // PID Constants For Hood
+    public static final double p = 0.00024;
+    public static final double i = 0.000;
+    public static final double d = 0;
+
+    // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
+    // Feed-Forward Constants for Hood
+    public static final double s = 0.0;
+    public static final double v = 0.0019;
+    public static final double a = 0.0;
+
+    public final static InterpolatingDoubleTreeMap HOOD_MAP = new InterpolatingDoubleTreeMap();
+
+    static { // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
+      for (var entry : List.of(
+          Pair.of(Meters.of(2), Degree.of(0.85)),
+          Pair.of(Meters.of(3), Degree.of(0.95)),
+          Pair.of(Meters.of(4), Degree.of(1.13))
+          )) 
+          {
+        HOOD_MAP.put(entry.getFirst().in(Meters), entry.getSecond().in(Degree));
+      }
+    }
   }
 
   public static class ShooterConstants {

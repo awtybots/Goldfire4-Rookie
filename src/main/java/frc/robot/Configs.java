@@ -5,6 +5,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.*;
 
 import frc.robot.Constants.FunnelConstants;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.KickerConstants;
@@ -398,6 +399,34 @@ public final class Configs
                         //     .feedForward
                         //     // kV is now in Volts, so we multiply by the nominal voltage (12V)
                         //     .kV(12.0 / 5767, ClosedLoopSlot.kSlot1);
+
+                     
+
+                }
+        }
+
+        public static final class HoodSubsystem {
+                
+            public static final SparkFlexConfig HoodControllerConfig = new SparkFlexConfig();
+
+                static {
+
+                        HoodControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+
+                        HoodControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                            // Set PID values for  position control. We don't need to pass a closed
+                            // loop slot, as it will default to slot 0.
+                                .p(HoodConstants.p)
+                                .i(HoodConstants.i)
+                                .d(HoodConstants.d)
+                                .outputRange(-1, 1)
+                                .feedForward
+                                .kS(HoodConstants.s)
+                                .kV(HoodConstants.v)
+                                .kA(HoodConstants.a)
+                                ;
+                        HoodControllerConfig.closedLoop
+                                .maxMotion.maxAcceleration(100000);
 
                      
 

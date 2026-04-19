@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Hood;
 // import frc.robot.subsystems.Hopper;
 // import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Shooter;
@@ -34,6 +35,7 @@ public class ControlAllShooting extends Command
 
   private final Supplier<Pose2d> goalPoseSupplier;
   private final Shooter m_shooter;
+  private final Hood m_hood;
   private final Supplier<Pose2d> robotPoseSupplier;
 
   public double distance = 0.0;
@@ -62,17 +64,18 @@ public class ControlAllShooting extends Command
   
   
 
-  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
+  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, Hood hood)
   {
-    this(goalPoseSupplier, shooter, robotPoseSupplier, false);
+    this(goalPoseSupplier, shooter, robotPoseSupplier, false, hood);
   }
 
-  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, boolean requireShooter)
+  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, boolean requireShooter, Hood hood)
 
   {
 
     this.goalPoseSupplier = goalPoseSupplier;
     this.m_shooter = shooter;
+    this.m_hood = hood;
     this.robotPoseSupplier = robotPoseSupplier;
     // this.m_swerveSubsystem = swerveSubsystem;
     // this.m_hopper = hopper;

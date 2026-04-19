@@ -81,7 +81,6 @@ public class Hopper extends SubsystemBase {
         return new RunCommand(() -> HopperToShooter(), this)
                 .finallyDo(interrupted -> stopHopper());
     }
-
     public Command runReverseHopperCommand() {
         return new RunCommand(() -> ReverseHopper(), this)
                 .finallyDo(interrupted -> stopHopper());

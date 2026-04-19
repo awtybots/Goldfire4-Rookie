@@ -68,6 +68,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.HubTrackerSubsystem;
 import frc.robot.subsystems.Shooter;
@@ -99,6 +100,7 @@ public class RobotContainer {
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
   private final Pushout m_pushout = new Pushout();
+  private final Hood m_hood = new Hood();
 
   // Helper Subsystems
   private final HubTrackerSubsystem m_hubtracker = new HubTrackerSubsystem(drivebase, driverXbox);
@@ -108,12 +110,12 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter, drivebase::getPose);
+    return new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter, drivebase::getPose, m_hood);
   }
 
   private ControllAllPassing makeVariablePass() {
     return new ControllAllPassing(drivebase::getDynamicFerryLocation,
-        m_shooter, drivebase::getPose);
+        m_shooter, drivebase::getPose, m_hood);
   }
 
   // public FuelSim fuelSim = new FuelSim("FuelSim"); // creates a new fuelSim of
@@ -264,7 +266,7 @@ public class RobotContainer {
       Logger.recordOutput("Auto/InAllianceZone", isInAllianceZone());
       if (isInAllianceZone()) {
         ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-            drivebase::getPose, true);
+            drivebase::getPose, true, m_hood);
         return Commands.sequence(
             Commands.parallel(
                 shootCmd,
@@ -326,7 +328,7 @@ public class RobotContainer {
     // shooter
     NamedCommands.registerCommand("Control All Shooting", Commands.defer(() -> {
       ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
+          drivebase::getPose, true, m_hood);
       return Commands.sequence(
           Commands.runOnce(() -> {
             drivebase.setAimLocations();
