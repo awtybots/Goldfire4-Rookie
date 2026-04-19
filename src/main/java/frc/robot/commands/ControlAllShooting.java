@@ -10,6 +10,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.HoodConstants;
 // import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -191,7 +192,8 @@ public class ControlAllShooting extends Command
   //       )
   //    );
 
-     m_shooter.setTargetRPM(idealHorizontalSpeed); 
+     m_shooter.setTargetRPM(idealHorizontalSpeed);
+     m_hood.SetHoodPosition(HoodConstants.HOOD_MAP.get(dist));
      RecordedidealHorizontalSpeed = idealHorizontalSpeed;
 
      if (isAtSpeed.getAsBoolean()) {

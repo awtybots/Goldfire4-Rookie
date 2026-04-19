@@ -189,9 +189,10 @@ public final class Constants {
 
     static { // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
       for (var entry : List.of(
-          Pair.of(Meters.of(2), Degree.of(0.85)),
-          Pair.of(Meters.of(3), Degree.of(0.95)),
-          Pair.of(Meters.of(4), Degree.of(1.13))
+          Pair.of(Meters.of(2), Degree.of(18)),
+          Pair.of(Meters.of(3), Degree.of(23)),
+          Pair.of(Meters.of(4), Degree.of(29)),
+          Pair.of(Meters.of(5), Degree.of(35))
           )) 
           {
         HOOD_MAP.put(entry.getFirst().in(Meters), entry.getSecond().in(Degree));
