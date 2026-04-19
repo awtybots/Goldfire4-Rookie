@@ -182,6 +182,9 @@ public final class Constants {
     public static final double v = 0.0019;
     public static final double a = 0.0;
 
+    public static final int GEAR_REDUCTION = 1;
+    public static final int COUNTS_PER_REVOLUTION = 42; // neo 550 has 42 CPR after looking online
+
     public final static InterpolatingDoubleTreeMap HOOD_MAP = new InterpolatingDoubleTreeMap();
 
     static { // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER

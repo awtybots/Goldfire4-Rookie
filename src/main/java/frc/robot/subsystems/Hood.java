@@ -15,7 +15,6 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants.HoodConstants;
-import frc.robot.Constants.PushoutConstants;
 import frc.robot.Configs;
 
 
@@ -34,10 +33,15 @@ public class Hood extends SubsystemBase
         hoodEncoder.setPosition(0);
     }
 
-    
-    public void SetHoodPosition(double position)
+    public double angleToEncoderTicks(double angle)
     {
-        HoodController.setSetpoint(position, ControlType.kMAXMotionPositionControl);
+        // target ticks = (target angle in deg / 360) * gear reduction * counts per revolution
+        return (angle / 360) * HoodConstants.GEAR_REDUCTION * HoodConstants.COUNTS_PER_REVOLUTION;
+    }
+    
+    public void SetHoodPosition(double angle)
+    {
+        HoodController.setSetpoint(angleToEncoderTicks(angle), ControlType.kMAXMotionPositionControl);
     }
 
     public void StopHood()
@@ -45,9 +49,9 @@ public class Hood extends SubsystemBase
         HoodMotor.set(0);
     }
 
-    public Command SetHoodPositionCommand(double position)
+    public Command SetHoodPositionCommand(double angle)
     {
-        return this.run(() -> SetHoodPosition(position))
+        return this.run(() -> SetHoodPosition(angle))
                         .finallyDo(interrupted -> StopHood());
     }
 
