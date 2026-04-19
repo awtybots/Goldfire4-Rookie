@@ -168,7 +168,7 @@ public final class Constants {
   }
 
   public static class HoodConstants {
-    public static final int PUSHOUT_ID = 24; // idk yet
+    public static final int HOOD_ID = 24; // idk yet
 
     // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
     // PID Constants For Hood
