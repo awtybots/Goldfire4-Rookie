@@ -733,6 +733,8 @@ public class RobotContainer {
     // // m_pushout.setDefaultCommand(m_pushout.runDefaultCommand());
     // m_hopper.setDefaultCommand(m_hopper.runDefaultCommand());
 
+    m_hood.setDefaultCommand(m_hood.SetHoodPositionCommand(0));
+
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
     } else {

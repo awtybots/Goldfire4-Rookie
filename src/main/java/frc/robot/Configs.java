@@ -249,7 +249,8 @@ public final class Configs
                                 ;
 
                                 kickerRightMotorConfig.closedLoop
-                                .maxMotion.maxAcceleration(1000000);
+                                .maxMotion.maxAcceleration(1000000)
+                                ;
                         }
 
         }
@@ -421,13 +422,16 @@ public final class Configs
                                 .i(HoodConstants.i)
                                 .d(HoodConstants.d)
                                 .outputRange(-1, 1)
-                                .feedForward
-                                .kS(HoodConstants.s)
-                                .kV(HoodConstants.v)
-                                .kA(HoodConstants.a)
+                                // .feedForward
+                                // .kS(HoodConstants.s)
+                                // .kV(HoodConstants.v)
+                                // .kA(HoodConstants.a)
                                 ;
                         HoodControllerConfig.closedLoop
-                                .maxMotion.maxAcceleration(100000);
+                                .maxMotion.maxAcceleration(100000)
+                                .allowedProfileError(0.1)
+                                .cruiseVelocity(100)
+                                ;
 
                      
 
