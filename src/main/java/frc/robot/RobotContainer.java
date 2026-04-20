@@ -339,7 +339,7 @@ public class RobotContainer {
               drivebase.driveFieldOriented(aimAtHubStream),
               Commands.sequence(
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
+                      && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean() && m_hood.isHoodAtSetpoint()),
                   Commands.parallel(
                       m_hopper.runHopperToShooterCommand(),
                       m_kicker.kickCommand(),
@@ -567,7 +567,7 @@ public class RobotContainer {
                 Commands.sequence(
                     Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
                         && aimAtHub.swerveInputStream
-                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()),
+                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean() && m_hood.isHoodAtSetpoint()),
                     Commands.parallel(
                         Commands.sequence(
                             Commands.runOnce(() -> Logger.recordOutput(
@@ -599,7 +599,7 @@ public class RobotContainer {
                 // drivebase.getDynamicFerryLocation())),
                 Commands.sequence(
                     Commands.waitUntil(() -> passCmd.isCASAtSpeed()
-                        && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
+                        && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean() && m_hood.isHoodAtSetpoint()),
                     Commands.parallel(
                         m_hopper.runHopperToShooterCommand(),
 

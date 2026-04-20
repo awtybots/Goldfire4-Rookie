@@ -185,6 +185,8 @@ public final class Constants {
     public static final int GEAR_REDUCTION = 1;
     public static final int COUNTS_PER_REVOLUTION = 42; // neo 550 has 42 CPR after looking online
 
+    public static final double HOOD_TOLERANCE = 1.0; // How close to setpoint is ok, need to tune
+
     public final static InterpolatingDoubleTreeMap HOOD_MAP = new InterpolatingDoubleTreeMap();
 
     static { // NOTHING HERE IS TESTED YET ITS JUST PLACEHOLDER
