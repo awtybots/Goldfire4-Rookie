@@ -428,7 +428,7 @@ public final class Configs
                                 // .kA(HoodConstants.a)
                                 ;
                         HoodControllerConfig.closedLoop
-                                .maxMotion.maxAcceleration(100000)
+                                .maxMotion.maxAcceleration(300)
                                 .allowedProfileError(0.1)
                                 .cruiseVelocity(100)
                                 ;
