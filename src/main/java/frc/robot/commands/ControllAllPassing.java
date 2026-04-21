@@ -104,7 +104,7 @@ public class ControllAllPassing extends Command
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
 
-    addRequirements();
+    addRequirements(m_hood, m_shooter);
   }
 
   @Override

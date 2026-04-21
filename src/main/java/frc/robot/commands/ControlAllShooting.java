@@ -118,6 +118,7 @@ public class ControlAllShooting extends Command
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
 
     if(requireShooter) addRequirements(m_shooter);
+    addRequirements(m_hood);
   }
 
   @Override
