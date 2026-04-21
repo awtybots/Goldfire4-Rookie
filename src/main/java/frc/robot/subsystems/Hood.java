@@ -89,6 +89,11 @@ public class Hood extends SubsystemBase
         return this.runOnce(() -> SetHoodPosition(angle));
     }
 
+    public Command holdCurrentHoodPositionCommand()
+    {
+        return this.run(() -> holdCurrentHoodPosition());
+    }
+
     @Override
     public void periodic() 
     {

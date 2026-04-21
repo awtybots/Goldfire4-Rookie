@@ -344,7 +344,8 @@ public class RobotContainer {
                       m_hopper.runHopperToShooterCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.AgitateCommand(),
-                      m_intake.runIntakeCommand()))
+                      m_intake.runIntakeCommand(),
+                      m_hood.holdCurrentHoodPositionCommand()))
                   .finallyDo(() -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1))))
           .finallyDo(() -> drivebase.isAiming = false);
     }, java.util.Collections.emptySet()).withTimeout(5.3));
@@ -584,7 +585,8 @@ public class RobotContainer {
                         m_pushout.AgitateCommand()
                             .onlyWhile(() -> !LT_Intake.getAsBoolean())
                             .beforeStarting(Commands.waitSeconds(2.25)),
-                        m_intake.runIntakeCommand())
+                        m_intake.runIntakeCommand()),
+                        m_hood.holdCurrentHoodPositionCommand()
                         .finallyDo(
                             () -> {
                               m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
@@ -607,7 +609,8 @@ public class RobotContainer {
                         m_kicker.kickCommand(),
                         m_pushout.AgitateCommand()
                             .beforeStarting(Commands.waitSeconds(1.5)),
-                        m_intake.runIntakeCommand())
+                        m_intake.runIntakeCommand(),
+                        m_hood.holdCurrentHoodPositionCommand())
                         .onlyWhile(aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(5, Degrees)))))
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
           }

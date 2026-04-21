@@ -32,6 +32,7 @@ public class HubTrackerSubsystem extends SubsystemBase
     private final SwerveSubsystem drivebase;
     private FieldObject2d circle;
     private FieldObject2d dynamicHubCircle;
+    @SuppressWarnings("unused")
     private FieldObject2d traj;
 
     final CommandXboxController driverController;
