@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.AimAtHub;
 import frc.robot.commands.AimAtFerry;
-import java.util.Optional;
+// import java.util.Optional;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -35,31 +35,31 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+// import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
+// import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Dimensions;
-import frc.robot.Constants.DrivebaseConstants;
+// import frc.robot.Constants.Dimensions;
+// import frc.robot.Constants.DrivebaseConstants;
 // import frc.robot.Configs.ShooterSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
 import frc.robot.commands.ControllAllPassing;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.util.HubTracker;
+// import frc.robot.util.HubTracker;
 // import frc.robot.utils.FuelSim;
 
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
-import java.lang.module.ModuleDescriptor.Requires;
-import java.util.function.BooleanSupplier;
+// import java.lang.module.ModuleDescriptor.Requires;
+// import java.util.function.BooleanSupplier;
 
 // import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -74,7 +74,7 @@ import frc.robot.subsystems.HubTrackerSubsystem;
 import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pushout;
-import frc.robot.subsystems.ObjectDetection;
+// import frc.robot.subsystems.ObjectDetection;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -402,7 +402,7 @@ public class RobotContainer {
     ControllAllPassing passWarm = makeVariablePass();
     @SuppressWarnings("unused")
     AimAtHub aimHubWarm = new AimAtHub(drivebase, driveAngularVelocity,
-        dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
+        dc()::getLeftX, dc()::getLeftY);
     @SuppressWarnings("unused")
     AimAtFerry aimFerryWarm = new AimAtFerry(drivebase, driveAngularVelocity);
   }
@@ -435,7 +435,7 @@ public class RobotContainer {
     dc().rightTrigger().whileTrue(Commands.defer(() -> {
       if (isInAllianceZone()) {
         aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
-            dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
+            dc()::getLeftX, dc()::getLeftY);
         return aimAtHub;
       } else {
         aimAtFerry = new AimAtFerry(drivebase, driveAngularVelocity);

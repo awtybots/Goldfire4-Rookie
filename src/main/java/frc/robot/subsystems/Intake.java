@@ -14,9 +14,9 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
+// import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
-import frc.robot.Constants.HopperConstants;
+// import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Configs;
 import org.littletonrobotics.junction.Logger;
@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
     private SparkClosedLoopController IntakeLeftController = IntakeLeftMotor.getClosedLoopController();
 
     private SparkFlex IntakeRightMotor = new SparkFlex(IntakeConstants.INTAKE_RIGHT_ID, MotorType.kBrushless);
-    private SparkClosedLoopController IntakeRightController = IntakeRightMotor.getClosedLoopController();
+    // private SparkClosedLoopController IntakeRightController = IntakeRightMotor.getClosedLoopController();
   
 
     public Intake() {

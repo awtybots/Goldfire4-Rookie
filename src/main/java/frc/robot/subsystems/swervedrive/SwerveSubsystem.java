@@ -28,7 +28,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+// import edu.wpi.first.math.kinematics.SwerveModuleState;
 // import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
@@ -50,10 +50,10 @@ import frc.robot.LimelightHelpers;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpResponse.PushPromiseHandler;
+// import java.net.http.HttpResponse.PushPromiseHandler;
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.ResourceBundle;
+// import java.util.Optional;
+// import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -61,7 +61,7 @@ import org.json.simple.parser.ParseException;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
-import swervelib.imu.SwerveIMU;
+// import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -69,7 +69,7 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+// import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class SwerveSubsystem extends SubsystemBase {
   /**
@@ -84,8 +84,8 @@ public class SwerveSubsystem extends SubsystemBase {
   private volatile ChassisSpeeds lastCommandedRobotVelocity = new ChassisSpeeds();
   private volatile ChassisSpeeds lastCommandedFieldVelocity = new ChassisSpeeds();
   // Track yaw over time to estimate yaw rate for logs.
-  private double lastYawRadians = 0.0;
-  private double lastYawTimeSec = 0.0;
+  // private double lastYawRadians = 0.0;
+  // private double lastYawTimeSec = 0.0;
 
   public int allMegaTagNumber = 1;
 
