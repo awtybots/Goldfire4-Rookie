@@ -420,6 +420,7 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
    * Flight joysticks}.
    */
+  @SuppressWarnings("unused")
   private void configureBindings() {
 
     // Build all SwerveInputStreams here using dc() so they reference the
