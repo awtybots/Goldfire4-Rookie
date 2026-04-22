@@ -165,7 +165,7 @@ public class RobotContainer {
   // ========= DRIVER TRIGGERS ===========
   // Parallel Commands
   private Trigger RTtransfer_kick_shoot; // index to kicker, kick, agitate, and shoot only when up to speed
-  private Trigger RBFerry; // Run hopper and kicker in reverse
+  private Trigger RBVariableSpeedUp; // Run hopper and kicker in reverse
   private Trigger LBretract_and_stop; // retract 4 bar and stop intake
   private Trigger PRDrivetoRightTrench; // Drive to right trench
   private Trigger PLDriveToPose; // run hopper in reverse and kick backwards to unjam
@@ -489,7 +489,7 @@ public class RobotContainer {
     // ========= DRIVER TRIGGERS ===========
     // Parallel Commands
     RTtransfer_kick_shoot = dc().rightTrigger(); // index to kicker, kick, agitate, and shoot only when up to speed
-    RBFerry = dc().rightBumper(); // Run hopper and kicker in reverse
+    RBVariableSpeedUp = dc().rightBumper(); // Run hopper and kicker in reverse
     LBretract_and_stop = dc().leftBumper(); // retract 4 bar and stop intake
     PRDrivetoRightTrench = dc().povRight(); // Drive to right trench
     PLDriveToPose = dc().povLeft(); // run hopper in reverse and kick backwards to unjam
@@ -607,6 +607,19 @@ public class RobotContainer {
                         m_intake.runIntakeCommand())
                         .onlyWhile(aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(5, Degrees)))))
                 .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
+          }
+        }, java.util.Collections.emptySet()));
+
+    RBVariableSpeedUp.onTrue(
+        Commands.defer(() -> {
+          if (isInAllianceZone()) // In alliance zone → shoot at hub
+          {
+            ControlAllShooting shootCmd = makeVariableShoot();
+            return Commands.parallel(shootCmd);
+          }
+          else {
+            ControllAllPassing passCmd = makeVariablePass();
+            return Commands.parallel(passCmd);
           }
         }, java.util.Collections.emptySet()));
 
