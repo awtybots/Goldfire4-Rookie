@@ -58,6 +58,7 @@ public class Intake extends SubsystemBase {
     public void stopIntake() {
         desiredPercent = 0.0;
         IntakeLeftMotor.set(0);
+        IntakeRightMotor.set(0);
     }
 
     public Command runIntakeCommand() {
