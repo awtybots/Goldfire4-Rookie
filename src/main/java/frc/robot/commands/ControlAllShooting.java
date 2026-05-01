@@ -93,13 +93,12 @@ public class ControlAllShooting extends Command
                             Pair.of(Meters.of(2.5), RPM.of(-1935-20)),
                             Pair.of(Meters.of(3), RPM.of(-2010-20)),
                             Pair.of(Meters.of(3.5), RPM.of(-2150-10)),
-                            Pair.of(Meters.of(4), RPM.of(-2280-20)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2517-15)),
-                            Pair.of(Meters.of(6), RPM.of(-3060-20))                            
+                            Pair.of(Meters.of(4), RPM.of(-2280)),
+                            Pair.of(Meters.of(5.2048), RPM.of(-2517)),
+                            Pair.of(Meters.of(6), RPM.of(-3060))                            
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
-    // leane has become programmer and is taking
 
     if(requireShooter) addRequirements(m_shooter);
   }
