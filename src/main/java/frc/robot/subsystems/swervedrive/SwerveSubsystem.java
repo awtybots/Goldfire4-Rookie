@@ -452,7 +452,7 @@ public class SwerveSubsystem extends SubsystemBase {
               // drive trains
               new PIDConstants(10, 0.0, 0.0), //1.5 i swear i see eople saying they shouldnt be lower than 5
               // Translation PID constants
-              new PIDConstants(10, 0.0, 0.0) //1
+              new PIDConstants(8, 0.0, 0.0) //1
           // Rotation PID constants
           ),
           config,
