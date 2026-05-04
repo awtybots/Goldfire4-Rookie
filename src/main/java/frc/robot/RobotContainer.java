@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Inches;
 // import static edu.wpi.first.units.Units.Meters;
 
@@ -205,11 +206,9 @@ public class RobotContainer {
   private Trigger B_OP_reteactIntake; // pull in
   private Trigger POVLEFT_OP_agitate; // agitate
 
-  // Climber / Vision
-  private Trigger POVUP_OP_FrontLimelight;
-  private Trigger POVLEFT_OP_LeftLimelight;
-  private Trigger POVRIGHT_OP_VisionToggle;
-  private Trigger POVDown_OP_BackLimelight; // toggle vision
+  // Hood
+  private Trigger POVDOWN_DecreaseHoodAngle;
+  private Trigger POVUP_IncreaseHoodAngle; // toggle vision
 
   // -----------------------------------------------------------------------
   // Helpers: resolve which physical controller acts as "driver" vs "operator"
@@ -531,13 +530,11 @@ public class RobotContainer {
     // Pushout
     Y_OP_extendIntake = oc().y(); // push out
     B_OP_reteactIntake = oc().b(); // pull in
-    POVLEFT_OP_agitate = oc().povLeft(); // agitate
 
-    // Climber / Vision
-    POVUP_OP_FrontLimelight = oc().povUp();
-    POVLEFT_OP_LeftLimelight = oc().povLeft();
-    POVRIGHT_OP_VisionToggle = oc().povRight();
-    POVDown_OP_BackLimelight = oc().povDown(); // toggle vision
+    // Hood
+    POVUP_IncreaseHoodAngle = oc().povUp();
+    POVDOWN_DecreaseHoodAngle = oc().povDown(); // toggle vision
+
 
     Command driveFieldOrientedDirectAngle = drivebase
         .driveFieldOriented(() -> applyHeadingBias(driveDirectAngle.get()));
@@ -721,10 +718,10 @@ public class RobotContainer {
     B_OP_reteactIntake.whileTrue(m_pushout.PushoutDutycyleRetractCommand());
 
     // vision
-    POVUP_OP_FrontLimelight.onTrue(drivebase.FrontToggle());
-    POVLEFT_OP_LeftLimelight.onTrue(drivebase.LeftToggle());
-    POVRIGHT_OP_VisionToggle.onTrue(drivebase.VisionToggle());
-    POVDown_OP_BackLimelight.onTrue(drivebase.BackToggle());
+    // POVLEFT_OP_LeftLimelight.onTrue(drivebase.LeftToggle());
+    // POVRIGHT_OP_VisionToggle.onTrue(drivebase.VisionToggle());
+    POVUP_IncreaseHoodAngle.onTrue(m_hood.SetHoodPositionCommand(m_hood.getHoodAngle().plus(Degree.of(1))));
+    POVDOWN_DecreaseHoodAngle.onTrue(m_hood.SetHoodPositionCommand(m_hood.getHoodAngle().minus(Degree.of(1))));
 
     // ========================
 
