@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,6 +33,9 @@ public class Hood extends SubsystemBase
 
     private RelativeEncoder hoodEncoder = HoodMotor.getEncoder();
 
+    private final double minAngle = 0;
+    private final double maxAngle = 100;
+
     public Hood() {
         HoodMotor.configure(Configs.HoodSubsystem.HoodControllerConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
@@ -51,7 +55,7 @@ public class Hood extends SubsystemBase
     
     public void SetHoodPosition(double angle)
     {
-        HoodController.setSetpoint(angleToEncoderTicks(angle), ControlType.kMAXMotionPositionControl);
+        HoodController.setSetpoint(MathUtil.clamp(angle, minAngle, maxAngle), ControlType.kMAXMotionPositionControl);
     }
 
     public Angle getHoodAngle()
