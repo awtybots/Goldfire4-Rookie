@@ -521,19 +521,8 @@ NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
         () -> dc().getLeftX() * -1)
         .withControllerRotationAxis(() -> dc().getRightX() * -1)
         .deadband(OperatorConstants.DEADBAND)
-        .scaleTranslation(1.0)
+        .scaleTranslation(0.4)
         .allianceRelativeControl(true);
-
-    dc().rightTrigger().whileTrue(Commands.defer(() -> {
-      if (isInAllianceZone()) {
-        aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
-            dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
-        return aimAtHub;
-      } else {
-        aimAtFerry = new AimAtFerry(drivebase, driveAngularVelocity);
-        return aimAtFerry;
-      }
-    }, Set.of(drivebase)));
 
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
@@ -649,61 +638,18 @@ NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
 
     // ======= Driver =======
     RTtransfer_kick_shoot.whileTrue(
+        Commands.parallel(
+            m_shooter.shootFuelCommand(),
 
-        Commands.defer(() -> {
-          if (isInAllianceZone()) // In alliance zone → shoot at hub
-          {
-            ControlAllShooting shootCmd = makeVariableShoot();
-            return Commands.parallel(
-                shootCmd,
-                Commands.sequence(
-                    Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                        && aimAtHub.swerveInputStream
-                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()),
-                    Commands.parallel(
-                        Commands.sequence(
-                            // Commands.runOnce(() -> Logger.recordOutput(
-                            //     "Aim/ShotParallelStartedAt", Timer.getFPGATimestamp())),
-                            Commands.waitSeconds(1.0),
-                            Commands.runOnce(() -> {
-                              aimAtHub.readyToLock = true;
-                              Logger.recordOutput("Aim/DynamicAimLockTolerance", aimTolerance(shootCmd.distance));
-                              // Logger.recordOutput("Aim/ReadyToLockFiredAt", Timer.getFPGATimestamp());
-                            })),
-                        m_hopper.runHopperToShooterCommand(),
-                        m_kicker.kickCommand(),
-                       m_pushout.CheeksyAgitationCommand()
-                            // .onlyWhile(() -> !LT_Intake.getAsBoolean())
-                            // .beforeStarting(Commands.waitSeconds(1.75)),
-                            ,
-                        m_intake.runIntakeCommand())
-                        .finallyDo(
-                            () -> {
-                              m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
-                              aimAtHub.readyToLock = false;
-                            })
-                        .onlyWhile(() -> aimAtHub.swerveInputStream
-                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean())));
-          } else {
-            ControllAllPassing passCmd = makeVariablePass();
-            return Commands.parallel(
-                passCmd,
-                // Commands.runOnce(() -> driveAngularVelocity.aim(() ->
-                // drivebase.getDynamicFerryLocation())),
-                Commands.sequence(
-                    Commands.waitUntil(() -> passCmd.isCASAtSpeed()
-                        && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
-                    Commands.parallel(
-                        m_hopper.runHopperToShooterCommand(),
-
-                        m_kicker.kickCommand(),
-                        m_pushout.CheeksyAgitationCommand()
-                            .beforeStarting(Commands.waitSeconds(1.5)),
-                        m_intake.runIntakeCommand())
-                        .onlyWhile(aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(5, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
-          }
-        }, java.util.Collections.emptySet()));
+            // once at speed, run hopper + kicker
+            Commands.sequence(
+                Commands.waitUntil(m_shooter::isShooterFast),
+                Commands.parallel(
+                    m_hopper.runHopperToShooterCommand(),
+                    m_intake.runIntakeCommand(),
+                    m_kicker.kickCommand(),
+                    m_pushout.CheeksyAgitationCommand()
+                        .beforeStarting(Commands.waitSeconds(1.5))))));
         
 
     // Intake
