@@ -229,69 +229,6 @@ public class RobotContainer {
     return isAsierSelected() ? driverXbox : operatorXbox;
   }
 
-  private Command followWithRecovery(String pathName, String recoveryPathName) {
-    return Commands.defer(() -> {
-      try {
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        PathPlannerPath recoveryPath = PathPlannerPath.fromPathFile(recoveryPathName);
-
-        return AutoBuilder.followPath(path)
-            .beforeStarting(() -> {
-              Logger.recordOutput("Auto/CurrentPath", pathName);
-              Logger.recordOutput("Auto/RecoveryPath", recoveryPathName);
-              Logger.recordOutput("Auto/RecoveryTriggered", false);
-            })
-            .until(() -> drivebase.isOffPath(0.15))
-            .andThen(
-                Commands.either(
-                    AutoBuilder.pathfindThenFollowPath(recoveryPath, autoConstraints)
-                        .beforeStarting(() -> {
-                          Logger.recordOutput("Auto/RecoveryTriggered", true);
-                          Logger.recordOutput("Auto/CurrentPath", recoveryPathName);
-                        }),
-                    Commands.none(),
-                    () -> drivebase.isOffPath(0.15)));
-      } catch (Exception e) {
-        Logger.recordOutput("Auto/PathLoadError", e.getMessage());
-        e.printStackTrace();
-        return Commands.none();
-      }
-    }, java.util.Set.of(drivebase));
-  }
-
-  private Command makeAutoShootCommand() {
-    return Commands.defer(() -> {
-      Logger.recordOutput("Auto/ShootingAttempted", true);
-      Logger.recordOutput("Auto/InAllianceZone", isInAllianceZone());
-      if (isInAllianceZone()) {
-        ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-            drivebase::getPose, true);
-        return Commands.sequence(
-            Commands.parallel(
-                shootCmd,
-                drivebase.driveFieldOriented(aimAtHubStream),
-                // Continuously update aim target for shoot-on-the-move
-                // Commands.run(() -> aimAtHubStream.aim(drivebase.getDynamicHubLocation())),
-                Commands.sequence(
-                    Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                        && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-                    Commands.parallel(
-                        m_hopper.runHopperToShooterCommand(),
-                        m_kicker.kickCommand(),
-                        m_pushout.CheeksyAgitationCommand()
-                            .beforeStarting(Commands.waitSeconds(1.5)),
-                        m_intake.runIntakeCommand()))
-                    .finallyDo(
-                        () -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)))
-                .onlyWhile(aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees))),
-            m_pushout.RetractCommand());
-      } else {
-        // Not in alliance zone: no-op command to satisfy return type
-        return Commands.none();
-      }
-    }, java.util.Collections.<edu.wpi.first.wpilibj2.command.Subsystem>emptySet()).withTimeout(5.75);
-  };
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -378,14 +315,8 @@ public class RobotContainer {
     }, java.util.Collections.emptySet()).withTimeout(4));
 
     
-NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
+  NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
     
-    // public Command runIntakeCommand() {
-    //     return new RunCommand(() -> runIntake(), this)
-    //             .finallyDo(interrupted -> stopIntake());
-    // }
-
-
 
     NamedCommands.registerCommand("SOTM", Commands.defer(() -> {
       ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
@@ -443,12 +374,6 @@ NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
 
     NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
     NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
-
-    // Auto constraints for correcting paths
-    autoConstraints = new PathConstraints(
-        drivebase.getSwerveDrive().getMaximumChassisVelocity(), 3.5,
-        drivebase.getSwerveDrive().getMaximumChassisAngularVelocity(),
-        Units.degreesToRadians(720));
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
