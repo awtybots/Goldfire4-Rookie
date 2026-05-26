@@ -126,7 +126,7 @@
   "folder": "Worlds Paths",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 134.434
+    "rotation": 134.257
   },
   "useDefaultConstraints": false
 }

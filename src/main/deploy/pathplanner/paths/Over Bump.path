@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.529689505261807,
-        "y": 5.554865085985628
+        "x": 5.863409415121255,
+        "y": 5.387089871611984
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.779132565924825,
-        "y": 5.538186971971569
+        "x": 6.207385731875616,
+        "y": 5.355914073744974
       },
       "isLocked": false,
-      "linkedName": "LB"
+      "linkedName": "LB Start"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.5606417100694445
       },
       "prevControl": {
-        "x": 2.868939053635339,
-        "y": 5.570665763491935
+        "x": 2.868652842748621,
+        "y": 5.586367116688533
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 134.434
+    "rotation": 134.257
   },
   "reversed": false,
   "folder": "Worlds Paths",
