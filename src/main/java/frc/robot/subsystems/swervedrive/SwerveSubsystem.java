@@ -46,14 +46,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.LimelightHelpers;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpResponse.PushPromiseHandler;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -103,6 +109,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public boolean useFrontLimelight = true;
   public boolean useBackLimelight = true;
   public boolean useLeftLimelight = true;
+
+  public Set<Double> visibleTags = new HashSet<>();
 
   boolean locked = false;
 
@@ -312,6 +320,10 @@ public class SwerveSubsystem extends SubsystemBase {
     Logger.recordOutput("Drive/Pose", pose);
     // Duplicate pose for compatibility with older dashboards.
     Logger.recordOutput("Odometry/Robot", pose);
+
+    Logger.recordOutput("Drive/VisibleTags", visibleTags.stream()
+                                         .mapToDouble(Double::doubleValue)
+                                         .toArray());
 
     // Heading values as structs for AdvantageScope.
     // Estimated heading from pose estimator (preferred for field-relative).
@@ -835,9 +847,23 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive.getPose();
   }
 
+  private void getVisibleTags(String cameraName)
+  {
+    LimelightResults results = LimelightHelpers.getLatestResults(cameraName);
+    if(results != null && results.valid)
+    {
+      LimelightHelpers.LimelightTarget_Fiducial[] tags = results.targets_Fiducials;
+      for(LimelightTarget_Fiducial tag : tags)
+      {
+        visibleTags.add(tag.fiducialID);
+      }
+    }
+  }
+
   private void updateLimelight(String cameraName, int megaTag)
   {
     boolean doRejectUpdate = false;
+    getVisibleTags(cameraName);
     if(megaTag == 1) // If using mega tag 1
     {
       LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraName);
