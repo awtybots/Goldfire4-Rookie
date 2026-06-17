@@ -51,6 +51,7 @@ import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
 import frc.robot.commands.ControllAllPassing;
+import frc.robot.commands.DriveToPoseReplan;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.HubTracker;
@@ -636,7 +637,8 @@ public class RobotContainer {
     LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
 
     // Drive to Pose
-    PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
+    // PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
+    PLDriveToPose.whileTrue(new DriveToPoseReplan(drivebase, drivebase.GetDriveToPose()));
 
     // Swerve Drive Commands
     dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -783,6 +785,8 @@ public class RobotContainer {
       dc().button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
           () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
+
+      
       // driverXbox.b().whileTrue(
       // drivebase.driveToPose(
       // new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))

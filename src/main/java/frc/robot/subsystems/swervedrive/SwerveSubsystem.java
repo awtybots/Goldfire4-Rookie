@@ -1276,7 +1276,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return false;
   }
 
-  private Pose2d GetDriveToPose()
+  public Pose2d GetDriveToPose()
   {
       boolean isInAllianceZone = isInAllianceZone();
       boolean IsOnLeftSide = IsOnLeftSide();
