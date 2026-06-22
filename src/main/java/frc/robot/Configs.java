@@ -70,17 +70,17 @@ public final class Configs
 
         public static final class PushoutSubsystem {
 
-            public static final SparkFlexConfig PushoutMotorConfig = new SparkFlexConfig();
-            public static final SparkFlexConfig PushoutMotor2Config = new SparkFlexConfig();
+            public static final SparkFlexConfig PushoutMotorLeftConfig = new SparkFlexConfig();
+            public static final SparkFlexConfig PushoutMotorRightConfig = new SparkFlexConfig();
         //     public static final SparkFlexConfig PushoutMotorAgitateConfig = new SparkFlexConfig();
             // public static final SparkFlexConfig PushoutRightMotorConfig = new SparkFlexConfig();
 
 
                 static {
-                        PushoutMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+                        PushoutMotorLeftConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
 
 
-                        PushoutMotorConfig.closedLoop
+                        PushoutMotorLeftConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .p(PushoutConstants.p)
                         .i(PushoutConstants.i)
@@ -89,7 +89,7 @@ public final class Configs
 
                         
 
-                        PushoutMotorConfig.closedLoop
+                        PushoutMotorLeftConfig.closedLoop
                         .maxMotion
                                 .allowedProfileError(0.5)
                                 .cruiseVelocity(400000)
@@ -99,10 +99,10 @@ public final class Configs
 
                         
                         
-                        PushoutMotor2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
-                        .follow(PushoutConstants.PUSHOUT_ID,true);
+                        PushoutMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                        .follow(PushoutConstants.PUSHOUT_LEFT_ID,true);
 
-                        PushoutMotor2Config.closedLoop
+                        PushoutMotorRightConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                         .p(PushoutConstants.p)
                         .i(PushoutConstants.i)
@@ -111,7 +111,7 @@ public final class Configs
 
                         
 
-                        PushoutMotor2Config.closedLoop
+                        PushoutMotorRightConfig.closedLoop
                         .maxMotion
                                 .allowedProfileError(0.5)
                                 .cruiseVelocity(400000)

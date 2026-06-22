@@ -785,7 +785,6 @@ public class RobotContainer {
       dc().button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
           () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
-
       
       // driverXbox.b().whileTrue(
       // drivebase.driveToPose(

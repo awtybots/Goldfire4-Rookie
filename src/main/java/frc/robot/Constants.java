@@ -153,8 +153,8 @@ public final class Constants {
   }
 
   public static class PushoutConstants {
-    public static final int PUSHOUT_ID = 16; // Correct
-    public static final int PUSHOUT_2_ID = 17;
+    public static final int PUSHOUT_LEFT_ID = 16; // Correct
+    public static final int PUSHOUT_RIGHT_ID = 17;
 
     public static final double PUSHOUT_RETRACTED_POS = 2; //
     public static final double PUSHOUT_EXTENDED_POS = 15.911; // TUNE THIS!!!
