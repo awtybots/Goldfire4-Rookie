@@ -40,6 +40,9 @@ public class Pushout extends SubsystemBase {
     private SparkFlex PushoutMotor = new SparkFlex(PushoutConstants.PUSHOUT_ID, MotorType.kBrushless);
     private SparkClosedLoopController PushoutController = PushoutMotor.getClosedLoopController();
 
+    private SparkFlex PushoutMotor2 = new SparkFlex(PushoutConstants.PUSHOUT_2_ID, MotorType.kBrushless);
+    private SparkClosedLoopController PushoutController2 = PushoutMotor2.getClosedLoopController();
+
     private final Angle hardLowerLimit = Degrees.of(0);
 
     // private SparkFlex PushoutRightMotor = new
@@ -48,6 +51,7 @@ public class Pushout extends SubsystemBase {
     // PushoutRightMotor.getClosedLoopController();
 
     private RelativeEncoder pushoutEncoder = PushoutMotor.getEncoder();
+    private RelativeEncoder pushoutEncoder2 = PushoutMotor2.getEncoder();
 
     double minVelocity = -350.0;
     // private final RelativeEncoder pushoutRightEncoder =
@@ -57,6 +61,9 @@ public class Pushout extends SubsystemBase {
         PushoutMotor.configure(Configs.PushoutSubsystem.PushoutMotorConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
         pushoutEncoder.setPosition(0);
+        PushoutMotor2.configure(Configs.PushoutSubsystem.PushoutMotor2Config, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+        pushoutEncoder2.setPosition(0);
     }
 
     public void PushIntake() {

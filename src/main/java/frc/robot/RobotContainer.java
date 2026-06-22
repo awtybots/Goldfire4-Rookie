@@ -51,7 +51,7 @@ import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
 import frc.robot.commands.ControllAllPassing;
-import frc.robot.commands.DriveToPoseReplan;
+// import frc.robot.commands.DriveToPoseReplan;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.HubTracker;
@@ -638,7 +638,7 @@ public class RobotContainer {
 
     // Drive to Pose
     // PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
-    PLDriveToPose.whileTrue(new DriveToPoseReplan(drivebase, drivebase.GetDriveToPose()));
+    PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
 
     // Swerve Drive Commands
     dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));

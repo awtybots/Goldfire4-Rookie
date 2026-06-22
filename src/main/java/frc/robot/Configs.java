@@ -8,6 +8,7 @@ import frc.robot.Constants.FunnelConstants;
 import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.KickerConstants;
+import frc.robot.Constants.PushoutConstants;
 import frc.robot.Constants.ShooterConstants;
 
 import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
@@ -72,6 +73,7 @@ public final class Configs
         public static final class PushoutSubsystem {
 
             public static final SparkFlexConfig PushoutMotorConfig = new SparkFlexConfig();
+            public static final SparkFlexConfig PushoutMotor2Config = new SparkFlexConfig();
         //     public static final SparkFlexConfig PushoutMotorAgitateConfig = new SparkFlexConfig();
             // public static final SparkFlexConfig PushoutRightMotorConfig = new SparkFlexConfig();
 
@@ -82,9 +84,9 @@ public final class Configs
 
                         PushoutMotorConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                        .p(3.3)
-                        .i(0.0)
-                        .d(0.001)
+                        .p(PushoutConstants.p)
+                        .i(PushoutConstants.i)
+                        .d(PushoutConstants.d)
                         .outputRange(-1.0, 1.0);
 
                         
@@ -94,7 +96,28 @@ public final class Configs
                                 .allowedProfileError(0.5)
                                 .cruiseVelocity(400000)
                                 .maxAcceleration(400000);   
+
+
+
                         
+                        
+                        PushoutMotor2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                        .follow(PushoutConstants.PUSHOUT_ID,true);
+
+                        PushoutMotor2Config.closedLoop
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .p(PushoutConstants.p)
+                        .i(PushoutConstants.i)
+                        .d(PushoutConstants.d)
+                        .outputRange(-1.0, 1.0);
+
+                        
+
+                        PushoutMotor2Config.closedLoop
+                        .maxMotion
+                                .allowedProfileError(0.5)
+                                .cruiseVelocity(400000)
+                                .maxAcceleration(400000);   
                 }
 
 
