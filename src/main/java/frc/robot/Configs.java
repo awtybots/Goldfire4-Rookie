@@ -4,8 +4,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import com.revrobotics.spark.config.SparkBaseConfig.*;
 
-import frc.robot.Constants.FunnelConstants;
-import frc.robot.Constants.HopperConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.KickerConstants;
 import frc.robot.Constants.PushoutConstants;
@@ -258,66 +256,66 @@ public final class Configs
  
         }
 
-        public static final class HopperSubsystem {
+        // public static final class HopperSubsystem {
                 
-            public static final SparkFlexConfig TwindexerRightControllerConfig = new SparkFlexConfig();
-            public static final SparkFlexConfig TwindexerLeftControllerConfig = new SparkFlexConfig();
+        //     public static final SparkFlexConfig TwindexerRightControllerConfig = new SparkFlexConfig();
+        //     public static final SparkFlexConfig TwindexerLeftControllerConfig = new SparkFlexConfig();
 
-                static {
+        //         static {
 
-                        TwindexerRightControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12).follow(HopperConstants.TWINDEXER_LEFT_ID, true);
-                        TwindexerLeftControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+        //                 TwindexerRightControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12).follow(HopperConstants.TWINDEXER_LEFT_ID, true);
+        //                 TwindexerLeftControllerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
 
-                        TwindexerRightControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for  position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                                .p(HopperConstants.p)
-                                .i(HopperConstants.i)
-                                .d(HopperConstants.d)
-                                .outputRange(-1, 1)
-                                .feedForward
-                                .kS(HopperConstants.s)
-                                .kV(HopperConstants.v)
-                                .kA(HopperConstants.a)
-                                ;
-                        TwindexerRightControllerConfig.closedLoop
-                                .maxMotion.maxAcceleration(100000);
-                            // Set PID values for velocity control in slot 1
-                        //     .p(0.0001, ClosedLoopSlot.kSlot1)
-                        //     .i(0, ClosedLoopSlot.kSlot1)
-                        //     .d(0, ClosedLoopSlot.kSlot1)
-                        //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
-                        //     .feedForward
-                        //     // kV is now in Volts, so we multiply by the nominal voltage (12V)
-                        //     .kV(12.0 / 5767, ClosedLoopSlot.kSlot1);
+        //                 TwindexerRightControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        //                     // Set PID values for  position control. We don't need to pass a closed
+        //                     // loop slot, as it will default to slot 0.
+        //                         .p(HopperConstants.p)
+        //                         .i(HopperConstants.i)
+        //                         .d(HopperConstants.d)
+        //                         .outputRange(-1, 1)
+        //                         .feedForward
+        //                         .kS(HopperConstants.s)
+        //                         .kV(HopperConstants.v)
+        //                         .kA(HopperConstants.a)
+        //                         ;
+        //                 TwindexerRightControllerConfig.closedLoop
+        //                         .maxMotion.maxAcceleration(100000);
+        //                     // Set PID values for velocity control in slot 1
+        //                 //     .p(0.0001, ClosedLoopSlot.kSlot1)
+        //                 //     .i(0, ClosedLoopSlot.kSlot1)
+        //                 //     .d(0, ClosedLoopSlot.kSlot1)
+        //                 //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
+        //                 //     .feedForward
+        //                 //     // kV is now in Volts, so we multiply by the nominal voltage (12V)
+        //                 //     .kV(12.0 / 5767, ClosedLoopSlot.kSlot1);
                         
 
-                            TwindexerLeftControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                                .p(HopperConstants.p)
-                                .i(HopperConstants.i)
-                                .d(HopperConstants.d)
-                                .outputRange(-1, 1)
-                                .feedForward
-                                .kS(HopperConstants.s)
-                                .kV(HopperConstants.v)
-                                .kA(HopperConstants.a)
-                                ;
-                        TwindexerLeftControllerConfig.closedLoop
-                                .maxMotion.maxAcceleration(100000);
-                            // Set PID values for velocity control in slot 1
-                        //     .p(0.0001, ClosedLoopSlot.kSlot1)
-                        //     .i(0, ClosedLoopSlot.kSlot1)
-                        //     .d(0, ClosedLoopSlot.kSlot1)
-                        //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
-                        //     .feedForward
-                        //     // kV is now in Volts, so we multiply by the nominal voltage (12V)
-                        //     .kV(12.0 / 5767, ClosedLoopSlot.kSlot1);
+        //                     TwindexerLeftControllerConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        //                     // Set PID values for position control. We don't need to pass a closed
+        //                     // loop slot, as it will default to slot 0.
+        //                         .p(HopperConstants.p)
+        //                         .i(HopperConstants.i)
+        //                         .d(HopperConstants.d)
+        //                         .outputRange(-1, 1)
+        //                         .feedForward
+        //                         .kS(HopperConstants.s)
+        //                         .kV(HopperConstants.v)
+        //                         .kA(HopperConstants.a)
+        //                         ;
+        //                 TwindexerLeftControllerConfig.closedLoop
+        //                         .maxMotion.maxAcceleration(100000);
+        //                     // Set PID values for velocity control in slot 1
+        //                 //     .p(0.0001, ClosedLoopSlot.kSlot1)
+        //                 //     .i(0, ClosedLoopSlot.kSlot1)
+        //                 //     .d(0, ClosedLoopSlot.kSlot1)
+        //                 //     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
+        //                 //     .feedForward
+        //                 //     // kV is now in Volts, so we multiply by the nominal voltage (12V)
+        //                 //     .kV(12.0 / 5767, ClosedLoopSlot.kSlot1);
 
                      
 
-                }
-        }
+        //         }
+        // }
 
 }

@@ -132,8 +132,8 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int INTAKE_LEFT_ID = 19; // unknown
-    public static final int INTAKE_RIGHT_ID = 20; // unknown
+    public static final int INTAKE_LEFT_ID = 18; // unknown
+    public static final int INTAKE_RIGHT_ID = 19; // unknown
 
     // PID Constants
     public static final double p = 0.006155;
@@ -153,8 +153,8 @@ public final class Constants {
   }
 
   public static class PushoutConstants {
-    public static final int PUSHOUT_ID = 17; // Correct
-    public static final int PUSHOUT_2_ID = 18;
+    public static final int PUSHOUT_ID = 16; // Correct
+    public static final int PUSHOUT_2_ID = 17;
 
     public static final double PUSHOUT_RETRACTED_POS = 2; //
     public static final double PUSHOUT_EXTENDED_POS = 15.911; // TUNE THIS!!!
@@ -241,37 +241,37 @@ public final class Constants {
     public static final double IDLE = 0; // % voltage -1 --> 1
   }
 
-  public static class HopperConstants {
+  // public static class HopperConstants {
+  //   // IDEAL mapping from motor_can_ids.csv: left=18, right=19
+  //   public static final int TWINDEXER_LEFT_ID = 15;
+  //   public static final int TWINDEXER_RIGHT_ID = 16;
+
+  //   public static final double TWINDEXER_RIGHT_RPM = -0.8;
+  //   public static final double TWINDEXER_LEFT_RPM = 0.8;
+
+  //   public static final double REVERSE_TWINDEXER_RIGHT_RPM = -16000;
+  //   public static final double REVERSE_TWINDEXER_LEFT_RPM = 16000;
+
+  //   // PID Constants
+  //   public static final double p = 0.0002;
+  //   public static final double i = 0.000;
+  //   public static final double d = 0.000;
+
+  //   // Feed-Forward Constants
+  //   public static final double s = 0.100;
+  //   public static final double v = 0.00177;
+  //   public static final double a = 0.00017;
+
+  //   public static final int six_seven = 67; // <---------- HISTORICAL MONUMENT
+
+  // }
+
+  public static class BeltsConstants {
     // IDEAL mapping from motor_can_ids.csv: left=18, right=19
-    public static final int TWINDEXER_LEFT_ID = 15;
-    public static final int TWINDEXER_RIGHT_ID = 16;
+    public static final int BELTS_ID = 15;
 
-    public static final double TWINDEXER_RIGHT_RPM = -0.8;
-    public static final double TWINDEXER_LEFT_RPM = 0.8;
-
-    public static final double REVERSE_TWINDEXER_RIGHT_RPM = -16000;
-    public static final double REVERSE_TWINDEXER_LEFT_RPM = 16000;
-
-    // PID Constants
-    public static final double p = 0.0002;
-    public static final double i = 0.000;
-    public static final double d = 0.000;
-
-    // Feed-Forward Constants
-    public static final double s = 0.100;
-    public static final double v = 0.00177;
-    public static final double a = 0.00017;
-
-    public static final int six_seven = 67; // <---------- HISTORICAL MONUMENT
-
-  }
-
-  public static class FunnelConstants {
-    // IDEAL mapping from motor_can_ids.csv: left=18, right=19
-    public static final int FUNNEL_ID = 15;
-
-    public static final double FUNNEL_RPM = -9000;
-    public static final double REVERSE_FUNNEL_RPM = 9000;
+    public static final double BELTS_RPM = 2000;
+    public static final double BELTS_REVERSE_RPM = -2000;
 
     // PID Constants
     public static final double p = 0.0002;

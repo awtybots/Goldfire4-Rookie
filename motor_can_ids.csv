@@ -1,21 +1,20 @@
 System,Motor Type,Motor Name, Type,CAN ID (IDEAL)
-Swerve Drive,Drive Motor,Front Left Drive,SparkFlex Vortex,1
-Swerve Drive,Drive Motor,Front Right Drive,SparkFlex Vortex,3
-Swerve Drive,Drive Motor,Back Left Drive,SparkFlex Vortex,5
-Swerve Drive,Drive Motor,Back Right Drive,SparkFlex Vortex,7
-Swerve Drive,Steering Motor,Front Left Angle,SparkMax Neo550,2
-Swerve Drive,Steering Motor,Front Right Angle,SparkMax Neo550,4
-Swerve Drive,Steering Motor,Back Left Angle,SparkMax Neo550,6
-Swerve Drive,Steering Motor,Back Right Angle,SparkMax Neo550,8
+Swerve Drive,Vortex,Front Left Drive,SparkFlex Vortex,1
+Swerve Drive,Vortex,Front Right Drive,SparkFlex Vortex,3
+Swerve Drive,Vortex,Back Left Drive,SparkFlex Vortex,5
+Swerve Drive,Vortex,Back Right Drive,SparkFlex Vortex,7
+Swerve Drive,NEO 550,Front Left Angle,SparkMax Neo550,2
+Swerve Drive,NEO 550,Front Right Angle,SparkMax Neo550,4
+Swerve Drive,NEO 550,Back Left Angle,SparkMax Neo550,6
+Swerve Drive,NEO 550,Back Right Angle,SparkMax Neo550,8
 Shooter,Primary Motor,Right Shooter R,SparkFlex,9  
 Shooter,Primary Motor,Right Shooter L,SparkFlex,10
 Shooter,Primary Motor,Left Shooter R,SparkFlex,11
 Shooter,Primary Motor,Left Shooter L,SparkFlex,12
 Kicker,Secondary Motor,Kicker L,SparkFlex,13
 Kicker,Secondary Motor,Kicker R,SparkFlex,14
-Twindexer,Drive Motor,Twindexer L,SparkFlex,15
-Twindexer,Drive Motor,Twindexer R,SparkFlex,16
-Intake_Extension,Drive Motor,Pushout,SparkFlex,17
-Intake_Extension 2,Drive Motor,Pushout,SparkFlex,18
-Intake,Drive Motor,Intake L,SparkFlex,19
-Intake,Drive Motor,Intake R,SparkFlex,20
+Belts,Kraken x60,Twindexer L,SparkFlex,15
+Intake_Extension,Vortex,Pushout,SparkFlex,16
+Intake_Extension 2,Vortex,Pushout,SparkFlex,17
+Intake,Vortex,Intake L,SparkFlex,18
+Intake,Vortex,Intake R,SparkFlex,19

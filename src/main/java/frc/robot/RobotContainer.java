@@ -70,11 +70,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.HubTrackerSubsystem;
 import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pushout;
+import frc.robot.subsystems.Belts;
 import frc.robot.subsystems.ObjectDetection;
 
 /**
@@ -96,7 +96,7 @@ public class RobotContainer {
 
   // Instantiate Subsystems
   private final Intake m_intake = new Intake();
-  private final Hopper m_hopper = new Hopper();
+  private final Belts m_belts = new Belts();
   private final Shooter m_shooter = new Shooter();
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
@@ -278,7 +278,7 @@ public class RobotContainer {
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
+                      m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.CheeksyAgitationCommand(),
                       m_intake.runIntakeCommand()))
@@ -304,7 +304,7 @@ public class RobotContainer {
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
+                      m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.CheeksyAgitationCommand(),
                       m_intake.runIntakeCommand()))
@@ -336,7 +336,7 @@ public class RobotContainer {
                       // && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()
                     ),
                   Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
+                      m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       // m_pushout.CheeksyAgitationCommand(),
                       m_intake.runIntakeCommand()))
@@ -362,7 +362,7 @@ public class RobotContainer {
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
+                      m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.CheeksyAgitationCommand(),
                       m_intake.runIntakeCommand()))
@@ -596,7 +596,7 @@ public class RobotContainer {
                               Logger.recordOutput("Aim/DynamicAimLockTolerance", aimTolerance(shootCmd.distance));
                               // Logger.recordOutput("Aim/ReadyToLockFiredAt", Timer.getFPGATimestamp());
                             })),
-                        m_hopper.runHopperToShooterCommand(),
+                        m_belts.RunBeltsCommand(),
                         m_kicker.kickCommand(),
                        m_pushout.CheeksyAgitationCommand()
                             // .onlyWhile(() -> !LT_Intake.getAsBoolean())
@@ -620,7 +620,7 @@ public class RobotContainer {
                     Commands.waitUntil(() -> passCmd.isCASAtSpeed()
                         && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
                     Commands.parallel(
-                        m_hopper.runHopperToShooterCommand(),
+                        m_belts.RunBeltsCommand(),
 
                         m_kicker.kickCommand(),
                         m_pushout.CheeksyAgitationCommand()
@@ -661,7 +661,7 @@ public class RobotContainer {
               Commands.sequence(
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()),
                   Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
+                      m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.CheeksyAgitationCommand()
                           .beforeStarting(Commands.waitSeconds(1.5))
@@ -682,7 +682,7 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.waitUntil(m_shooter::isShooterFast),
                 Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
+                    m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
                     m_kicker.kickCommand(),
                     // drivebase.lockCommand(
@@ -701,7 +701,7 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.waitUntil(m_shooter::isShooterRunning),
                 Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
+                    m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
                     m_kicker.kickCommand(),
                     // drivebase.lockCommand(
@@ -712,7 +712,7 @@ public class RobotContainer {
                     m_pushout.CheeksyAgitationCommand()
                         .beforeStarting(Commands.waitSeconds(1.5))))));
 
-    LB_OP_unjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));
+    LB_OP_unjam.whileTrue(Commands.parallel(m_belts.RunBeltsReverseCommand(), m_kicker.kickBackwardsCommand()));
 
     ResetEncoder.onTrue(m_pushout.ResetEncoderCommand());
 
