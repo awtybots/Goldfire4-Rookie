@@ -7,10 +7,10 @@ Swerve Drive,NEO 550,Front Left Angle,SparkMax Neo550,2
 Swerve Drive,NEO 550,Front Right Angle,SparkMax Neo550,4
 Swerve Drive,NEO 550,Back Left Angle,SparkMax Neo550,6
 Swerve Drive,NEO 550,Back Right Angle,SparkMax Neo550,8
-Shooter,Primary Motor,Right Shooter R,SparkFlex,9  
-Shooter,Primary Motor,Right Shooter L,SparkFlex,10
-Shooter,Primary Motor,Left Shooter R,SparkFlex,11
-Shooter,Primary Motor,Left Shooter L,SparkFlex,12
+Shooter,Vortex,Right Shooter R,SparkFlex,9  
+Shooter,Vortex,Right Shooter L,SparkFlex,10
+Shooter,Vortex,Left Shooter R,SparkFlex,11
+Shooter,Vortex,Left Shooter L,SparkFlex,12
 Kicker,Secondary Motor,Kicker L,SparkFlex,13
 Kicker,Secondary Motor,Kicker R,SparkFlex,14
 Belts,Kraken x60,Twindexer L,SparkFlex,15
