@@ -93,6 +93,7 @@ public class Pushout extends SubsystemBase {
     public void PushoutDutycyleRetract() {
         PushoutMotor.set(-0.8);
     }
+
     public void CheeksyAgitation() {
 
         PushoutLeftController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
@@ -104,6 +105,12 @@ public class Pushout extends SubsystemBase {
                     StopPushout();
                 });
     }
+
+    public Command CheesyAgitationCommand()
+    {
+        return this.run(() -> Commands.waitSeconds(1).andThen(() -> RetractIntake())).finallyDo(() -> StopPushout());
+    }
+    
     public Command HomingCommand(double threshold) {
         Debouncer currentDebouncer = new Debouncer(0.2);
 
