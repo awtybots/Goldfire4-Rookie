@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LT Swipe"
+            "pathName": "Aggressive Bump Swipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Through LT"
+            "pathName": "Over Bump"
           }
         },
         {
@@ -25,19 +25,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Zhihao Second Swipe"
+            "pathName": "2056 Swipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Depot and shoot from LB"
+            "pathName": "Over Bump"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Control All Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Position After Bump"
           }
         }
       ]

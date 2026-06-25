@@ -3,32 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.863409415121255,
-        "y": 5.387089871611984
+        "x": 5.8235144675925925,
+        "y": 5.519110243055556
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.207385731875616,
-        "y": 5.355914073744974
+        "x": 6.304766454680437,
+        "y": 5.516647694679425
       },
       "isLocked": false,
       "linkedName": "LB Start"
     },
     {
       "anchor": {
-        "x": 3.131711154513889,
-        "y": 5.5606417100694445
+        "x": 3.5886885127314825,
+        "y": 5.545026403356482
       },
       "prevControl": {
-        "x": 2.868652842748621,
-        "y": 5.586367116688533
+        "x": 4.316276870791274,
+        "y": 5.443631320134177
+      },
+      "nextControl": {
+        "x": 3.341081289877153,
+        "y": 5.579532391103052
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.584650535300926,
+        "y": 5.967230179398148
+      },
+      "prevControl": {
+        "x": 2.365078030376675,
+        "y": 6.086762246565455
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "LB Shoot Spc"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 138.715
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 134.257
+    "rotation": 136.18099999999998
   },
   "reversed": false,
   "folder": "Worlds Paths",
   "idealStartingState": {
     "velocity": 2.5,
-    "rotation": 138.7149442243733
+    "rotation": 138.715
   },
   "useDefaultConstraints": true
 }
