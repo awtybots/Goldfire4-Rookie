@@ -99,7 +99,7 @@ public final class Configs
 
                         
                         
-                        PushoutMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true)
+                        PushoutMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
                         ;
 
                         PushoutMotorRightConfig.closedLoop

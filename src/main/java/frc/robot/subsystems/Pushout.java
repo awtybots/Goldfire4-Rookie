@@ -89,18 +89,18 @@ public class Pushout extends SubsystemBase {
 
     public void PushoutDutycyle() {
         PushoutMotor.set(0.8);
-        PushoutMotor2.set(0.8);
+        PushoutMotor2.set(-0.8);
     }
 
     public void PushoutDutycyleRetract() {
         PushoutMotor.set(-0.8);
-        PushoutMotor2.set(-0.8);
+        PushoutMotor2.set(0.8);
     }
 
     public void CheeksyAgitation() {
 
         PushoutLeftController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
-        PushoutRightController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
+        PushoutRightController.setSetpoint(-minVelocity, ControlType.kMAXMotionVelocityControl);
     }
 
     public Command CheeksyAgitationCommand() {
