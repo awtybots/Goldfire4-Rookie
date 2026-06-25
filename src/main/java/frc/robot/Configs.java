@@ -112,7 +112,12 @@ public final class Configs
                         .p(PushoutConstants.p)
                         .i(PushoutConstants.i)
                         .d(PushoutConstants.d)
-                        .outputRange(-1.0, 1.0);
+                        .outputRange(-1.0, 1.0)
+                        .feedForward
+                        .kS(PushoutConstants.s)
+                        .kA(PushoutConstants.a)
+                        .kV(PushoutConstants.v);
+;
 
                         
 
