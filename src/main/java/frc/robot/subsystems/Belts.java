@@ -22,8 +22,8 @@ public class Belts extends SubsystemBase{
     public Belts()
     {
         TalonFXConfiguration BeltConfig = new TalonFXConfiguration();
-        BeltConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        BeltConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        BeltConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        BeltConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         BeltConfig.CurrentLimits.StatorCurrentLimit = 40.0;
         BeltConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         BeltConfig.Slot0.kP = BeltsConstants.p;

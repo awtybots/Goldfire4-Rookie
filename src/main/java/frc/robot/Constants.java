@@ -270,18 +270,18 @@ public final class Constants {
     // IDEAL mapping from motor_can_ids.csv: left=18, right=19
     public static final int BELTS_ID = 15;
 
-    public static final double BELTS_RPM = 2000;
-    public static final double BELTS_REVERSE_RPM = -2000;
+    public static final double BELTS_RPM = 6000;
+    public static final double BELTS_REVERSE_RPM = -6000;
 
     // PID Constants
-    public static final double p = 0.0002;
+    public static final double p = 0.001;
     public static final double i = 0.000;
     public static final double d = 0.000;
 
     // Feed-Forward Constants
-    public static final double s = 0.100;
-    public static final double v = 0.00177;
-    public static final double a = 0.00017;
+    public static final double s = 0.1;
+    public static final double v = 0.00169;
+    public static final double a = 0.0;
 
   }
 
