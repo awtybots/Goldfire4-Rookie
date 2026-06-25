@@ -8,9 +8,8 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
+// import com.pathplanner.lib.path.PathConstraints;
 
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,10 +22,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.AimAtHub;
 import frc.robot.commands.AimAtFerry;
-import java.util.Optional;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -35,18 +32,13 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Dimensions;
-import frc.robot.Constants.DrivebaseConstants;
 // import frc.robot.Configs.ShooterSubsystem;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
@@ -54,14 +46,14 @@ import frc.robot.commands.ControllAllPassing;
 // import frc.robot.commands.DriveToPoseReplan;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.util.HubTracker;
+// import frc.robot.util.HubTracker;
 // import frc.robot.utils.FuelSim;
 
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
-import java.lang.module.ModuleDescriptor.Requires;
-import java.util.function.BooleanSupplier;
+// import java.lang.module.ModuleDescriptor.Requires;
+// import java.util.function.BooleanSupplier;
 
 // import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -75,7 +67,6 @@ import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Pushout;
 import frc.robot.subsystems.Belts;
-import frc.robot.subsystems.ObjectDetection;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -98,7 +89,6 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Belts m_belts = new Belts();
   private final Shooter m_shooter = new Shooter();
-  // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
   private final Pushout m_pushout = new Pushout();
 
@@ -118,18 +108,12 @@ public class RobotContainer {
         m_shooter, drivebase::getPose);
   }
 
-  // public FuelSim fuelSim = new FuelSim("FuelSim"); // creates a new fuelSim of
-  // FuelSim
-
   // Establish a Sendable Chooser that will be able to be sent to the
   // SmartDashboard, allowing selection of desired auto
   private SendableChooser<Command> autoChooser;
   private LoggedDashboardChooser<Command> loggedAutoChooser;
   // Add this field at the top of RobotContainer (alongside your other fields)
   private SendableChooser<Boolean> flipChooser = new SendableChooser<>();
-
-  // Driver chooser: "David" = port 0 drives, "Asier" = port 1 drives
-  private final SendableChooser<String> driverChooser = new SendableChooser<>();
 
   // -----------------------------------------------------------------------
   // SwerveInputStreams — built in configureBindings() so they reference
@@ -160,40 +144,22 @@ public class RobotContainer {
 
   private AimAtHub aimAtHub;
   private AimAtFerry aimAtFerry;
-  private PathConstraints autoConstraints;
 
   SwerveInputStream aimAtHubStream;
   SwerveInputStream aimAtFerryStream;
 
-  // -----------------------------------------------------------------------
-  // Helpers: resolve which physical controller acts as "driver" vs "operator"
-  // based on the SmartDashboard chooser selection.  
-  // -----------------------------------------------------------------------
-  private boolean isAsierSelected() {
-    String selected = driverChooser.getSelected();
-    return selected != null && selected.equals("Asier");
-  }
-
   /** Returns the controller that should be treated as the driving controller. */
   private CommandXboxController dc() {
-    return isAsierSelected() ? operatorXbox : driverXbox;
+      return driverXbox;
   }
 
-  /** Returns the controller that should be treated as the operator controller. */
   private CommandXboxController oc() {
-    return isAsierSelected() ? driverXbox : operatorXbox;
+      return operatorXbox;
   }
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-    // ---- Driver chooser: put on SmartDashboard before configureBindings() ----
-    driverChooser.setDefaultOption("David", "David");
-    driverChooser.addOption("Asier", "Asier");
-    SmartDashboard.putData("Driver:", driverChooser);
-
     // Configure the trigger bindings
     configureBindings();
 
