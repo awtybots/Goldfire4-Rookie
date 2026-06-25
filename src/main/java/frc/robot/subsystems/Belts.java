@@ -72,7 +72,7 @@ public class Belts extends SubsystemBase{
     @Override
     public void periodic()
     {
-        Logger.recordOutput("Belts/RPS", BeltMotor.getVelocity().getValueAsDouble());
-        Logger.recordOutput("Belts/GoalRPS", goalRPS);
+        Logger.recordOutput("Belts/RPM", BeltMotor.getVelocity().getValueAsDouble() * 60);
+        Logger.recordOutput("Belts/GoalRPM", goalRPS);
     }
 }
