@@ -43,7 +43,8 @@ public class Belts extends SubsystemBase{
     public void RunBelts()
     {
         goalRPS = BeltsConstants.BELTS_RPM;
-        BeltMotor.setControl(velocityRequest.withVelocity(RPMToRPS(BeltsConstants.BELTS_RPM)).withSlot(0));
+        // BeltMotor.setControl(velocityRequest.withVelocity(RPMToRPS(BeltsConstants.BELTS_RPM)).withSlot(0));
+        BeltMotor.set(1);
     }
 
     public void RunBeltsReverse()
