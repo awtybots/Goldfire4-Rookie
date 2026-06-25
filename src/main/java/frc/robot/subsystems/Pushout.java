@@ -38,6 +38,7 @@ public class Pushout extends SubsystemBase {
     private SparkClosedLoopController PushoutLeftController = PushoutMotor.getClosedLoopController();
 
     private SparkFlex PushoutMotor2 = new SparkFlex(PushoutConstants.PUSHOUT_RIGHT_ID, MotorType.kBrushless);
+    private SparkClosedLoopController PushoutRightController = PushoutMotor2.getClosedLoopController();
 
 
     // private SparkFlex PushoutRightMotor = new
@@ -63,35 +64,43 @@ public class Pushout extends SubsystemBase {
 
     public void PushIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void RetractIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void FullyRetract() {
         PushoutLeftController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void ResetEncoder() {
         pushoutEncoderLeft.setPosition(0);
+        pushoutEncoderRight.setPosition(0);
     }
 
     public void StopPushout() {
         PushoutMotor.set(0);
+        PushoutMotor2.set(0);
     }
 
     public void PushoutDutycyle() {
         PushoutMotor.set(0.8);
+        PushoutMotor2.set(0.8);
     }
 
     public void PushoutDutycyleRetract() {
         PushoutMotor.set(-0.8);
+        PushoutMotor2.set(-0.8);
     }
 
     public void CheeksyAgitation() {
 
         PushoutLeftController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
+        PushoutRightController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
     }
 
     public Command CheeksyAgitationCommand() {

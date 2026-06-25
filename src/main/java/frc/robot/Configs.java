@@ -100,7 +100,7 @@ public final class Configs
                         
                         
                         PushoutMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
-                        .follow(PushoutConstants.PUSHOUT_LEFT_ID,true);
+                        ;
 
                         PushoutMotorRightConfig.closedLoop
                         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
