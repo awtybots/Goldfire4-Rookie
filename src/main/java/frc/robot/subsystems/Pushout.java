@@ -64,17 +64,17 @@ public class Pushout extends SubsystemBase {
 
     public void PushIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RIGHT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void RetractIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RIGHT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void FullyRetract() {
         PushoutLeftController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.FULLY_RETRACTED_RIGHT_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void ResetEncoder() {
