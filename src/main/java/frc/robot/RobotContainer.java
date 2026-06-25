@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -43,30 +44,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
 import frc.robot.commands.ControllAllPassing;
-// import frc.robot.commands.DriveToPoseReplan;
-// import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-// import frc.robot.util.HubTracker;
-// import frc.robot.utils.FuelSim;
-
-import static edu.wpi.first.units.Units.Seconds;
 
 import java.io.File;
-// import java.lang.module.ModuleDescriptor.Requires;
-// import java.util.function.BooleanSupplier;
-
-// import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Kicker;
-import frc.robot.subsystems.HubTrackerSubsystem;
-import frc.robot.subsystems.Shooter;
-// import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Pushout;
-import frc.robot.subsystems.Belts;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -93,9 +78,8 @@ public class RobotContainer {
   private final Pushout m_pushout = new Pushout();
 
   // Helper Subsystems
+  @SuppressWarnings("unused")
   private final HubTrackerSubsystem m_hubtracker = new HubTrackerSubsystem(drivebase, driverXbox);
-
-  // private final ObjectDetection m_ObjectDetection = new ObjectDetection();
 
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
@@ -427,23 +411,10 @@ public class RobotContainer {
         .aimHeadingOffset(true);
 
 
-    Command driveFieldOrientedDirectAngle = drivebase
-        .driveFieldOriented(() -> applyHeadingBias(driveDirectAngle.get()));
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
         () -> applyHeadingBias(driveAngularVelocity.get()));
-    Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
-    Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-        driveDirectAngle);
     Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(
         () -> applyHeadingBias(driveDirectAngleKeyboard.get()));
-    Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(
-        () -> applyHeadingBias(driveAngularVelocityKeyboard.get()));
-    Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-        driveDirectAngleKeyboard);
-    // ====================================== ALIGN TO HUB COMMANDS
-    // ======================================
-    // ====================================== ALL CONTROLS
-    // ======================================
 
     // ======= Driver =======
     dc().rightTrigger().whileTrue(
@@ -790,96 +761,4 @@ public class RobotContainer {
 
     return false;
   }
-
-  private boolean isInOpponentZone() {
-    Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
-
-    if (alliance == Alliance.Red && drivebase.getPose().getMeasureX().lt(blueZone)) {
-      return true;
-    } else if (alliance == Alliance.Blue && drivebase.getPose().getMeasureX().gt(redZone)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private boolean isOnAllianceOutpostSide() {
-    Alliance alliance = getAlliance();
-    Distance midLine = Inches.of(158.84375);
-
-    if (alliance == Alliance.Blue && drivebase.getPose().getMeasureY().lt(midLine)) {
-      return true;
-    } else if (alliance == Alliance.Red && drivebase.getPose().getMeasureY().gt(midLine)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // private void configureFuelSim() {
-  // fuelSim = new FuelSim();
-  // fuelSim.spawnStartingFuel();
-
-  // fuelSim.start();
-  // SmartDashboard.putData(Commands.runOnce(() -> {
-  // fuelSim.clearFuel();
-  // fuelSim.spawnStartingFuel();
-  // })
-  // .withName("Reset Fuel")
-  // .ignoringDisable(true));
-  // }
-
-  // private void configureFuelSimRobot() {
-  // fuelSim.registerRobot(
-  // Dimensions.FULL_WIDTH.in(Meters),
-  // Dimensions.FULL_LENGTH.in(Meters),
-  // Dimensions.BUMPER_HEIGHT.in(Meters),
-  // drivebase::getPose,
-  // drivebase::getFieldVelocity);
-
-  // // fuelSim.registerIntake(
-  // // -Dimensions.FULL_LENGTH.div(2).in(Meters),
-  // // Dimensions.FULL_LENGTH.div(2).in(Meters),
-  // // -Dimensions.FULL_WIDTH.div(2).plus(Inches.of(7)).in(Meters),
-  // // -Dimensions.FULL_WIDTH.div(2).in(Meters),
-  // // () -> m_pushout.isRightDeployed() && ableToIntake.getAsBoolean(),
-  // // intakeCallback);
-  // }
-
-  private double computeDynamicLookaheadSeconds() {
-    // Read robot field velocities (from SwerveSubsystem)
-    var chassisSpeeds = drivebase.getFieldVelocity(); // ChassisSpeeds
-
-    double omega = Math.abs(chassisSpeeds.omegaRadiansPerSecond);
-    double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
-
-    // Simple linear combination of yaw rate and translation speed
-    double lookahead = Constants.LOOKAHEAD_BASE_SEC + Constants.LOOKAHEAD_K_OMEGA * omega
-        + Constants.LOOKAHEAD_K_V * speed;
-
-    // Clamp to safe range
-    lookahead = Math.min(Math.max(lookahead, Constants.LOOKAHEAD_MIN_SEC), Constants.LOOKAHEAD_MAX_SEC);
-
-    return lookahead;
-  }
-
-  /**
-   * Checks if the robot heading is within a tolerance of the angle toward a
-   * target pose.
-   */
-  private boolean isAimedAt(Pose2d target, double toleranceDegrees) {
-    Pose2d robot = drivebase.getPose();
-    double targetAngle = Math.toDegrees(Math.atan2(
-        target.getY() - robot.getY(),
-        target.getX() - robot.getX()));
-    double currentAngle = robot.getRotation().getDegrees();
-    double error = Math.abs(currentAngle - targetAngle);
-    error = error % 360;
-    if (error > 180)
-      error = 360 - error;
-    return error <= toleranceDegrees;
-  }
-
 }

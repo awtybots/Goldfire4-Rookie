@@ -14,21 +14,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 
-import edu.wpi.first.math.filter.Debouncer;
+// import edu.wpi.first.math.filter.Debouncer;
 
-import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.units.measure.Voltage;
+// import edu.wpi.first.units.measure.Angle;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants.PushoutConstants;
 import frc.robot.Configs;
-import edu.wpi.first.wpilibj.Timer;
 
-import static edu.wpi.first.units.Units.Amp;
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Volts;
+// import static edu.wpi.first.units.Units.Amp;
+// import static edu.wpi.first.units.Units.Degrees;
+// import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -41,9 +38,7 @@ public class Pushout extends SubsystemBase {
     private SparkClosedLoopController PushoutLeftController = PushoutMotor.getClosedLoopController();
 
     private SparkFlex PushoutMotor2 = new SparkFlex(PushoutConstants.PUSHOUT_RIGHT_ID, MotorType.kBrushless);
-    private SparkClosedLoopController PushoutRightController = PushoutMotor2.getClosedLoopController();
 
-    private final Angle hardLowerLimit = Degrees.of(0);
 
     // private SparkFlex PushoutRightMotor = new
     // SparkFlex(PushoutConstants.PUSHOUT_RIGHT_ID, MotorType.kBrushless);
@@ -112,7 +107,7 @@ public class Pushout extends SubsystemBase {
     }
     
     public Command HomingCommand(double threshold) {
-        Debouncer currentDebouncer = new Debouncer(0.2);
+        // Debouncer currentDebouncer = new Debouncer(0.2);
 
         return new RunCommand(() -> PushoutLeftController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl),
                 this)

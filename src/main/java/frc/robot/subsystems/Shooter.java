@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -16,15 +15,10 @@ import com.revrobotics.ResetMode;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.PersistMode;
-// import com.revrobotics.spark.ClosedLoopSlot;
-// import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-// import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.SparkBase.ControlType;
 import frc.robot.Constants.ShooterConstants;
-// import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import frc.robot.Configs;
 
 public class Shooter extends SubsystemBase {
@@ -34,12 +28,10 @@ public class Shooter extends SubsystemBase {
     private SparkFlex ShooterRight1Motor = new SparkFlex(ShooterConstants.SHOOTER_R1_ID, MotorType.kBrushless);
     private SparkFlex ShooterRight2Motor = new SparkFlex(ShooterConstants.SHOOTER_R2_ID, MotorType.kBrushless);
     private SparkClosedLoopController shooterright1Controller = ShooterRight1Motor.getClosedLoopController();
-    // private SparkClosedLoopController shooterright2Controller = ShooterRight2Motor.getClosedLoopController();
 
     private SparkFlex ShooterLeft1Motor = new SparkFlex(ShooterConstants.SHOOTER_L1_ID, MotorType.kBrushless);
     private SparkFlex ShooterLeft2Motor = new SparkFlex(ShooterConstants.SHOOTER_L2_ID, MotorType.kBrushless);
     private SparkClosedLoopController shooterleft1Controller = ShooterLeft1Motor.getClosedLoopController();
-    // private SparkClosedLoopController shooterleft2Controller = ShooterLeft2Motor.getClosedLoopController();
 
     private final RelativeEncoder shooterRight1Encoder = ShooterRight1Motor.getEncoder();
     private final RelativeEncoder shooterRight2Encoder = ShooterRight2Motor.getEncoder();
@@ -151,37 +143,22 @@ public class Shooter extends SubsystemBase {
     // methods below this) and decided to make
     // shoot fuel call that, as well as the kicker motor so we reduce extra code
     public void shootFuel() {
-        SpeedUpShooter();
+        shooterright1Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED , ControlType.kMAXMotionVelocityControl);
+        shooterleft1Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED, ControlType.kMAXMotionVelocityControl);
     }
 
     public void stopShooting() {
         targetRPM = 0.0;
-        // targetKickerRPM = 0.0;
-      shooterright1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
-        // shooterright2Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED,
-        // ControlType.kMAXMotionVelocityControl);
+        shooterright1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
         shooterleft1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
-        // ShooterLeft2Motor.set(ShooterConstants.IDLE);
     }
 
-    // Speeds up shooter (runs all motors except kicker) so it's faster
-    public void SpeedUpShooter() {
-        shooterright1Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED , ControlType.kMAXMotionVelocityControl);
-        // shooterright2Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED,
-        // ControlType.kMAXMotionVelocityControl);
-        shooterleft1Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED, ControlType.kMAXMotionVelocityControl);
-        // shooterleft2Controller.setSetpoint(ShooterConstants.SHOOTER_SPEED,
-        // ControlType.kMAXMotionVelocityControl);
-    }
+
 
     public void setTargetRPM(double rpm) {
         targetRPM = rpm;
         shooterright1Controller.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl);
-        // shooterright2Controller.setSetpoint(rpm,
-        // ControlType.kMAXMotionVelocityControl);
         shooterleft1Controller.setSetpoint(rpm, ControlType.kMAXMotionVelocityControl);
-        // shooterleft2Controller.setSetpoint(rpm,
-        // ControlType.kMAXMotionVelocityControl);
     }
 
     public void ShooterPassing()
@@ -213,7 +190,7 @@ public class Shooter extends SubsystemBase {
 
     public Command shootFuelCommand() {
 
-        return new RunCommand(() -> SpeedUpShooter(), this)
+        return new RunCommand(() -> shootFuel(), this)
                 .finallyDo(interrupted -> stopShooting());
     }
 
@@ -222,7 +199,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command SpeedUpShooterCommand() {
-        return new RunCommand(() -> SpeedUpShooter(), this);
+        return new RunCommand(() -> shootFuel(), this);
     }
 
     public Command ShooterPassingCommand() {
