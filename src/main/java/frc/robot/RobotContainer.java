@@ -164,52 +164,6 @@ public class RobotContainer {
 
   SwerveInputStream aimAtHubStream;
   SwerveInputStream aimAtFerryStream;
-  // ========= DRIVER TRIGGERS ===========
-  // Parallel Commands
-  private Trigger RTtransfer_kick_shoot; // index to kicker, kick, agitate, and shoot only when up to speed
-  private Trigger RBFerry; // Run hopper and kicker in reverse
-  private Trigger LBretract_and_stop; // retract 4 bar and stop intake
-  private Trigger PRDrivetoRightTrench; // Drive to right trench
-  private Trigger PLDriveToPose; // run hopper in reverse and kick backwards to unjam
-
-  // Shooter
-  private Trigger LT_Intake;
-
-  // Intake
-  private Trigger X_runIntake;
-  private Trigger A_runOuttake;
-
-  // Pushout
-  private Trigger Y_extendIntake;
-  private Trigger B_agitate;
-
-  // Climber
-  private Trigger Climb;
-  private Trigger ClimbDown;
-
-  // ========= OPERATOR TRIGGERS ===========
-  // Shooter
-  private Trigger LT_OP_1900Shot; // just shoot
-  private Trigger RT_OP_VariableShoot; // Shoot, Kick, Index, Agitate, and Run Intake
-
-  // Get to Shooter
-  private Trigger RB_OP_Pass; // kick, index
-  private Trigger LB_OP_unjam; // unjam
-
-  // Intake
-  private Trigger X_OP_intake; // intake fuel
-  private Trigger A_OP_outtake; // outtake fuel
-
-  // Pushout
-  private Trigger Y_OP_extendIntake; // push out
-  private Trigger B_OP_reteactIntake; // pull in
-  private Trigger POVLEFT_OP_agitate; // agitate 
-
-  // Climber / Vision
-  private Trigger POVUP_OP_FrontLimelight;
-  private Trigger POVLEFT_OP_LeftLimelight;
-  private Trigger POVRIGHT_OP_VisionToggle;
-  private Trigger POVDown_OP_BackLimelight; // toggle vision
 
   // -----------------------------------------------------------------------
   // Helpers: resolve which physical controller acts as "driver" vs "operator"
@@ -506,54 +460,6 @@ public class RobotContainer {
         .aimHeadingOffset(Rotation2d.fromDegrees(180))
         .aimHeadingOffset(true);
 
-    // ========= DRIVER TRIGGERS ===========
-    // Parallel Commands
-    RTtransfer_kick_shoot = dc().rightTrigger(); // index to kicker, kick, agitate, and shoot only when up to speed
-    // RBFerry = dc().rightBumper(); // Run hopper and kicker in reverse
-    LBretract_and_stop = dc().leftBumper(); // retract 4 bar and stop intake
-    PRDrivetoRightTrench = dc().povRight(); // Drive to right trench
-    PLDriveToPose = dc().povLeft(); // run hopper in reverse and kick backwards to unjam
-
-    // Shooter
-    LT_Intake = dc().leftTrigger();
-
-    // Intake
-    X_runIntake = dc().x();
-    A_runOuttake = dc().a();
-
-    // Pushout
-    Y_extendIntake = dc().y();
-    B_agitate = dc().b();
-
-    // Climber
-    // Climb = dc().povUp();
-    // ClimbDown = dc().povDown();
-
-    // ========= OPERATOR TRIGGERS ===========
-    // Shooter
-    LT_OP_1900Shot = oc().leftTrigger(); // just shoot
-    RT_OP_VariableShoot = oc().rightTrigger(); // Shoot, Kick, Index, Agitate, and Run Intake
-
-    Trigger ResetEncoder = oc().start();
-
-    // Get to Shooter
-    RB_OP_Pass = oc().rightBumper(); // kick, index
-    LB_OP_unjam = oc().leftBumper(); // unjam
-
-    // Intake
-    X_OP_intake = oc().x(); // intake fuel
-    A_OP_outtake = oc().a(); // outtake fuel
-
-    // Pushout
-    Y_OP_extendIntake = oc().y(); // push out
-    B_OP_reteactIntake = oc().b(); // pull in
-    POVLEFT_OP_agitate = oc().povLeft(); // agitate
-
-    // Climber / Vision
-    POVUP_OP_FrontLimelight = oc().povUp();
-    POVLEFT_OP_LeftLimelight = oc().povLeft();
-    POVRIGHT_OP_VisionToggle = oc().povRight();
-    POVDown_OP_BackLimelight = oc().povDown(); // toggle vision
 
     Command driveFieldOrientedDirectAngle = drivebase
         .driveFieldOriented(() -> applyHeadingBias(driveDirectAngle.get()));
@@ -574,7 +480,7 @@ public class RobotContainer {
     // ======================================
 
     // ======= Driver =======
-    RTtransfer_kick_shoot.whileTrue(
+    dc().rightTrigger().whileTrue(
 
         Commands.defer(() -> {
           if (isInAllianceZone()) // In alliance zone → shoot at hub
@@ -633,27 +539,18 @@ public class RobotContainer {
         
 
     // Intake
-    LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
-    LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
+    dc().leftTrigger().whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
+    dc().leftBumper().whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
 
     // Drive to Pose
-    // PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
-    PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
+    dc().povLeft().whileTrue(drivebase.driveToPoseDeffered());
 
     // Swerve Drive Commands
     dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-    // A_runOuttake.whileTrue(drivebase.lockCommand(
-    // driverXbox::getLeftX,
-    // driverXbox::getLeftY,
-    // driverXbox::getRightX,
-    // driveAngularVelocity::get)
-    // .onlyWhile(autoAimCommand.swerveInputStream.aimLock(Angle.ofBaseUnits(3,
-    // Degrees))));
-
     // ======== Operator ========
     // shooter
-    RT_OP_VariableShoot.whileTrue(
+    oc().rightTrigger().whileTrue(
         Commands.defer(() -> {
           ControlAllShooting shootCmd = makeVariableShoot();
           return Commands.parallel(
@@ -664,15 +561,13 @@ public class RobotContainer {
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
                       m_pushout.CheeksyAgitationCommand()
-                          .beforeStarting(Commands.waitSeconds(1.5))
-                          .onlyWhile(() -> !LT_Intake.getAsBoolean()),
-
+                          .beforeStarting(Commands.waitSeconds(1.5)),
                       m_intake.runIntakeCommand()))
                   .finallyDo(
                       () -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
         }, java.util.Collections.emptySet()));
 
-    LT_OP_1900Shot.whileTrue(
+    oc().leftTrigger().whileTrue(
         Commands.parallel(
             // keep running the VariableShoot command while we wait for the shooter to reaal
             // speed
@@ -694,7 +589,7 @@ public class RobotContainer {
                         .beforeStarting(Commands.waitSeconds(1.5))))));
 
     // get to shooter
-    RB_OP_Pass.whileTrue(
+    oc().rightBumper().whileTrue(
         Commands.parallel(
             m_shooter.ShooterPassingCommand(),
 
@@ -704,42 +599,28 @@ public class RobotContainer {
                     m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
                     m_kicker.kickCommand(),
-                    // drivebase.lockCommand(
-                    // driverXbox::getLeftX,
-                    // driverXbox::getLeftY,
-                    // driverXbox::getRightX,
-                    // driveAngularVelocity::get),
                     m_pushout.CheeksyAgitationCommand()
                         .beforeStarting(Commands.waitSeconds(1.5))))));
 
-    LB_OP_unjam.whileTrue(Commands.parallel(m_belts.RunBeltsReverseCommand(), m_kicker.kickBackwardsCommand()));
+    oc().leftBumper().whileTrue(Commands.parallel(m_belts.RunBeltsReverseCommand(), m_kicker.kickBackwardsCommand()));
 
-    ResetEncoder.onTrue(m_pushout.ResetEncoderCommand());
+    oc().start().onTrue(m_pushout.ResetEncoderCommand());
 
     // intake
-    X_OP_intake.whileTrue(m_intake.runIntakeCommand());
-    A_OP_outtake.whileTrue(m_intake.runOuttakeCommand());
+    oc().x().whileTrue(m_intake.runIntakeCommand());
+    oc().a().whileTrue(m_intake.runOuttakeCommand());
 
     // pushout
-    Y_OP_extendIntake.whileTrue(m_pushout.PushoutDutycyleCommand());
-    B_OP_reteactIntake.whileTrue(m_pushout.PushoutDutycyleRetractCommand());
+    oc().y().whileTrue(m_pushout.PushoutDutycyleCommand());
+    oc().b().whileTrue(m_pushout.PushoutDutycyleRetractCommand());
 
     // vision
-    POVUP_OP_FrontLimelight.onTrue(drivebase.FrontToggle());
-    POVLEFT_OP_LeftLimelight.onTrue(drivebase.LeftToggle());
-    POVRIGHT_OP_VisionToggle.onTrue(drivebase.VisionToggle());
-    POVDown_OP_BackLimelight.onTrue(drivebase.BackToggle());
+    oc().povUp().onTrue(drivebase.FrontToggle());
+    oc().povLeft().onTrue(drivebase.LeftToggle());
+    oc().povRight().onTrue(drivebase.VisionToggle());
+    oc().povDown().onTrue(drivebase.BackToggle());
 
     // ========================
-
-    // SysId: run shooter quasistatic forward.
-    // oc().a().whileTrue(m_shooter.sysIdQuasistaticForward());
-    // // SysId: run shooter quasistatic reverse.
-    // oc().b().whileTrue(m_shooter.sysIdQuasistaticReverse());
-    // // SysId: run shooter dynamic forward.
-    // oc().x().whileTrue(m_shooter.sysIdDynamicForward());
-    // // SysId: run shooter dynamic reverse.
-    // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
     // new Trigger(() -> isInAllianceZone()
     //     && DriverStation.isTeleop())
