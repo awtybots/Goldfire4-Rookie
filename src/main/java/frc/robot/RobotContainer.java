@@ -162,9 +162,6 @@ public class RobotContainer {
 
     // // pushout
     NamedCommands.registerCommand("extend", m_pushout.PushCommand());
-    NamedCommands.registerCommand("extend and intake",
-        Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
-    NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
 
     // shooter
     NamedCommands.registerCommand("Control All Shooting", Commands.defer(() -> {
@@ -191,7 +188,7 @@ public class RobotContainer {
                     m_pushout.RetractCommand()
                   ))))
           .finallyDo(() -> drivebase.isAiming = false);
-    }, java.util.Collections.emptySet()).withTimeout(5.3));
+    }, java.util.Collections.emptySet()).withTimeout(4.75));
 
     NamedCommands.registerCommand("Shoot Depot Fuel", Commands.defer(() -> {
       ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
@@ -220,37 +217,6 @@ public class RobotContainer {
     }, java.util.Collections.emptySet()).withTimeout(4));
 
     
-  NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
-    
-
-    NamedCommands.registerCommand("SOTM", Commands.defer(() -> {
-      ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
-      return Commands.sequence(
-          Commands.runOnce(() -> {
-            drivebase.setAimLocations();
-            drivebase.isAiming = true;
-            drivebase.shouldAimAtHubAuto = true;
-          }),
-          Commands.parallel(
-              shootCmd,
-              // drivebase.driveFieldOriented(aimAtHubStream),
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      // && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()
-                    ),
-                  Commands.parallel(
-                      m_belts.RunBeltsCommand(),
-                      m_kicker.kickCommand(),
-                      // m_pushout.CheeksyAgitationCommand(),
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(() -> Commands.parallel(
-                    m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
-                    m_pushout.RetractCommand()
-                  ))))
-          .finallyDo(() -> {drivebase.isAiming = false; drivebase.shouldAimAtHubAuto = false;});
-    }, java.util.Collections.emptySet()).withTimeout(5.3));
-
     NamedCommands.registerCommand("Shoot Preload", Commands.defer(() -> {
       ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
           drivebase::getPose, true);
@@ -278,7 +244,6 @@ public class RobotContainer {
     }, java.util.Collections.emptySet()).withTimeout(2));
 
     NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
-    NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
