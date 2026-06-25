@@ -509,7 +509,7 @@ public class RobotContainer {
     // ========= DRIVER TRIGGERS ===========
     // Parallel Commands
     RTtransfer_kick_shoot = dc().rightTrigger(); // index to kicker, kick, agitate, and shoot only when up to speed
-    RBFerry = dc().rightBumper(); // Run hopper and kicker in reverse
+    // RBFerry = dc().rightBumper(); // Run hopper and kicker in reverse
     LBretract_and_stop = dc().leftBumper(); // retract 4 bar and stop intake
     PRDrivetoRightTrench = dc().povRight(); // Drive to right trench
     PLDriveToPose = dc().povLeft(); // run hopper in reverse and kick backwards to unjam
@@ -526,8 +526,8 @@ public class RobotContainer {
     B_agitate = dc().b();
 
     // Climber
-    Climb = dc().povUp();
-    ClimbDown = dc().povDown();
+    // Climb = dc().povUp();
+    // ClimbDown = dc().povDown();
 
     // ========= OPERATOR TRIGGERS ===========
     // Shooter
