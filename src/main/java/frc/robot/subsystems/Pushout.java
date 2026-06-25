@@ -220,6 +220,7 @@ public class Pushout extends SubsystemBase {
         // Commanded intake motor percent output.
         Logger.recordOutput("Pushout/DesiredPercent", desiredPercent);
         Logger.recordOutput("Pushout/EncoderPosition", pushoutEncoderLeft.getPosition());
+        Logger.recordOutput("Pushout/EncoderRightPosition", pushoutEncoderRight.getPosition());
 
         // Applied voltage to intake motor.
         // Logger.recordOutput("Pushout/AppliedVolts",

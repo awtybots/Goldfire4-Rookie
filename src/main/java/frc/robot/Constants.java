@@ -166,7 +166,7 @@ public final class Constants {
     // PID Constants
     public static final double p = 2.0;
     public static final double i = 0.0;
-    public static final double d = 0.01;
+    public static final double d = 0.1;
 
     public static final double PUSHOUT_RETRACTED_AGITATE_POS = 2; // it was 4.693
     public static final double PUSHOUT_EXTENDED_AGITATE_POS = 11; // TUNE THIS!!!
