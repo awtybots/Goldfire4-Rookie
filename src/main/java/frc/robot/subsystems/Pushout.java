@@ -219,7 +219,9 @@ public class Pushout extends SubsystemBase {
         // AdvantageKit Logging
         // Commanded intake motor percent output.
         Logger.recordOutput("Pushout/DesiredPercent", desiredPercent);
-        Logger.recordOutput("Pushout/EncoderPosition", pushoutEncoderLeft.getPosition());
+        Logger.recordOutput("Pushout/EncoderLeftPosition", pushoutEncoderLeft.getPosition());
+        Logger.recordOutput("Pushout/EncoderLefttTarget", PushoutLeftController.getSetpoint());
+        Logger.recordOutput("Pushout/EncoderRighttTarget", PushoutRightController.getSetpoint());
         Logger.recordOutput("Pushout/EncoderRightPosition", pushoutEncoderRight.getPosition());
 
         // Applied voltage to intake motor.

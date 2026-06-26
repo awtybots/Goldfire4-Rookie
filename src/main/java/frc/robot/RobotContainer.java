@@ -181,7 +181,7 @@ public class RobotContainer {
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
+                      m_pushout.CheesyAgitationCommand(),
                       m_intake.runIntakeCommand()))
                   .finallyDo(() -> Commands.parallel(
                     m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
@@ -207,7 +207,7 @@ public class RobotContainer {
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
+                      m_pushout.CheesyAgitationCommand(),
                       m_intake.runIntakeCommand()))
                   .finallyDo(() -> Commands.parallel(
                     m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
@@ -234,7 +234,7 @@ public class RobotContainer {
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
+                      m_pushout.CheesyAgitationCommand(),
                       m_intake.runIntakeCommand()))
                   .finallyDo(() -> Commands.parallel(
                     m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
@@ -406,7 +406,7 @@ public class RobotContainer {
                             })),
                         m_belts.RunBeltsCommand(),
                         m_kicker.kickCommand(),
-                       m_pushout.CheeksyAgitationCommand()
+                       m_pushout.CheesyAgitationCommand()
                             // .onlyWhile(() -> !LT_Intake.getAsBoolean())
                             // .beforeStarting(Commands.waitSeconds(1.75)),
                             ,
@@ -431,7 +431,7 @@ public class RobotContainer {
                         m_belts.RunBeltsCommand(),
 
                         m_kicker.kickCommand(),
-                        m_pushout.CheeksyAgitationCommand()
+                        m_pushout.CheesyAgitationCommand()
                             .beforeStarting(Commands.waitSeconds(1.5)),
                         m_intake.runIntakeCommand())
                         .onlyWhile(aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(5, Degrees)))))
@@ -464,7 +464,7 @@ public class RobotContainer {
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand()
+                      m_pushout.CheesyAgitationCommand()
                           .beforeStarting(Commands.waitSeconds(1.5)),
                       m_intake.runIntakeCommand()))
                   .finallyDo(
@@ -483,14 +483,13 @@ public class RobotContainer {
                 Commands.parallel(
                     m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand(),
+                    m_kicker.kickCommand()
                     // drivebase.lockCommand(
                     // driverXbox::getLeftX,
                     // driverXbox::getLeftY,
                     // driverXbox::getRightX,
                     // driveAngularVelocity::get),
-                    m_pushout.CheeksyAgitationCommand()
-                        .beforeStarting(Commands.waitSeconds(1.5))))));
+                       ))));
 
     // get to shooter
     oc().rightBumper().whileTrue(
@@ -503,7 +502,7 @@ public class RobotContainer {
                     m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
                     m_kicker.kickCommand(),
-                    m_pushout.CheeksyAgitationCommand()
+                    m_pushout.CheesyAgitationCommand()
                         .beforeStarting(Commands.waitSeconds(1.5))))));
 
     oc().leftBumper().whileTrue(Commands.parallel(m_belts.RunBeltsReverseCommand(), m_kicker.kickBackwardsCommand()));
