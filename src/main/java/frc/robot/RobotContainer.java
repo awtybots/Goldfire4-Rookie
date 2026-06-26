@@ -443,9 +443,11 @@ public class RobotContainer {
     // Intake
     dc().leftTrigger().whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
     dc().leftBumper().whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
+    dc().rightBumper().whileTrue(Commands.parallel(
+      m_intake.runOuttakeCommand(), 
+      m_belts.RunBeltsReverseCommand(), 
+      m_kicker.kickBackwardsCommand()));
 
-    dc().x().whileTrue(m_belts.RunBeltsCommand());
-    dc().a().onTrue(m_pushout.CheeksyAgitationCommand());
 
     // Drive to Pose
     dc().povLeft().whileTrue(drivebase.driveToPoseDeffered());

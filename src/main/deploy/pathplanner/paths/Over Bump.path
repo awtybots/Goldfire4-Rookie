@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.304766454680437,
-        "y": 5.516647694679425
+        "x": 6.071002677750783,
+        "y": 5.55445972441944
       },
       "isLocked": false,
       "linkedName": "LB Start"
@@ -20,24 +20,24 @@
         "y": 5.545026403356482
       },
       "prevControl": {
-        "x": 4.316276870791274,
-        "y": 5.443631320134177
+        "x": 4.136669368729321,
+        "y": 5.392226096360235
       },
       "nextControl": {
-        "x": 3.341081289877153,
-        "y": 5.579532391103052
+        "x": 3.3209012313570816,
+        "y": 5.619696856449574
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.584650535300926,
-        "y": 5.967230179398148
+        "x": 2.5381740370898713,
+        "y": 6.228102710413695
       },
       "prevControl": {
-        "x": 2.365078030376675,
-        "y": 6.086762246565455
+        "x": 2.343230919909525,
+        "y": 6.391087178921704
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 138.715
+      "rotationDegrees": 123.2537077066738
     }
   ],
   "constraintZones": [],
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 136.18099999999998
+    "rotation": 133.073
   },
   "reversed": false,
   "folder": "Worlds Paths",
   "idealStartingState": {
     "velocity": 2.5,
-    "rotation": 138.715
+    "rotation": 111.15382601117265
   },
   "useDefaultConstraints": true
 }
