@@ -516,6 +516,9 @@ public class RobotContainer {
     oc().y().whileTrue(m_pushout.PushoutDutycyleCommand());
     oc().b().whileTrue(m_pushout.PushoutDutycyleRetractCommand());
 
+    oc().povUp().onTrue(m_shooter.increaseRPM());
+    oc().povDown().onTrue(m_shooter.decreaseRPM());
+
     // vision
     // oc().povUp().onTrue(drivebase.FrontToggle());
     // oc().povLeft().onTrue(drivebase.LeftToggle());

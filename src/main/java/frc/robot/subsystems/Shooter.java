@@ -39,6 +39,8 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
     private final RelativeEncoder shooterLeft2Encoder = ShooterLeft2Motor.getEncoder();
 
+    public double RPMOffset = 0;
+
     private double targetRPM = 0.0;
     private double targetKickerRPM = 0.0;
 
@@ -98,6 +100,16 @@ public class Shooter extends SubsystemBase {
         ShooterLeft2Motor.configure(Configs.ShooterSubsystem.ShooterLeftMotor2Config, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
+    }
+
+    public Command increaseRPM()
+    {
+        return this.runOnce(() -> RPMOffset -= 25);
+    }
+
+    public Command decreaseRPM()
+    {
+        return this.runOnce(() -> RPMOffset += 25);
     }
 
     public boolean isShooterFast() 
@@ -258,5 +270,7 @@ public class Shooter extends SubsystemBase {
                 ShooterLeft1Motor.getAppliedOutput() * ShooterLeft1Motor.getBusVoltage());
         Logger.recordOutput("Shooter/Left2AppliedVolts",
                 ShooterLeft2Motor.getAppliedOutput() * ShooterLeft2Motor.getBusVoltage());
+
+        Logger.recordOutput("Shooter/RPMOffset", RPMOffset);
     }
 }

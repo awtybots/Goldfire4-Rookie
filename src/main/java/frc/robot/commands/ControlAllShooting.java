@@ -36,7 +36,6 @@ public class ControlAllShooting extends Command
   private final Shooter m_shooter;
   private final Supplier<Pose2d> robotPoseSupplier;
 
-  private final double RPMOffset = 0;
 
   public double distance = 0.0;
   // private final Hopper m_hopper;
@@ -70,7 +69,7 @@ public class ControlAllShooting extends Command
   }
 
   public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, boolean requireShooter)
-
+//
   {
 
     this.goalPoseSupplier = goalPoseSupplier;
@@ -92,12 +91,12 @@ public class ControlAllShooting extends Command
     for (var entry : List.of(
       // Pair.of(Meters.of(1), RPM.of((1000))),
                             Pair.of(Meters.of(2), RPM.of(-1370)),
-                            Pair.of(Meters.of(2.5), RPM.of(-1605)),
-                            Pair.of(Meters.of(3), RPM.of(-1680)),
-                            Pair.of(Meters.of(3.5), RPM.of(-1810)),
-                            Pair.of(Meters.of(4), RPM.of(-1900)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2127)),
-                            Pair.of(Meters.of(6), RPM.of(-2650))                            
+                            Pair.of(Meters.of(2.5), RPM.of(-1665)),
+                            Pair.of(Meters.of(3), RPM.of(-1740)),
+                            Pair.of(Meters.of(3.5), RPM.of(-1870)),
+                            Pair.of(Meters.of(4), RPM.of(-1970)),
+                            Pair.of(Meters.of(5.2048), RPM.of(-2197)),
+                            Pair.of(Meters.of(6), RPM.of(-2720))                            
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
@@ -138,7 +137,7 @@ public class ControlAllShooting extends Command
     double idealHorizontalSpeed = shooterTable.get(dist);
 
     // Local predicate to check if shooter is at the desired speed (methods cannot be declared inside methods)
-    BooleanSupplier isAtSpeed = () -> Math.abs(idealHorizontalSpeed - m_shooter.getRPM()) <= ShooterConstants.ERROR_MARGIN;
+    BooleanSupplier isAtSpeed = () -> Math.abs(idealHorizontalSpeed + m_shooter.RPMOffset - m_shooter.getRPM()) <= ShooterConstants.ERROR_MARGIN;
     // 4. VECTOR SUBTRACTION
     // Translation2d robotVelVec = new Translation2d(robotSpeed.vxMetersPerSecond, robotSpeed.vyMetersPerSecond);
     // Translation2d shotVec     = targetVec.div(dist).times(idealHorizontalSpeed).minus(robotVelVec);
@@ -177,7 +176,7 @@ public class ControlAllShooting extends Command
   //       )
   //    );
 
-     m_shooter.setTargetRPM(idealHorizontalSpeed); 
+     m_shooter.setTargetRPM(idealHorizontalSpeed + m_shooter.RPMOffset); 
      RecordedidealHorizontalSpeed = idealHorizontalSpeed;
 
      if (isAtSpeed.getAsBoolean()) {
