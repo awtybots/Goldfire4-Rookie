@@ -445,7 +445,7 @@ public class RobotContainer {
     dc().leftBumper().whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
 
     dc().x().whileTrue(m_belts.RunBeltsCommand());
-    dc().a().whileTrue(m_pushout.CheesyAgitationCommand());
+    dc().a().onTrue(m_pushout.CheesyAgitationCommand());
 
     // Drive to Pose
     dc().povLeft().whileTrue(drivebase.driveToPoseDeffered());
@@ -521,7 +521,7 @@ public class RobotContainer {
     // oc().povLeft().onTrue(drivebase.LeftToggle());
     // oc().povRight().onTrue(drivebase.VisionToggle());
     // oc().povDown().onTrue(drivebase.BackToggle());
-//code code code code code code
+//code code code code code code neven
     // ========================
 
     // new Trigger(() -> isInAllianceZone()
