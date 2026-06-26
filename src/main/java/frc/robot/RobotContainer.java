@@ -479,15 +479,11 @@ public class RobotContainer {
 
             // once at speed, run hopper + kicker
             Commands.sequence(
+              Commands.waitUntil(m_shooter::isShooterFast),
                 Commands.parallel(
                     m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
                     m_kicker.kickCommand()
-                    // drivebase.lockCommand(
-                    // driverXbox::getLeftX,
-                    // driverXbox::getLeftY,
-                    // driverXbox::getRightX,
-                    // driveAngularVelocity::get),
                        ))));
 
     // get to shooter

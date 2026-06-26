@@ -64,17 +64,17 @@ public class Pushout extends SubsystemBase {
 
     public void PushIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RIGHT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_EXTENDED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void RetractIntake() {
         PushoutLeftController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RIGHT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.PUSHOUT_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void FullyRetract() {
         PushoutLeftController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
-        PushoutRightController.setSetpoint(PushoutConstants.FULLY_RETRACTED_RIGHT_POS, ControlType.kMAXMotionPositionControl);
+        PushoutRightController.setSetpoint(PushoutConstants.FULLY_RETRACTED_POS, ControlType.kMAXMotionPositionControl);
     }
 
     public void ResetEncoder() {
@@ -89,18 +89,18 @@ public class Pushout extends SubsystemBase {
 
     public void PushoutDutycyle() {
         PushoutMotor.set(0.8);
-        PushoutMotor2.set(-0.8);
+        PushoutMotor2.set(0.8);
     }
 
     public void PushoutDutycyleRetract() {
         PushoutMotor.set(-0.8);
-        PushoutMotor2.set(0.8);
+        PushoutMotor2.set(-0.8);
     }
 
     public void CheeksyAgitation() {
 
         PushoutLeftController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
-        PushoutRightController.setSetpoint(-minVelocity, ControlType.kMAXMotionVelocityControl);
+        PushoutRightController.setSetpoint(minVelocity, ControlType.kMAXMotionVelocityControl);
     }
 
     public Command CheeksyAgitationCommand() {
