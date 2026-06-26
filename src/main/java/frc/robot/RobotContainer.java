@@ -487,24 +487,26 @@ public class RobotContainer {
                        ))));
 
     // get to shooter
-    oc().rightBumper().whileTrue(
-        Commands.parallel(
-            m_shooter.ShooterPassingCommand(),
+    // oc().rightBumper().whileTrue(
+    //     Commands.parallel(
+    //         m_shooter.ShooterPassingCommand(),
 
-            Commands.sequence(
-                Commands.waitUntil(m_shooter::isShooterRunning),
-                Commands.parallel(
-                    m_belts.RunBeltsCommand(),
-                    m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand(),
-                    m_pushout.CheesyAgitationCommand()
-                        .beforeStarting(Commands.waitSeconds(1.5))))));
+    //         Commands.sequence(
+    //             Commands.waitUntil(m_shooter::isShooterRunning),
+    //             Commands.parallel(
+    //                 m_belts.RunBeltsCommand(),
+    //                 m_intake.runIntakeCommand(),
+    //                 m_kicker.kickCommand(),
+    //                 m_pushout.CheesyAgitationCommand()
+    //                     .beforeStarting(Commands.waitSeconds(1.5))))));
 
     oc().leftBumper().whileTrue(Commands.parallel(m_belts.RunBeltsReverseCommand(), m_kicker.kickBackwardsCommand()));
+    oc().rightBumper().whileTrue(Commands.parallel(m_belts.RunBeltsCommand(), m_kicker.kickCommand()));
 
     oc().start().onTrue(m_pushout.ResetEncoderCommand());
 
-    // intake
+    // Intake
+    // THY PEOPLE are loathing neven
     oc().x().whileTrue(m_intake.runIntakeCommand());
     oc().a().whileTrue(m_intake.runOuttakeCommand());
 
@@ -513,11 +515,11 @@ public class RobotContainer {
     oc().b().whileTrue(m_pushout.PushoutDutycyleRetractCommand());
 
     // vision
-    oc().povUp().onTrue(drivebase.FrontToggle());
-    oc().povLeft().onTrue(drivebase.LeftToggle());
-    oc().povRight().onTrue(drivebase.VisionToggle());
-    oc().povDown().onTrue(drivebase.BackToggle());
-
+    // oc().povUp().onTrue(drivebase.FrontToggle());
+    // oc().povLeft().onTrue(drivebase.LeftToggle());
+    // oc().povRight().onTrue(drivebase.VisionToggle());
+    // oc().povDown().onTrue(drivebase.BackToggle());
+//code code code code code code
     // ========================
 
     // new Trigger(() -> isInAllianceZone()

@@ -186,7 +186,7 @@ public final class Constants {
     public static final int SHOOTER_R1_ID = 11;
     public static final int SHOOTER_R2_ID = 12;
 
-    public static final double SHOOTER_SPEED = -1735;                  // RPM 3 meters 1900 4 meters 2200
+    public static final double SHOOTER_SPEED = -2020;                  // RPM 3 meters 1900 4 meters 2200
     public static final double SHOOTER_PASSING_SPEED = -4000;  
     public static final double ERROR_MARGIN = 50; // RPM         
     public static final double STOP = 0;
@@ -231,8 +231,8 @@ public final class Constants {
     public static final int KICKER_LEFT_ID = 13;
     public static final int KICKER_RIGHT_ID = 14;
 
-    public static final double KICKER_REVERSE_RPM_TARGET = 8000; // RPM
-    public static final double KICKER_RPM_TARGET = -8000; // RPM
+    public static final double KICKER_REVERSE_RPM_TARGET = -16000; // RPM
+    public static final double KICKER_RPM_TARGET = 16000; // RPM
 
     // PID Constants
     public static final double p = 0.000236;
