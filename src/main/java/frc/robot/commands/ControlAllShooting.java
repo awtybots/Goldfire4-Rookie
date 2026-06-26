@@ -86,16 +86,16 @@ public class ControlAllShooting extends Command
     //ball exit from 0.391 meters above ground.
     //RPM = 249.665 v_out
     // Test Results
-    
+    // code=work
     for (var entry : List.of(
       // Pair.of(Meters.of(1), RPM.of((1000))),
-                            Pair.of(Meters.of(2), RPM.of(-1620)),
-                            Pair.of(Meters.of(2.5), RPM.of(-1855)),
-                            Pair.of(Meters.of(3), RPM.of(-1930)),
-                            Pair.of(Meters.of(3.5), RPM.of(-2060)),
-                            Pair.of(Meters.of(4), RPM.of(-2150)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2377)),
-                            Pair.of(Meters.of(6), RPM.of(-2900))                            
+                            Pair.of(Meters.of(2), RPM.of(-1520)),
+                            Pair.of(Meters.of(2.5), RPM.of(-1755)),
+                            Pair.of(Meters.of(3), RPM.of(-1830)),
+                            Pair.of(Meters.of(3.5), RPM.of(-1960)),
+                            Pair.of(Meters.of(4), RPM.of(-2050)),
+                            Pair.of(Meters.of(5.2048), RPM.of(-2277)),
+                            Pair.of(Meters.of(6), RPM.of(-2800))                            
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}

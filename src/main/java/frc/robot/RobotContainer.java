@@ -445,6 +445,7 @@ public class RobotContainer {
     dc().leftBumper().whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
 
     dc().x().whileTrue(m_belts.RunBeltsCommand());
+    dc().a().whileTrue(m_pushout.CheesyAgitationCommand());
 
     // Drive to Pose
     dc().povLeft().whileTrue(drivebase.driveToPoseDeffered());
@@ -479,11 +480,12 @@ public class RobotContainer {
 
             // once at speed, run hopper + kicker
             Commands.sequence(
-              // Commands.waitUntil(m_shooter::isShooterFast),
+              Commands.waitUntil(m_shooter::isShooterFast),
                 Commands.parallel(
                     m_belts.RunBeltsCommand(),
                     m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand()
+                    m_kicker.kickCommand(),
+                    m_pushout.CheesyAgitationCommand()
                        ))));
 
     // get to shooter
