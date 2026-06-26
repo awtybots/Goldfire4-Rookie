@@ -36,6 +36,8 @@ public class ControlAllShooting extends Command
   private final Shooter m_shooter;
   private final Supplier<Pose2d> robotPoseSupplier;
 
+  private final double RPMOffset = 0;
+
   public double distance = 0.0;
   // private final Hopper m_hopper;
   // private final Kicker m_kicker;
