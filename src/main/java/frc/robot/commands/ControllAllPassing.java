@@ -79,22 +79,22 @@ public class ControllAllPassing extends Command
     //RPM = 249.665 v_out
     // Test Results
     for (var entry : List.of(
-                               Pair.of(Meters.of(2), RPM.of(-1700-240)),
-                            Pair.of(Meters.of(2.5), RPM.of(-1935-240)),
-                            Pair.of(Meters.of(3), RPM.of(-2010-240)),
-                            Pair.of(Meters.of(3.5), RPM.of(-2150-220)),
-                            Pair.of(Meters.of(4), RPM.of(-2280-220)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2517-220)),
-                            Pair.of(Meters.of(6), RPM.of(-3060-220)),
-                            Pair.of(Meters.of(7), RPM.of(-2600-200)),
-                            Pair.of(Meters.of(8), RPM.of(-2800)),
-                            Pair.of(Meters.of(9), RPM.of(-3000)),
-                            Pair.of(Meters.of(10), RPM.of(-3300)),
-                            Pair.of(Meters.of(11), RPM.of(-3750)),
-                            Pair.of(Meters.of(12), RPM.of(-4000)),
-                            Pair.of(Meters.of(13), RPM.of(-4000)),     
-                            Pair.of(Meters.of(14), RPM.of(-4000)),
-                            Pair.of(Meters.of(15), RPM.of(-4000))
+                               Pair.of(Meters.of(2), RPM.of(-1700-240+350)),
+                            Pair.of(Meters.of(2.5), RPM.of(-1935-240+350)),
+                            Pair.of(Meters.of(3), RPM.of(-2010-240+350)),
+                            Pair.of(Meters.of(3.5), RPM.of(-2150-220+350)),
+                            Pair.of(Meters.of(4), RPM.of(-2280-220+350)),
+                            Pair.of(Meters.of(5.2048), RPM.of(-2517-220+350)),
+                            Pair.of(Meters.of(6), RPM.of(-3060-220+350)),
+                            Pair.of(Meters.of(7), RPM.of(-2600-200+350)),
+                            Pair.of(Meters.of(8), RPM.of(-2800+350)),
+                            Pair.of(Meters.of(9), RPM.of(-3000+350)),
+                            Pair.of(Meters.of(10), RPM.of(-3300+350)),
+                            Pair.of(Meters.of(11), RPM.of(-3750+350)),
+                            Pair.of(Meters.of(12), RPM.of(-4000+350)),
+                            Pair.of(Meters.of(13), RPM.of(-4000+350)),     
+                            Pair.of(Meters.of(14), RPM.of(-4000+350)),
+                            Pair.of(Meters.of(15), RPM.of(-4000+350))
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
