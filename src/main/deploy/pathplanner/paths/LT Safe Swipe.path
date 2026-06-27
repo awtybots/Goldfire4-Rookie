@@ -200,6 +200,17 @@
       }
     },
     {
+      "name": "extend",
+      "waypointRelativePos": 1.0965563808237344,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "extend"
+        }
+      }
+    },
+    {
       "name": "intake",
       "waypointRelativePos": 1.3884966777408616,
       "endWaypointRelativePos": 7.0,
@@ -207,6 +218,17 @@
         "type": "named",
         "data": {
           "name": "intake"
+        }
+      }
+    },
+    {
+      "name": "extend",
+      "waypointRelativePos": 1.6070222822417202,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "extend"
         }
       }
     }

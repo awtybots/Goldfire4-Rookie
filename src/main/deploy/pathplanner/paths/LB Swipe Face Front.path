@@ -125,7 +125,18 @@
   "eventMarkers": [
     {
       "name": "extend",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.9182984469952283,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "extend"
+        }
+      }
+    },
+    {
+      "name": "extend",
+      "waypointRelativePos": 1.2829169480080536,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -142,6 +153,17 @@
         "type": "named",
         "data": {
           "name": "intake"
+        }
+      }
+    },
+    {
+      "name": "extend",
+      "waypointRelativePos": 1.9176232275489102,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "extend"
         }
       }
     }
