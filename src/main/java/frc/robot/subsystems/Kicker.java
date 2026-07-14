@@ -90,7 +90,9 @@ public class Kicker extends SubsystemBase {
 
     public void stopKicking() {
         targetKickerRPM = 0.0;
-        kickerLeftController.setSetpoint(KickerConstants.STOP, ControlType.kMAXMotionVelocityControl);
+        // kickerLeftController.setSetpoint(KickerConstants.STOP, ControlType.kMAXMotionVelocityControl);
+        KickerLeftMotor.set(KickerConstants.STOP);
+        KickerRightMotor.set(KickerConstants.STOP);
     }
 
     public Command kickCommand() {

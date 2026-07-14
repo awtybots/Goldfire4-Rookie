@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -16,7 +17,7 @@ public class Belts extends SubsystemBase{
     private TalonFX BeltMotor = new TalonFX(BeltsConstants.BELTS_ID);
 
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
-
+    private final CoastOut coastRequest = new CoastOut();
     private double goalRPM = 0;
 
     public Belts()
@@ -56,7 +57,8 @@ public class Belts extends SubsystemBase{
     public void stopBelts() 
     {
         goalRPM = 0;
-        BeltMotor.setControl(velocityRequest.withVelocity(0));
+        BeltMotor.setControl(coastRequest);
+        // BeltMotor.setControl(velocityRequest.withVelocity(0));
     }
 
     public Command RunBeltsCommand()

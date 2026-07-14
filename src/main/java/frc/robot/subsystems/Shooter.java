@@ -161,8 +161,10 @@ public class Shooter extends SubsystemBase {
 
     public void stopShooting() {
         targetRPM = 0.0;
-        shooterright1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
-        shooterleft1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
+        // shooterright1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
+        // shooterleft1Controller.setSetpoint(0.0, ControlType.kMAXMotionVelocityControl);
+        ShooterLeft1Motor.set(0);
+        ShooterLeft2Motor.set(0);
     }
 
 
