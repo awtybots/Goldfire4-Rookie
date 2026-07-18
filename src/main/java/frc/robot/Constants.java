@@ -227,6 +227,28 @@ public final class Constants {
     }
   }
 
+  public static class HoodConstants {
+    public static final int HOOD_ID = 20; // SET THIS!!! placeholder CAN ID
+
+    public static final double HOOD_MIN_DEGREES = 45.0; // minimum shot angle (starting pos)
+    public static final double HOOD_MAX_DEGREES = 70.0; // maximum shot angle
+
+    // NEO Vortex -> 3:1 gearbox -> (1:1 pulleys) -> 15t pinion to 233t gear
+    // = motor rotations per 360 deg of hood
+    public static final double GEAR_RATIO = 3.0 * (233.0 / 15.0); // 46.6
+    public static final double ANGLE_TOLERANCE_DEGREES = 0.5;
+
+    public static final double TRENCH_X_BLUE = 4.6; // blue side trench x coordinate
+    public static final double TRENCH_X_RED = 11.9; // red side trench x coordinate
+    public static final double TRENCH_THRESHOLD = 0.6; // tuck when within this many meters of the trench
+
+    // PID Constants - tune on robot
+    public static final double p = 0.1;
+    public static final double i = 0.0;
+    public static final double d = 0.0;
+    public static final double MAX_OUTPUT = 0.5; // limit speed for safety while tuning
+  }
+
   public static class KickerConstants {
     public static final int KICKER_LEFT_ID = 13;
     public static final int KICKER_RIGHT_ID = 14;

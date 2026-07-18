@@ -4,6 +4,7 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import com.revrobotics.spark.config.SparkBaseConfig.*;
 
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.KickerConstants;
 import frc.robot.Constants.PushoutConstants;
@@ -122,6 +123,22 @@ public final class Configs
 
 
         };
+
+        public static final class HoodSubsystem {
+
+                public static final SparkFlexConfig HoodMotorConfig = new SparkFlexConfig();
+
+                static {
+                        HoodMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(20).voltageCompensation(12);
+
+                        HoodMotorConfig.closedLoop
+                        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                        .p(HoodConstants.p)
+                        .i(HoodConstants.i)
+                        .d(HoodConstants.d)
+                        .outputRange(-HoodConstants.MAX_OUTPUT, HoodConstants.MAX_OUTPUT);
+                }
+        }
 
         public static final class KickerSubsystem {
                 public static final SparkFlexConfig kickerLeftMotorConfig = new SparkFlexConfig();

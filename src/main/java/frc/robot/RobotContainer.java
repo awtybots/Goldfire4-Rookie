@@ -24,6 +24,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.AimAtHub;
 import frc.robot.commands.AimAtFerry;
+import frc.robot.commands.AimHood;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -76,6 +77,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Kicker m_kicker = new Kicker();
   private final Pushout m_pushout = new Pushout();
+  private final Hood m_hood = new Hood();
 
   // Helper Subsystems
   @SuppressWarnings("unused")
@@ -90,6 +92,16 @@ public class RobotContainer {
   private ControllAllPassing makeVariablePass() {
     return new ControllAllPassing(drivebase::getDynamicFerryLocation,
         m_shooter, drivebase::getPose);
+  }
+
+  // Factory for AimHood instances, same fresh-instance rule as above.
+  // Hub mode uses the hub LUT, ferry mode uses the ferry LUT.
+  private AimHood makeAimHoodHub() {
+    return new AimHood(m_hood, drivebase::getCachedDynamicHubLocation, drivebase::getPose, false);
+  }
+
+  private AimHood makeAimHoodFerry() {
+    return new AimHood(m_hood, drivebase::getDynamicFerryLocation, drivebase::getPose, true);
   }
 
   // Establish a Sendable Chooser that will be able to be sent to the
@@ -174,9 +186,11 @@ public class RobotContainer {
           }),
           Commands.parallel(
               shootCmd,
+              makeAimHoodHub(),
               drivebase.driveFieldOriented(aimAtHubStream),
               Commands.sequence(
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                      && m_hood.isAtAngle()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
@@ -200,9 +214,11 @@ public class RobotContainer {
           }),
           Commands.parallel(
               shootCmd,
+              makeAimHoodHub(),
               drivebase.driveFieldOriented(aimAtHubStream),
               Commands.sequence(
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                      && m_hood.isAtAngle()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
@@ -227,9 +243,11 @@ public class RobotContainer {
           }),
           Commands.parallel(
               shootCmd,
+              makeAimHoodHub(),
               drivebase.driveFieldOriented(aimAtHubStream),
               Commands.sequence(
                   Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                      && m_hood.isAtAngle()
                       && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
@@ -292,6 +310,8 @@ public class RobotContainer {
         dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
     @SuppressWarnings("unused")
     AimAtFerry aimFerryWarm = new AimAtFerry(drivebase, driveAngularVelocity);
+    @SuppressWarnings("unused")
+    AimHood aimHoodWarm = makeAimHoodHub();
   }
 
   /**
@@ -390,8 +410,10 @@ public class RobotContainer {
             ControlAllShooting shootCmd = makeVariableShoot();
             return Commands.parallel(
                 shootCmd,
+                makeAimHoodHub(),
                 Commands.sequence(
                     Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
+                        && m_hood.isAtAngle()
                         && aimAtHub.swerveInputStream
                             .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()),
                     Commands.parallel(
@@ -422,10 +444,12 @@ public class RobotContainer {
             ControllAllPassing passCmd = makeVariablePass();
             return Commands.parallel(
                 passCmd,
+                makeAimHoodFerry(),
                 // Commands.runOnce(() -> driveAngularVelocity.aim(() ->
                 // drivebase.getDynamicFerryLocation())),
                 Commands.sequence(
                     Commands.waitUntil(() -> passCmd.isCASAtSpeed()
+                        && m_hood.isAtAngle()
                         && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
                     Commands.parallel(
                         m_belts.RunBeltsCommand(),
@@ -462,8 +486,9 @@ public class RobotContainer {
           ControlAllShooting shootCmd = makeVariableShoot();
           return Commands.parallel(
               shootCmd,
+              makeAimHoodHub(),
               Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()),
+                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed() && m_hood.isAtAngle()),
                   Commands.parallel(
                       m_belts.RunBeltsCommand(),
                       m_kicker.kickCommand(),
@@ -520,6 +545,13 @@ public class RobotContainer {
 
     oc().povUp().onTrue(m_shooter.increaseRPM());
     oc().povDown().onTrue(m_shooter.decreaseRPM());
+
+    // hood manual controls for testing/tuning
+    oc().povLeft().whileTrue(m_hood.goToMaxCommand());
+    oc().povRight().whileTrue(m_hood.goToMinCommand());
+
+    // hood stays tucked down whenever nothing is aiming it
+    m_hood.setDefaultCommand(m_hood.tuckCommand());
 
     // vision
     // oc().povUp().onTrue(drivebase.FrontToggle());
