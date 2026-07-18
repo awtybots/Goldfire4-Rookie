@@ -42,6 +42,7 @@ import static edu.wpi.first.units.Units.Seconds;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.Configs.ShooterSubsystem;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ControlAllShooting;
 import frc.robot.commands.ControllAllPassing;
@@ -340,6 +341,9 @@ public class RobotContainer {
         .allianceRelativeControl(true);
 
     dc().rightTrigger().whileTrue(Commands.defer(() -> {
+      if (isNearTrench()) { // under the trench: don't aim either, RT is a no-op
+        return Commands.none();
+      }
       if (isInAllianceZone()) {
         aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
             dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
@@ -405,6 +409,14 @@ public class RobotContainer {
     dc().rightTrigger().whileTrue(
 
         Commands.defer(() -> {
+          // Checked once at trigger press: under the trench we don't shoot and
+          // the hood never comes up. If we drive toward the trench after the
+          // shot has started, the hood intentionally stays up (see AimHood).
+          if (isNearTrench()) {
+            Logger.recordOutput("Hood/ShotBlockedByTrench", true);
+            return Commands.none();
+          }
+          Logger.recordOutput("Hood/ShotBlockedByTrench", false);
           if (isInAllianceZone()) // In alliance zone → shoot at hub
           {
             ControlAllShooting shootCmd = makeVariableShoot();
@@ -483,6 +495,11 @@ public class RobotContainer {
     // shooter
     oc().rightTrigger().whileTrue(
         Commands.defer(() -> {
+          if (isNearTrench()) { // same trench lockout as the driver binding
+            Logger.recordOutput("Hood/ShotBlockedByTrench", true);
+            return Commands.none();
+          }
+          Logger.recordOutput("Hood/ShotBlockedByTrench", false);
           ControlAllShooting shootCmd = makeVariableShoot();
           return Commands.parallel(
               shootCmd,
@@ -748,6 +765,13 @@ public class RobotContainer {
 
   private Alliance getAlliance() {
     return DriverStation.getAlliance().orElse(Alliance.Red);
+  }
+
+  /** True when the robot is close enough to a trench that raising the hood could hit it. */
+  private boolean isNearTrench() {
+    double x = drivebase.getPose().getX();
+    return Math.abs(x - HoodConstants.TRENCH_X_BLUE) <= HoodConstants.TRENCH_THRESHOLD
+        || Math.abs(x - HoodConstants.TRENCH_X_RED) <= HoodConstants.TRENCH_THRESHOLD;
   }
 
   private boolean isInAllianceZone() {

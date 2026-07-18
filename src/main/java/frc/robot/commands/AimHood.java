@@ -14,13 +14,7 @@ import org.littletonrobotics.junction.Logger;
 import java.util.List;
 import java.util.function.Supplier;
 
-/**
- * Continuously sets the hood angle (shot angle) based on distance from the
- * robot to the goal pose, using a distance -> degrees lookup table.
- * Ported from the Offseason-Kraken AimHood command, adapted to the
- * goal/robot pose supplier pattern used by ControlAllShooting since this
- * robot has no turret.
- */
+
 public class AimHood extends Command {
 
     private final Hood hood;
@@ -41,27 +35,26 @@ public class AimHood extends Command {
         this.ferryMode = ferryMode;
         addRequirements(hood);
 
-        // aim at hub LUT: launch angle in degrees, steeper up close, flatter far
-        // out. 3m anchored at ~62 deg per the tuning notes in ControlAllShooting.
+        // aim at hub LUT
         // TUNE THIS!!!
         for (var entry : List.of(
-                Pair.of(Meters.of(2.0), Degrees.of(70.0)),
-                Pair.of(Meters.of(2.5), Degrees.of(66.0)),
-                Pair.of(Meters.of(3.0), Degrees.of(62.0)),
-                Pair.of(Meters.of(3.5), Degrees.of(58.0)),
-                Pair.of(Meters.of(4.0), Degrees.of(54.0)),
-                Pair.of(Meters.of(5.0), Degrees.of(49.0)),
-                Pair.of(Meters.of(6.0), Degrees.of(45.0)))) {
+                Pair.of(Meters.of(2.0), Degrees.of(45.7)),
+                Pair.of(Meters.of(2.5), Degrees.of(42.0)),
+                Pair.of(Meters.of(3.0), Degrees.of(38.5)),
+                Pair.of(Meters.of(3.5), Degrees.of(35.0)),
+                Pair.of(Meters.of(4.0), Degrees.of(31.5)),
+                Pair.of(Meters.of(5.0), Degrees.of(28.0)),
+                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
             hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
 
-        // aim at ferry LUT: flatter lobs for distance - TUNE THIS!!!
+        // aim at ferry LUT flatter angle for distance - TUNE THIS!!!
         for (var entry : List.of(
-                Pair.of(Meters.of(2.0), Degrees.of(60.0)),
-                Pair.of(Meters.of(3.0), Degrees.of(55.0)),
-                Pair.of(Meters.of(4.0), Degrees.of(50.0)),
-                Pair.of(Meters.of(5.0), Degrees.of(47.0)),
-                Pair.of(Meters.of(6.0), Degrees.of(45.0)))) {
+                Pair.of(Meters.of(2.0), Degrees.of(40.0)),
+                Pair.of(Meters.of(3.0), Degrees.of(35.0)),
+                Pair.of(Meters.of(4.0), Degrees.of(31.0)),
+                Pair.of(Meters.of(5.0), Degrees.of(27.0)),
+                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
             ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
     }

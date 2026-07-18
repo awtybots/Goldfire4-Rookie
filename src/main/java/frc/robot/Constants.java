@@ -230,11 +230,14 @@ public final class Constants {
   public static class HoodConstants {
     public static final int HOOD_ID = 20; // SET THIS!!! placeholder CAN ID
 
-    public static final double HOOD_MIN_DEGREES = 45.0; // minimum shot angle (starting pos)
-    public static final double HOOD_MAX_DEGREES = 70.0; // maximum shot angle
+    // physical hard stops are 23.7 and 46.7 deg
+    public static final double HOOD_HARD_MIN_DEGREES = 23.7; // start the hood here
+    public static final double HOOD_HARD_MAX_DEGREES = 46.7;
+    public static final double HOOD_LIMIT_BUFFER_DEGREES = 1.0;
+    public static final double HOOD_MIN_DEGREES = HOOD_HARD_MIN_DEGREES; // all the way down
+    public static final double HOOD_MAX_DEGREES = HOOD_HARD_MAX_DEGREES - HOOD_LIMIT_BUFFER_DEGREES; // 45.7
 
-    // NEO Vortex -> 3:1 gearbox -> (1:1 pulleys) -> 15t pinion to 233t gear
-    // = motor rotations per 360 deg of hood
+    // 3:1 and a 15t pinion to 233t gear
     public static final double GEAR_RATIO = 3.0 * (233.0 / 15.0); // 46.6
     public static final double ANGLE_TOLERANCE_DEGREES = 0.5;
 
