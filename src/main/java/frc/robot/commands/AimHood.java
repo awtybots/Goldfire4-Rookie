@@ -24,17 +24,10 @@ public class AimHood extends Command {
 
     public double distance = 0.0;
 
-    private final InterpolatingDoubleTreeMap hubHoodTable = new InterpolatingDoubleTreeMap();
-    private final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
+    private static final InterpolatingDoubleTreeMap hubHoodTable = new InterpolatingDoubleTreeMap();
+    private static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
 
-    public AimHood(Hood hood, Supplier<Pose2d> goalPoseSupplier, Supplier<Pose2d> robotPoseSupplier,
-            boolean ferryMode) {
-        this.hood = hood;
-        this.goalPoseSupplier = goalPoseSupplier;
-        this.robotPoseSupplier = robotPoseSupplier;
-        this.ferryMode = ferryMode;
-        addRequirements(hood);
-
+    static {
         // aim at hub LUT
         // TUNE THIS!!!
         for (var entry : List.of(
@@ -57,6 +50,15 @@ public class AimHood extends Command {
                 Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
             ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
+    }
+
+    public AimHood(Hood hood, Supplier<Pose2d> goalPoseSupplier, Supplier<Pose2d> robotPoseSupplier,
+            boolean ferryMode) {
+        this.hood = hood;
+        this.goalPoseSupplier = goalPoseSupplier;
+        this.robotPoseSupplier = robotPoseSupplier;
+        this.ferryMode = ferryMode;
+        addRequirements(hood);
     }
 
     private boolean isUnderTrench() { // checks if robot is under the trench by looking at the field x pos

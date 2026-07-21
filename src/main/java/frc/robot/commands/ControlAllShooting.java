@@ -59,27 +59,11 @@ public class ControlAllShooting extends Command
   /**
    * Maps Distance to RPM
    */
-  private final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
-  
-  
+  private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
 
-  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
-  {
-    this(goalPoseSupplier, shooter, robotPoseSupplier, false);
-  }
-
-  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, boolean requireShooter)
-//
-  {
-
-    this.goalPoseSupplier = goalPoseSupplier;
-    this.m_shooter = shooter;
-    this.robotPoseSupplier = robotPoseSupplier;
-    // this.m_swerveSubsystem = swerveSubsystem;
-    // this.m_hopper = hopper;
-    // this.m_kicker = kicker;
-    // 4.034 meters half field, 0.661 byumper to shooter exit. Only 3.373 vertical distance to target meters, 
-    // horizontal distance 4.625 meters from driver station to middle of hub, minus 0.661 byumper to shooter exit, 
+  static {
+    // 4.034 meters half field, 0.661 byumper to shooter exit. Only 3.373 vertical distance to target meters,
+    // horizontal distance 4.625 meters from driver station to middle of hub, minus 0.661 byumper to shooter exit,
     // total 3.964 meters horizontal distance from driver station to shooter exit.
     //using cosine rule we find that max distance would be 5.2048 M
     //the closest shooter can get to the hub would be 1.1277 meters
@@ -96,10 +80,27 @@ public class ControlAllShooting extends Command
                             Pair.of(Meters.of(3.5), RPM.of(-1870)),
                             Pair.of(Meters.of(4), RPM.of(-1970)),
                             Pair.of(Meters.of(5.2048), RPM.of(-2197)),
-                            Pair.of(Meters.of(6), RPM.of(-2720))                            
+                            Pair.of(Meters.of(6), RPM.of(-2720))
                             )
     )
     {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
+  }
+
+  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
+  {
+    this(goalPoseSupplier, shooter, robotPoseSupplier, false);
+  }
+
+  public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier, boolean requireShooter)
+//
+  {
+
+    this.goalPoseSupplier = goalPoseSupplier;
+    this.m_shooter = shooter;
+    this.robotPoseSupplier = robotPoseSupplier;
+    // this.m_swerveSubsystem = swerveSubsystem;
+    // this.m_hopper = hopper;
+    // this.m_kicker = kicker;
 
     if(requireShooter) addRequirements(m_shooter);
   }
