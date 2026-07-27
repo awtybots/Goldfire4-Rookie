@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.List;
@@ -250,6 +251,34 @@ public final class Constants {
     public static final double i = 0.0;
     public static final double d = 0.0;
     public static final double MAX_OUTPUT = 0.5; // limit speed for safety while tuning
+
+    public static final InterpolatingDoubleTreeMap hubHoodTable = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
+
+    static {
+        // aim at hub LUT
+        // TUNE THIS!!!
+        for (var entry : List.of(
+                Pair.of(Meters.of(2.0), Degrees.of(45.7)),
+                Pair.of(Meters.of(2.5), Degrees.of(42.0)),
+                Pair.of(Meters.of(3.0), Degrees.of(38.5)),
+                Pair.of(Meters.of(3.5), Degrees.of(35.0)),
+                Pair.of(Meters.of(4.0), Degrees.of(31.5)),
+                Pair.of(Meters.of(5.0), Degrees.of(28.0)),
+                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
+            hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        }
+
+        // aim at ferry LUT flatter angle for distance - TUNE THIS!!!
+        for (var entry : List.of(
+                Pair.of(Meters.of(2.0), Degrees.of(40.0)),
+                Pair.of(Meters.of(3.0), Degrees.of(35.0)),
+                Pair.of(Meters.of(4.0), Degrees.of(31.0)),
+                Pair.of(Meters.of(5.0), Degrees.of(27.0)),
+                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
+            ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        }
+    }
   }
 
   public static class KickerConstants {

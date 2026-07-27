@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
-
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -11,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.Hood;
 import org.littletonrobotics.junction.Logger;
-import java.util.List;
 import java.util.function.Supplier;
 
 
@@ -24,33 +19,8 @@ public class AimHood extends Command {
 
     public double distance = 0.0;
 
-    private static final InterpolatingDoubleTreeMap hubHoodTable = new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
-
-    static {
-        // aim at hub LUT
-        // TUNE THIS!!!
-        for (var entry : List.of(
-                Pair.of(Meters.of(2.0), Degrees.of(45.7)),
-                Pair.of(Meters.of(2.5), Degrees.of(42.0)),
-                Pair.of(Meters.of(3.0), Degrees.of(38.5)),
-                Pair.of(Meters.of(3.5), Degrees.of(35.0)),
-                Pair.of(Meters.of(4.0), Degrees.of(31.5)),
-                Pair.of(Meters.of(5.0), Degrees.of(28.0)),
-                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
-            hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
-        }
-
-        // aim at ferry LUT flatter angle for distance - TUNE THIS!!!
-        for (var entry : List.of(
-                Pair.of(Meters.of(2.0), Degrees.of(40.0)),
-                Pair.of(Meters.of(3.0), Degrees.of(35.0)),
-                Pair.of(Meters.of(4.0), Degrees.of(31.0)),
-                Pair.of(Meters.of(5.0), Degrees.of(27.0)),
-                Pair.of(Meters.of(6.0), Degrees.of(24.7)))) {
-            ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
-        }
-    }
+    private static final InterpolatingDoubleTreeMap hubHoodTable = HoodConstants.hubHoodTable;
+    private static final InterpolatingDoubleTreeMap ferryHoodTable = HoodConstants.ferryHoodTable;
 
     public AimHood(Hood hood, Supplier<Pose2d> goalPoseSupplier, Supplier<Pose2d> robotPoseSupplier,
             boolean ferryMode) {
