@@ -203,7 +203,7 @@ public class RobotContainer {
                     m_pushout.RetractCommand()
                   ))))
           .finallyDo(() -> drivebase.isAiming = false);
-    }, java.util.Collections.emptySet()).withTimeout(4.75));
+    }, java.util.Collections.emptySet()).withTimeout(3.5));
 
     NamedCommands.registerCommand("Shoot Depot Fuel", Commands.defer(() -> {
       ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
