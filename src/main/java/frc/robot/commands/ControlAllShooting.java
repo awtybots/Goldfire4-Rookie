@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
-
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -11,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 import org.littletonrobotics.junction.Logger;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.BooleanSupplier;
 
@@ -31,22 +26,7 @@ public class ControlAllShooting extends Command
   public boolean isCASAtSpeed() { // <-- getter for RobotContainer
     return isCASAtSpeed;
   }
-  private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
-
-  static {
-    for (var entry : List.of(
-      Pair.of(Meters.of(1), RPM.of((1000))),
-      Pair.of(Meters.of(2), RPM.of(-1370)),
-      Pair.of(Meters.of(2.5), RPM.of(-1665)),
-      Pair.of(Meters.of(3), RPM.of(-1740)),
-      Pair.of(Meters.of(3.5), RPM.of(-1870)),
-      Pair.of(Meters.of(4), RPM.of(-1970)),
-      Pair.of(Meters.of(5.2048), RPM.of(-2197)),
-      Pair.of(Meters.of(6), RPM.of(-2720))
-      )
-    )
-    {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
-  }
+  private static final InterpolatingDoubleTreeMap shooterTable = ShooterConstants.shooterTable;
 
   public ControlAllShooting(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
   {

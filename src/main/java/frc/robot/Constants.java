@@ -3,6 +3,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.List;
@@ -225,6 +226,46 @@ public final class Constants {
           Pair.of(Meters.of(12), Seconds.of(2.57)))) {
         TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
       }
+    }
+
+    public static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap passingTable = new InterpolatingDoubleTreeMap();
+
+    static {
+      for (var entry : List.of(
+        Pair.of(Meters.of(1), RPM.of((1000))),
+        Pair.of(Meters.of(2), RPM.of(-1370)),
+        Pair.of(Meters.of(2.5), RPM.of(-1665)),
+        Pair.of(Meters.of(3), RPM.of(-1740)),
+        Pair.of(Meters.of(3.5), RPM.of(-1870)),
+        Pair.of(Meters.of(4), RPM.of(-1970)),
+        Pair.of(Meters.of(5.2048), RPM.of(-2197)),
+        Pair.of(Meters.of(6), RPM.of(-2720))
+        )
+      )
+      {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
+
+      for (var entry : List.of(
+        Pair.of(Meters.of(1), RPM.of((1000))),
+        Pair.of(Meters.of(2), RPM.of(-1370)),
+        Pair.of(Meters.of(2.5), RPM.of(-1665)),
+        Pair.of(Meters.of(3), RPM.of(-1740)),
+        Pair.of(Meters.of(3.5), RPM.of(-1870)),
+        Pair.of(Meters.of(4), RPM.of(-1970)),
+        Pair.of(Meters.of(5.2048), RPM.of(-2197)),
+        Pair.of(Meters.of(6), RPM.of(-2720)),
+        Pair.of(Meters.of(7), RPM.of(-2975)), // here onward are estimates - Aditya
+        Pair.of(Meters.of(8), RPM.of(-3215)),
+        Pair.of(Meters.of(9), RPM.of(-3435)),
+        Pair.of(Meters.of(10), RPM.of(-3645)),
+        Pair.of(Meters.of(11), RPM.of(-3840)),
+        Pair.of(Meters.of(12), RPM.of(-4030)),
+        Pair.of(Meters.of(13), RPM.of(-4210)),
+        Pair.of(Meters.of(14), RPM.of(-4385)),
+        Pair.of(Meters.of(15), RPM.of(-4550))
+        )
+      )
+      {passingTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
     }
   }
 

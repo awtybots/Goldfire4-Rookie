@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
-
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -20,7 +16,6 @@ import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 // import swervelib.SwerveDrive;
 import org.littletonrobotics.junction.Logger;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.BooleanSupplier;
 
@@ -55,39 +50,7 @@ public class ControllAllPassing extends Command
   /**
    * Maps Distance to RPM
    */
-  private static final InterpolatingDoubleTreeMap shooterTable = new InterpolatingDoubleTreeMap();
-
-  static {
-    // 4.034 meters half field, 0.661 byumper to shooter exit. Only 3.373 vertical distance to target meters,
-    // horizontal distance 4.625 meters from driver station to middle of hub, minus 0.661 byumper to shooter exit,
-    // total 3.964 meters horizontal distance from driver station to shooter exit.
-    //using cosine rule we find that max distance would be 5.2048 M
-    //the closest shooter can get to the hub would be 1.1277 meters
-    //ball exit at 62 degrees
-    //ball exit from 0.391 meters above ground.
-    //RPM = 249.665 v_out
-    // Test Results
-    for (var entry : List.of(
-                               Pair.of(Meters.of(2), RPM.of(-1700-240+350)),
-                            Pair.of(Meters.of(2.5), RPM.of(-1935-240+350)),
-                            Pair.of(Meters.of(3), RPM.of(-2010-240+350)),
-                            Pair.of(Meters.of(3.5), RPM.of(-2150-220+350)),
-                            Pair.of(Meters.of(4), RPM.of(-2280-220+350)),
-                            Pair.of(Meters.of(5.2048), RPM.of(-2517-220+350)),
-                            Pair.of(Meters.of(6), RPM.of(-3060-220+350)),
-                            Pair.of(Meters.of(7), RPM.of(-2600-200+350)),
-                            Pair.of(Meters.of(8), RPM.of(-2800+350)),
-                            Pair.of(Meters.of(9), RPM.of(-3000+350)),
-                            Pair.of(Meters.of(10), RPM.of(-3300+350)),
-                            Pair.of(Meters.of(11), RPM.of(-3750+350)),
-                            Pair.of(Meters.of(12), RPM.of(-4000+350)),
-                            Pair.of(Meters.of(13), RPM.of(-4000+350)),
-                            Pair.of(Meters.of(14), RPM.of(-4000+350)),
-                            Pair.of(Meters.of(15), RPM.of(-4000+350))
-                            )
-    )
-    {shooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));}
-  }
+  private static final InterpolatingDoubleTreeMap shooterTable = ShooterConstants.passingTable;
 
   public ControllAllPassing(Supplier<Pose2d> goalPoseSupplier, Shooter shooter, Supplier<Pose2d> robotPoseSupplier)
 
