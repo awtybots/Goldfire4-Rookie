@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -16,8 +18,8 @@ public class Belts extends SubsystemBase{
     private TalonFX BeltMotor = new TalonFX(BeltsConstants.BELTS_ID);
 
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
-
-    private double goalRPS = 0;
+    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0.0);
+    private double goalRPM = 0;
 
     public Belts()
     {
@@ -42,21 +44,22 @@ public class Belts extends SubsystemBase{
 
     public void RunBelts()
     {
-        goalRPS = BeltsConstants.BELTS_RPM;
+        goalRPM = BeltsConstants.BELTS_RPM;
         BeltMotor.setControl(velocityRequest.withVelocity(RPMToRPS(BeltsConstants.BELTS_RPM)).withSlot(0));
         // BeltMotor.set(1);
     }
 
     public void RunBeltsReverse()
     {
-        goalRPS = BeltsConstants.BELTS_REVERSE_RPM;
-        BeltMotor.setControl(velocityRequest.withVelocity(RPMToRPS(BeltsConstants.BELTS_RPM)).withSlot(0));
+        goalRPM = BeltsConstants.BELTS_REVERSE_RPM;
+        BeltMotor.setControl(velocityRequest.withVelocity(RPMToRPS(BeltsConstants.BELTS_REVERSE_RPM)).withSlot(0));
     }
 
     public void stopBelts() 
     {
-        goalRPS = 0;
-        BeltMotor.setControl(velocityRequest.withVelocity(0));
+        goalRPM = 0;
+        BeltMotor.setControl(dutyCycleRequest.withOutput(0.0));
+        // BeltMotor.setControl(velocityRequest.withVelocity(0));
     }
 
     public Command RunBeltsCommand()
@@ -73,6 +76,6 @@ public class Belts extends SubsystemBase{
     public void periodic()
     {
         Logger.recordOutput("Belts/RPM", BeltMotor.getVelocity().getValueAsDouble() * 60);
-        Logger.recordOutput("Belts/GoalRPM", goalRPS);
+        Logger.recordOutput("Belts/GoalRPM", goalRPM);
     }
 }

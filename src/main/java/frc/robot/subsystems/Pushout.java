@@ -112,7 +112,7 @@ public class Pushout extends SubsystemBase {
 
     public Command CheesyAgitationCommand()
     {
-        return this.runOnce(() -> Commands.sequence(
+        return this.run(() -> Commands.sequence(
             Commands.waitSeconds(1),
             RetractCommand()
         ));
