@@ -49,8 +49,6 @@ import frc.robot.Constants.Dimensions;
 import frc.robot.Constants.DrivebaseConstants;
 // import frc.robot.Configs.ShooterSubsystem;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ControlAllShooting;
-import frc.robot.commands.ControllAllPassing;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.HubTracker;
@@ -108,14 +106,9 @@ public class RobotContainer {
 
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
-  private ControlAllShooting makeVariableShoot() {
-    return new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter, drivebase::getPose);
-  }
-
-  private ControllAllPassing makeVariablePass() {
-    return new ControllAllPassing(drivebase::getDynamicFerryLocation,
-        m_shooter, drivebase::getPose);
-  }
+  // private ControlAllShooting makeVariableShoot() {
+  //   return new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter, drivebase::getPose);
+  // }
 
   // public FuelSim fuelSim = new FuelSim("FuelSim"); // creates a new fuelSim of
   // FuelSim
@@ -248,132 +241,13 @@ public class RobotContainer {
 
     DriverStation.silenceJoystickConnectionWarning(true);
     SmartDashboard.putNumber("Heading Bias Deg", 0.0);
-    SmartDashboard.putBoolean("Is Shooter Running", m_shooter.isShooterRunning());
+    // SmartDashboard.putBoolean("Is Shooter Running", m_shooter.isShooterRunning());
     // Tunable gain: radians of bias -> radians/sec of angular velocity
     SmartDashboard.putNumber("Heading Bias Gain", 0);
 
     // Create the NamedCommands that will be used in PathPlanner
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
 
-    // // pushout
-    NamedCommands.registerCommand("extend", m_pushout.PushCommand());
-    NamedCommands.registerCommand("extend and intake",
-        Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()).withTimeout(4));
-    NamedCommands.registerCommand("retract intake", m_pushout.RetractCommand().withTimeout(4));
-
-    // shooter
-    NamedCommands.registerCommand("Control All Shooting", Commands.defer(() -> {
-      ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
-      return Commands.sequence(
-          Commands.runOnce(() -> {
-            drivebase.setAimLocations();
-            drivebase.isAiming = true;
-          }),
-          Commands.parallel(
-              shootCmd,
-              drivebase.driveFieldOriented(aimAtHubStream),
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-                  Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
-                      m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(() -> Commands.parallel(
-                    m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
-                    m_pushout.RetractCommand()
-                  ))))
-          .finallyDo(() -> drivebase.isAiming = false);
-    }, java.util.Collections.emptySet()).withTimeout(5.3));
-
-    NamedCommands.registerCommand("Shoot Depot Fuel", Commands.defer(() -> {
-      ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
-      return Commands.sequence(
-          Commands.runOnce(() -> {
-            drivebase.setAimLocations();
-            drivebase.isAiming = true;
-          }),
-          Commands.parallel(
-              shootCmd,
-              drivebase.driveFieldOriented(aimAtHubStream),
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-                  Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
-                      m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(() -> Commands.parallel(
-                    m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
-                    m_pushout.RetractCommand()
-                  ))))
-          .finallyDo(() -> drivebase.isAiming = false);
-    }, java.util.Collections.emptySet()).withTimeout(4));
-
-    
-  NamedCommands.registerCommand("Speed Up", m_shooter.SpeedUpShooterCommand());
-    
-
-    NamedCommands.registerCommand("SOTM", Commands.defer(() -> {
-      ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
-      return Commands.sequence(
-          Commands.runOnce(() -> {
-            drivebase.setAimLocations();
-            drivebase.isAiming = true;
-            drivebase.shouldAimAtHubAuto = true;
-          }),
-          Commands.parallel(
-              shootCmd,
-              // drivebase.driveFieldOriented(aimAtHubStream),
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      // && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()
-                    ),
-                  Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
-                      m_kicker.kickCommand(),
-                      // m_pushout.CheeksyAgitationCommand(),
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(() -> Commands.parallel(
-                    m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
-                    m_pushout.RetractCommand()
-                  ))))
-          .finallyDo(() -> {drivebase.isAiming = false; drivebase.shouldAimAtHubAuto = false;});
-    }, java.util.Collections.emptySet()).withTimeout(5.3));
-
-    NamedCommands.registerCommand("Shoot Preload", Commands.defer(() -> {
-      ControlAllShooting shootCmd = new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter,
-          drivebase::getPose, true);
-      return Commands.sequence(
-          Commands.runOnce(() -> {
-            drivebase.setAimLocations();
-            drivebase.isAiming = true;
-          }),
-          Commands.parallel(
-              shootCmd,
-              drivebase.driveFieldOriented(aimAtHubStream),
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                      && aimAtHubStream.aimLock(Angle.ofBaseUnits(1, Degrees)).getAsBoolean()),
-                  Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
-                      m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand(),
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(() -> Commands.parallel(
-                    m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1),
-                    m_pushout.RetractCommand()
-                  ))))
-          .finallyDo(() -> {drivebase.isAiming = false; drivebase.shouldAimAtHubAuto = false;});
-    }, java.util.Collections.emptySet()).withTimeout(2));
-
-    NamedCommands.registerCommand("intake", m_intake.runIntakeCommand());
-    NamedCommands.registerCommand("outtake", m_intake.runOuttakeCommand().withTimeout(4));
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
@@ -413,15 +287,6 @@ public class RobotContainer {
    */
 
   public void warmupCommands() {
-    @SuppressWarnings("unused")
-    ControlAllShooting shootWarm = makeVariableShoot();
-    @SuppressWarnings("unused")
-    ControllAllPassing passWarm = makeVariablePass();
-    @SuppressWarnings("unused")
-    AimAtHub aimHubWarm = new AimAtHub(drivebase, driveAngularVelocity,
-        dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
-    @SuppressWarnings("unused")
-    AimAtFerry aimFerryWarm = new AimAtFerry(drivebase, driveAngularVelocity);
   }
 
   /**
@@ -573,71 +438,7 @@ public class RobotContainer {
     // ======================================
 
     // ======= Driver =======
-    RTtransfer_kick_shoot.whileTrue(
-
-        Commands.defer(() -> {
-          if (isInAllianceZone()) // In alliance zone → shoot at hub
-          {
-            ControlAllShooting shootCmd = makeVariableShoot();
-            return Commands.parallel(
-                shootCmd,
-                Commands.sequence(
-                    Commands.waitUntil(() -> shootCmd.isCASAtSpeed()
-                        && aimAtHub.swerveInputStream
-                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean()),
-                    Commands.parallel(
-                        Commands.sequence(
-                            // Commands.runOnce(() -> Logger.recordOutput(
-                            //     "Aim/ShotParallelStartedAt", Timer.getFPGATimestamp())),
-                            Commands.waitSeconds(1.0),
-                            Commands.runOnce(() -> {
-                              aimAtHub.readyToLock = true;
-                              Logger.recordOutput("Aim/DynamicAimLockTolerance", aimTolerance(shootCmd.distance));
-                              // Logger.recordOutput("Aim/ReadyToLockFiredAt", Timer.getFPGATimestamp());
-                            })),
-                        m_hopper.runHopperToShooterCommand(),
-                        m_kicker.kickCommand(),
-                       m_pushout.CheeksyAgitationCommand()
-                            // .onlyWhile(() -> !LT_Intake.getAsBoolean())
-                            // .beforeStarting(Commands.waitSeconds(1.75)),
-                            ,
-                        m_intake.runIntakeCommand())
-                        .finallyDo(
-                            () -> {
-                              m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1);
-                              aimAtHub.readyToLock = false;
-                            })
-                        .onlyWhile(() -> aimAtHub.swerveInputStream
-                            .aimLock(Angle.ofBaseUnits(aimTolerance(shootCmd.distance), Degrees)).getAsBoolean())));
-          } else {
-            ControllAllPassing passCmd = makeVariablePass();
-            return Commands.parallel(
-                passCmd,
-                // Commands.runOnce(() -> driveAngularVelocity.aim(() ->
-                // drivebase.getDynamicFerryLocation())),
-                Commands.sequence(
-                    Commands.waitUntil(() -> passCmd.isCASAtSpeed()
-                        && aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(3, Degrees)).getAsBoolean()),
-                    Commands.parallel(
-                        m_hopper.runHopperToShooterCommand(),
-
-                        m_kicker.kickCommand(),
-                        m_pushout.CheeksyAgitationCommand()
-                            .beforeStarting(Commands.waitSeconds(1.5)),
-                        m_intake.runIntakeCommand())
-                        .onlyWhile(aimAtFerry.swerveInputStream.aimLock(Angle.ofBaseUnits(5, Degrees)))))
-                .finallyDo(() -> m_shooter.setTargetRPMCommand(passCmd.RecordedidealHorizontalSpeed).withTimeout(1));
-          }
-        }, java.util.Collections.emptySet()));
-        
-
-    // Intake
-    LT_Intake.whileTrue(Commands.parallel(m_pushout.PushCommand(), m_intake.runIntakeCommand()));
-    LBretract_and_stop.whileTrue(Commands.parallel(m_pushout.RetractCommand(), m_intake.stopIntakeCommand()));
-
-    // Drive to Pose
-    PLDriveToPose.whileTrue(drivebase.driveToPoseDeffered());
-
+ 
     // Swerve Drive Commands
     dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
@@ -649,85 +450,7 @@ public class RobotContainer {
     // .onlyWhile(autoAimCommand.swerveInputStream.aimLock(Angle.ofBaseUnits(3,
     // Degrees))));
 
-    // ======== Operator ========
-    // shooter
-    RT_OP_VariableShoot.whileTrue(
-        Commands.defer(() -> {
-          ControlAllShooting shootCmd = makeVariableShoot();
-          return Commands.parallel(
-              shootCmd,
-              Commands.sequence(
-                  Commands.waitUntil(() -> shootCmd.isCASAtSpeed()),
-                  Commands.parallel(
-                      m_hopper.runHopperToShooterCommand(),
-                      m_kicker.kickCommand(),
-                      m_pushout.CheeksyAgitationCommand()
-                          .beforeStarting(Commands.waitSeconds(1.5))
-                          .onlyWhile(() -> !LT_Intake.getAsBoolean()),
-
-                      m_intake.runIntakeCommand()))
-                  .finallyDo(
-                      () -> m_shooter.setTargetRPMCommand(shootCmd.RecordedidealHorizontalSpeed).withTimeout(1)));
-        }, java.util.Collections.emptySet()));
-
-    LT_OP_1900Shot.whileTrue(
-        Commands.parallel(
-            // keep running the VariableShoot command while we wait for the shooter to reaal
-            // speed
-            m_shooter.shootFuelCommand(),
-
-            // once at speed, run hopper + kicker
-            Commands.sequence(
-                Commands.waitUntil(m_shooter::isShooterFast),
-                Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
-                    m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand(),
-                    // drivebase.lockCommand(
-                    // driverXbox::getLeftX,
-                    // driverXbox::getLeftY,
-                    // driverXbox::getRightX,
-                    // driveAngularVelocity::get),
-                    m_pushout.CheeksyAgitationCommand()
-                        .beforeStarting(Commands.waitSeconds(1.5))))));
-
-    // get to shooter
-    RB_OP_Pass.whileTrue(
-        Commands.parallel(
-            m_shooter.ShooterPassingCommand(),
-
-            Commands.sequence(
-                Commands.waitUntil(m_shooter::isShooterRunning),
-                Commands.parallel(
-                    m_hopper.runHopperToShooterCommand(),
-                    m_intake.runIntakeCommand(),
-                    m_kicker.kickCommand(),
-                    // drivebase.lockCommand(
-                    // driverXbox::getLeftX,
-                    // driverXbox::getLeftY,
-                    // driverXbox::getRightX,
-                    // driveAngularVelocity::get),
-                    m_pushout.CheeksyAgitationCommand()
-                        .beforeStarting(Commands.waitSeconds(1.5))))));
-
-    LB_OP_unjam.whileTrue(Commands.parallel(m_hopper.runReverseHopperCommand(), m_kicker.kickBackwardsCommand()));
-
-    ResetEncoder.onTrue(m_pushout.ResetEncoderCommand());
-
-    // intake
-    X_OP_intake.whileTrue(m_intake.runIntakeCommand());
-    A_OP_outtake.whileTrue(m_intake.runOuttakeCommand());
-
-    // pushout
-    Y_OP_extendIntake.whileTrue(m_pushout.PushoutDutycyleCommand());
-    B_OP_reteactIntake.whileTrue(m_pushout.PushoutDutycyleRetractCommand());
-
-    // vision
-    POVUP_OP_FrontLimelight.onTrue(drivebase.FrontToggle());
-    POVLEFT_OP_LeftLimelight.onTrue(drivebase.LeftToggle());
-    POVRIGHT_OP_VisionToggle.onTrue(drivebase.VisionToggle());
-    POVDown_OP_BackLimelight.onTrue(drivebase.BackToggle());
-
+  
     // ========================
 
     // SysId: run shooter quasistatic forward.

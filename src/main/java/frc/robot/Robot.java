@@ -36,8 +36,6 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private RobotContainerShooter m_robotContainerShooter;
-  private RobotContainerDrive m_robotContainerDrive;
   // private SwerveSubsystem drivebase;
 
   private Timer disabledTimer;
@@ -89,13 +87,8 @@ public class Robot extends LoggedRobot {
     // LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_FRONT, 1); // Seed internal IMU
     // LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_LEFT, 1); // Seed internal IMU
     // Instantiate the selected container. This will perform all button bindings.
-    if (Constants.USE_DRIVE_ONLY) {
-      m_robotContainerDrive = new RobotContainerDrive();
-    } else if (Constants.USE_SHOOTER_ONLY) {
-      m_robotContainerShooter = new RobotContainerShooter();
-    } else {
-      m_robotContainer = new RobotContainer();
-    }
+
+    m_robotContainer = new RobotContainer();
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -142,13 +135,8 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     // Publish hub tracker status for all the robotPeriodics
     // the hubtracker will pass to elastic.
-    if (Constants.USE_DRIVE_ONLY) {
-      m_robotContainerDrive.logControllerInputs();
-    } else if (Constants.USE_SHOOTER_ONLY) {
-      m_robotContainerShooter.logControllerInputs();
-    } else {
       m_robotContainer.logControllerInputs();
-    }
+    
 
   }
 
@@ -166,11 +154,6 @@ public class Robot extends LoggedRobot {
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_FRONT, 200);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_BACK, 200);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_LEFT, 200);
-    if (Constants.USE_DRIVE_ONLY) {
-      m_robotContainerDrive.setMotorBrake(true);
-    } else if (!Constants.USE_SHOOTER_ONLY) {
-      m_robotContainer.setMotorBrake(true);
-    }
     disabledTimer.reset();
     disabledTimer.start();
    
@@ -179,11 +162,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     if (disabledTimer.hasElapsed(Constants.DrivebaseConstants.WHEEL_LOCK_TIME)) {
-      if (Constants.USE_DRIVE_ONLY) {
-        m_robotContainerDrive.setMotorBrake(false);
-      } else if (!Constants.USE_SHOOTER_ONLY) {
-        m_robotContainer.setMotorBrake(false);
-      }
       disabledTimer.stop();
       disabledTimer.reset();
     }
@@ -209,16 +187,9 @@ public class Robot extends LoggedRobot {
     LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_FRONT, 0.1);
     LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_BACK, 0.1);
     LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_LEFT, 0.1);
-    if (Constants.USE_DRIVE_ONLY) {
-      m_robotContainerDrive.setMotorBrake(true);
-      m_autonomousCommand = m_robotContainerDrive.getAutonomousCommand();
-    } else if (Constants.USE_SHOOTER_ONLY) {
-      m_autonomousCommand = m_robotContainerShooter.getAutonomousCommand();
-    } else {
-      m_robotContainer.setMotorBrake(true);
-      m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    }
-
+    m_robotContainer.setMotorBrake(true);
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  
     // Print the selected autonomous command upon autonomous init
     System.out.println("Auto selected: " + m_autonomousCommand);
 

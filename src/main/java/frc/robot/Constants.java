@@ -131,68 +131,7 @@ public final class Constants {
     public static final double TURN_CONSTANT = 6;
   }
 
-  public static class IntakeConstants {
-    public static final int INTAKE_LEFT_ID = 18; // unknown
-    public static final int INTAKE_RIGHT_ID = 19; // unknown
-
-    // PID Constants
-    public static final double p = 0.006155;
-    public static final double i = 0.000;
-    public static final double d = 0.01;
-
-    // Feed-Forward Constants
-    public static final double s = 1.25;
-    public static final double v = 0.5;
-    public static final double a = 0.75;
-
-    public static final double OUTTAKE_SPEED = -1;
-    public static final double INTAKE_SPEED = 1;
-    public static final double INTAKE_RPM = -12500;
-    public static final double OUTTAKE_RPM = 12500;
-
-  }
-
-  public static class PushoutConstants {
-    public static final int PUSHOUT_ID = 17; // Correct
-
-    public static final double PUSHOUT_RETRACTED_POS = 2; //
-    public static final double PUSHOUT_EXTENDED_POS = 15.911; // TUNE THIS!!!
-    public static final double FULLY_RETRACTED_POS = 0.25;
-
-    public static final double PUSHOUT_RETRACTED_AGITATE_POS = 2; // it was 4.693
-    public static final double PUSHOUT_EXTENDED_AGITATE_POS = 11; // TUNE THIS!!!
-
-    public static final double PUSHOUT_AGITATE_WAIT = 0.1; // seconds to wait between agitate cycles, TUNE THIS!!!\
-    public static final double PUSHOUT_BETWEEN = 0.6;
-  }
-
   public static class ShooterConstants {
-    public static final int SHOOTER_L1_ID = 9;
-    public static final int SHOOTER_L2_ID = 10;
-
-    public static final int SHOOTER_R1_ID = 11;
-    public static final int SHOOTER_R2_ID = 12;
-
-    public static final double SHOOTER_SPEED = -1735;                  // RPM 3 meters 1900 4 meters 2200
-    public static final double SHOOTER_PASSING_SPEED = -4000;  
-    public static final double ERROR_MARGIN = 50; // RPM         
-    public static final double STOP = 0;
-    public static final double IDLE = 0.1; // % voltage -1 --> 1
-
-    public static final double ALLIANCE_IDLE_RPM = -1000;
-    public static final double ALLIANCE_AUTO_RPM = -1900;
-    public static final double NEUTRAL_IDLE_RPM = -0;
-
-    // PID Constants For Shooter
-    public static final double p = 0.00039;
-    public static final double i = 0.000;
-    public static final double d = 0.0065;
-
-    // Feed-Forward Constants for Shooter
-    public static final double s = 0.0;
-    public static final double v = 0.00169;
-    public static final double a = 0.0;
-
 
     public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
 
@@ -212,78 +151,6 @@ public final class Constants {
         TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
       }
     }
-  }
-
-  public static class KickerConstants {
-    public static final int KICKER_LEFT_ID = 13;
-    public static final int KICKER_RIGHT_ID = 14;
-
-    public static final double KICKER_REVERSE_RPM_TARGET = -16000; // RPM
-    public static final double KICKER_RPM_TARGET = 16000; // RPM
-
-    // PID Constants
-    public static final double p = 0.000236;
-    public static final double i = 0.000;
-    public static final double d = 0.000;
-
-    // Feed-Forward Constants
-    public static final double s = 0.100;
-    public static final double v = 0.004;
-    public static final double a = 0.0003;
-
-    public static final double STOP = 0;
-    public static final double IDLE = 0; // % voltage -1 --> 1
-  }
-
-  public static class HopperConstants {
-    // IDEAL mapping from motor_can_ids.csv: left=18, right=19
-    public static final int TWINDEXER_LEFT_ID = 15;
-    public static final int TWINDEXER_RIGHT_ID = 16;
-
-    public static final double TWINDEXER_RIGHT_RPM = -0.8;
-    public static final double TWINDEXER_LEFT_RPM = 0.8;
-
-    public static final double REVERSE_TWINDEXER_RIGHT_RPM = -16000;
-    public static final double REVERSE_TWINDEXER_LEFT_RPM = 16000;
-
-    // PID Constants
-    public static final double p = 0.0002;
-    public static final double i = 0.000;
-    public static final double d = 0.000;
-
-    // Feed-Forward Constants
-    public static final double s = 0.100;
-    public static final double v = 0.00177;
-    public static final double a = 0.00017;
-
-    public static final int six_seven = 67; // <---------- HISTORICAL MONUMENT
-
-  }
-
-  public static class FunnelConstants {
-    // IDEAL mapping from motor_can_ids.csv: left=18, right=19
-    public static final int FUNNEL_ID = 15;
-
-    public static final double FUNNEL_RPM = -9000;
-    public static final double REVERSE_FUNNEL_RPM = 9000;
-
-    // PID Constants
-    public static final double p = 0.0002;
-    public static final double i = 0.000;
-    public static final double d = 0.000;
-
-    // Feed-Forward Constants
-    public static final double s = 0.100;
-    public static final double v = 0.00177;
-    public static final double a = 0.00017;
-
-  }
-
-  public static class ClimberConstants {
-    public static final int CLIMBER_LEFT_ID = 19; // placeholder
-
-    public static final double CLIMBER_RETRACTED_POS = 0.0; // TUNE THIS!!!
-    public static final double CLIMBER_EXTENDED_POS = 0.0; // TUNE THIS!!!
   }
 
   public static final double X_REEF_ALIGNMENT_P = 2.1; // Proportional gain for X-axis reef alignment
