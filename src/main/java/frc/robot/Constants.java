@@ -131,7 +131,7 @@ public final class Constants {
     public static final double TURN_CONSTANT = 6;
   }
 
-
+// INTAKE
   public static class IntakeConstants {
     public static final int INTAKE_LEFT_ID = 20; // change ids later
     public static final int INTAKE_RIGHT_ID = 21;
@@ -149,6 +149,24 @@ public final class Constants {
     public static final double OUTTAKE_RPM = -12500;
 
   }
+
+//KICKER
+  public static class KickerConstants {
+    public static final int KICKER_LEFT_ID = 13; 
+    public static final int KICKER_RIGHT_ID = 14;
+
+    // PID Constants
+    public static final double p = 0.0;
+    public static final double i = 0.0;
+    public static final double d = 0.0;
+
+    // Feed-Forward Constants
+    public static final double s = 0.0;
+    public static final double v = 0.0;
+    public static final double a = 0.0;
+
+    public static final double KICKER_RPM = 16000;
+    public static final double KICKER_REVERSE_RPM = -16000;
 
   public static class ShooterConstants {
 

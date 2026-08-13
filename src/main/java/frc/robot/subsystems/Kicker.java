@@ -10,7 +10,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-
+import frc.robot.Constants.KickerConstants;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.PersistMode;
@@ -26,16 +26,21 @@ import frc.robot.Configs;
 public class Kicker extends SubsystemBase {
 
     // Instantiating the hopper to shooter motor
-    // private SparkFlex KickerLeftMotor = new SparkFlex(KickerConstants.KICKER_LEFT_ID, MotorType.kBrushless);
-    // private SparkClosedLoopController kickerLeftController = KickerLeftMotor.getClosedLoopController();
+    private SparkFlex KickerLeftMotor = new SparkFlex(KickerConstants.KICKER_LEFT_ID, MotorType.kBrushless);
+    private SparkClosedLoopController kickerLeftController = KickerLeftMotor.getClosedLoopController();
 
+    private SparkFlex KickerRightMotor = new SparkFlex(KickerConstants.KICKER_RIGHT_ID, MotorType.kBrushless);
+    private SparkClosedLoopController kickerRightController = KickerRightMotor.getClosedLoopController();
     // private final RelativeEncoder kickerLeftEncoder = KickerLeftMotor.getEncoder();
 
 
 
     public Kicker() {
-        // KickerRightMotor.configure(Configs.KickerSubsystem.kickerRightMotorConfig, ResetMode.kResetSafeParameters,
-        //         PersistMode.kPersistParameters);
+        // KickerRightMotor.configure(Configs.KickerSubsystem.kickerRightMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        KickerRightMotor.configure(Configs.KickerSubsystem.KickerMotorRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+ 
+        KickerLeftMotor.configure(Configs.KickerSubsystem.KickerMotorLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
     }
 
 
