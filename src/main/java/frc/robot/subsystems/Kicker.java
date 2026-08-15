@@ -54,7 +54,7 @@ public class Kicker extends SubsystemBase {
             .finallyDo(interrupted -> stopKicking());
     }
 
-    public Command stopKicking() {
+    public void stopKicking() {
         KickerLeftMotor.set(0);
         KickerRightMotor.set(0);
     }
