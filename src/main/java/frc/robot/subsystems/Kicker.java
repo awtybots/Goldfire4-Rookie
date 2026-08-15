@@ -45,14 +45,19 @@ public class Kicker extends SubsystemBase {
 
 
     public void Kick() {
-        // kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM_TARGET, ControlType.kMAXMotionVelocityControl);
+        KickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        KickerRightController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
     }
 
-    // public Command kickCommand() {
+    public Command kickCommand() {
+        return new RunCommand(() -> Kick(), this)
+            .finallyDo(interrupted -> stopKicking());
+    }
 
-    //     return new RunCommand(() -> Kick(), this)
-    //             .finallyDo(interrupted -> stopKicking());
-    // }
+    public Command stopKicking() {
+        KickerLeftMotor.set(0);
+        KickerRightMotor.set(0);
+    }
 
 
     @Override
