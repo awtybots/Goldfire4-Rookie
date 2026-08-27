@@ -131,12 +131,11 @@ public final class Constants {
     public static final double TURN_CONSTANT = 6;
   }
 
-// INTAKE
+  // INTAKE
   public static class IntakeConstants {
-    public static final int INTAKE_LEFT_ID = 20; // change ids later
-    public static final int INTAKE_RIGHT_ID = 21;
+    public static final int INTAKE_ID = 0; // change ids later
 
-      // PID Constants
+    // PID Constants
     public static final double p = 0.0;
     public static final double i = 0.0;
     public static final double d = 0.0;
@@ -149,10 +148,18 @@ public final class Constants {
     public static final double OUTTAKE_RPM = -12500;
 
   }
+  public static class SlapdownConstants {
+    public static final int SLAPDOWN_ID = 0; // change ids later
 
-//KICKER
+    // PID Constants
+    public static final double p = 0.0;
+    public static final double i = 0.0;
+    public static final double d = 0.0;
+  }
+
+  // KICKER
   public static class KickerConstants {
-    public static final int KICKER_LEFT_ID = 13; 
+    public static final int KICKER_LEFT_ID = 13;
     public static final int KICKER_RIGHT_ID = 14;
 
     // PID Constants
@@ -168,72 +175,119 @@ public final class Constants {
     public static final double KICKER_RPM = 16000;
     public static final double KICKER_REVERSE_RPM = -16000;
 
-  public static class ShooterConstants {
+  }
+    public static class HoodConstants {
+      public static final int HOOD_ID = 0; // change ids later
 
-    public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
+      // PID Constants
+      public static final double p = 0.0;
+      public static final double i = 0.0;
+      public static final double d = 0.0;
+    }
+    public static class ShooterConstants {
 
-    static { // 7-12 are estimates - Aditya
-      for (var entry : List.of(
-          Pair.of(Meters.of(2), Seconds.of(0.85)),
-          Pair.of(Meters.of(3), Seconds.of(0.95)),
-          Pair.of(Meters.of(4), Seconds.of(1.13)),
-          Pair.of(Meters.of(5), Seconds.of(1.31)),
-          Pair.of(Meters.of(6), Seconds.of(1.49)),
-          Pair.of(Meters.of(7), Seconds.of(1.67)),
-          Pair.of(Meters.of(8), Seconds.of(1.85)),
-          Pair.of(Meters.of(9), Seconds.of(2.03)),
-          Pair.of(Meters.of(10), Seconds.of(2.21)),
-          Pair.of(Meters.of(11), Seconds.of(2.39)),
-          Pair.of(Meters.of(12), Seconds.of(2.57)))) {
-        TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
+      public static final int SHOOTER_R1_ID = 0; // change ids later
+      public static final int SHOOTER_L1_ID = 0;
+      public static final int SHOOTER_R2_ID = 0; 
+      public static final int SHOOTER_L2_ID = 0;
+      
+       
+      // PID Constants
+      public static final double p = 0.0;
+      public static final double i = 0.0;
+      public static final double d = 0.0;
+
+      // Feed-Forward Constants
+      public static final double s = 0.0;
+      public static final double v = 0.0;
+      public static final double a = 0.0;
+
+
+      public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
+
+      static { // 7-12 are estimates - Aditya
+        for (var entry : List.of(
+            Pair.of(Meters.of(2), Seconds.of(0.85)),
+            Pair.of(Meters.of(3), Seconds.of(0.95)),
+            Pair.of(Meters.of(4), Seconds.of(1.13)),
+            Pair.of(Meters.of(5), Seconds.of(1.31)),
+            Pair.of(Meters.of(6), Seconds.of(1.49)),
+            Pair.of(Meters.of(7), Seconds.of(1.67)),
+            Pair.of(Meters.of(8), Seconds.of(1.85)),
+            Pair.of(Meters.of(9), Seconds.of(2.03)),
+            Pair.of(Meters.of(10), Seconds.of(2.21)),
+            Pair.of(Meters.of(11), Seconds.of(2.39)),
+            Pair.of(Meters.of(12), Seconds.of(2.57)))) {
+          TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
+        }
       }
     }
-  }
 
-  public static final double X_REEF_ALIGNMENT_P = 2.1; // Proportional gain for X-axis reef alignment
-  public static final double Y_REEF_ALIGNMENT_P = 2.5; // Proportional gain for Y-axis reef alignment (previously 1.74)
-  public static final double ROT_REEF_ALIGNMENT_P = 0.07; // Proportional gain for rotational reef alignment
-  public static final boolean USE_AUTO_ALIGNMENT_FAST_APPROACH = false; // Turn fast appraoch for auto align
-  public static final double AUTO_ALIGNMENT_FAST_APPROACH_DISTANCE_METERS = 0.60; // Distance where we switch from max
-                                                                                  // speed to PID control
-  public static final double AUTO_ALIGNMENT_FAST_APPROACH_SPEED = 1.2; // Fast approach speed in m/s when far from the
-                                                                       // reef
-  // Shift these setpoints when the robot stops short, crashes the reef, or parks
-  // off-center.
-  public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0; // Desired robot heading when aligned to the reef
-  public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1; // Allowable heading error while aligning
-  public static final double X_SETPOINT_REEF_ALIGNMENT = 0.06; // Desired X offset from reef for scoring (previously
-                                                               // -0.43)
-  public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.08; // Acceptable X error when aligning
-  public static final double Y_L_SETPOINT_REEF_ALIGNMENT = 0.05; // Desired Y offset when approaching left reef side
-                                                                 // (was -0.359)
-  public static final double Y_R_SETPOINT_REEF_ALIGNMENT = 0.275; // Desired Y offset when approaching right reef side
-  public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.1; // Acceptable Y error during alignment
+    public static class HopperConstants {
+      public static final int BELTS_LEFT_ID = 0; // change ids later
+      public static final int BELTS_RIGHT_ID = 0;
 
-  // Extend this wait if brief vision dropouts abort alignment, shorten to bail
-  // sooner.
-  public static final double DONT_SEE_TAG_WAIT_TIME = 0.4; // Time to continue aligning after vision tag loss
-  public static final double POSE_VALIDATION_TIME = 0.07; // Duration a pose measurement must remain valid
-  public static final double POSE_LOSS_GRACE_PERIOD = 0.2; // Allowed vision dropout time before aborting alignment
+      public static final double BELTS_SPEED = 0;
+      public static final double REVERSE_BELTS_SPEED = 0;
+    
+      // PID Constants
+      public static final double p = 0.0;
+      public static final double i = 0.0;
+      public static final double d = 0.0;
 
-  // Dashboard throttling
-  public static final boolean LIMIT_DASHBOARD_PERIODIC_UPDATES = false; // Enable throttling of dashboard updates
-  public static final int DASHBOARD_UPDATE_PERIOD_CYCLES = 10; // Number of periodic loops between dashboard refreshes
+      // Feed-Forward Constants
+      public static final double s = 0.0;
+      public static final double v = 0.0;
+      public static final double a = 0.0;
 
-  // Object Detection
-  public static final double X_FUEL_SETPOINT = 0.5;
-  public static final double Y_FUEL_SETPOINT = 0.0;
+    }
+    public static final double X_REEF_ALIGNMENT_P = 2.1; // Proportional gain for X-axis reef alignment
+    public static final double Y_REEF_ALIGNMENT_P = 2.5; // Proportional gain for Y-axis reef alignment (previously
+                                                         // 1.74)
+    public static final double ROT_REEF_ALIGNMENT_P = 0.07; // Proportional gain for rotational reef alignment
+    public static final boolean USE_AUTO_ALIGNMENT_FAST_APPROACH = false; // Turn fast appraoch for auto align
+    public static final double AUTO_ALIGNMENT_FAST_APPROACH_DISTANCE_METERS = 0.60; // Distance where we switch from max
+                                                                                    // speed to PID control
+    public static final double AUTO_ALIGNMENT_FAST_APPROACH_SPEED = 1.2; // Fast approach speed in m/s when far from the
+                                                                         // reef
+    // Shift these setpoints when the robot stops short, crashes the reef, or parks
+    // off-center.
+    public static final double ROT_SETPOINT_REEF_ALIGNMENT = 0; // Desired robot heading when aligned to the reef
+    public static final double ROT_TOLERANCE_REEF_ALIGNMENT = 1; // Allowable heading error while aligning
+    public static final double X_SETPOINT_REEF_ALIGNMENT = 0.06; // Desired X offset from reef for scoring (previously
+                                                                 // -0.43)
+    public static final double X_TOLERANCE_REEF_ALIGNMENT = 0.08; // Acceptable X error when aligning
+    public static final double Y_L_SETPOINT_REEF_ALIGNMENT = 0.05; // Desired Y offset when approaching left reef side
+                                                                   // (was -0.359)
+    public static final double Y_R_SETPOINT_REEF_ALIGNMENT = 0.275; // Desired Y offset when approaching right reef side
+    public static final double Y_TOLERANCE_REEF_ALIGNMENT = 0.1; // Acceptable Y error during alignment
 
-  public static final double X_FUEL_TOLERANCE = 0.1;
-  public static final double Y_FUEL_TOLERANCE = 0.1;
+    // Extend this wait if brief vision dropouts abort alignment, shorten to bail
+    // sooner.
+    public static final double DONT_SEE_TAG_WAIT_TIME = 0.4; // Time to continue aligning after vision tag loss
+    public static final double POSE_VALIDATION_TIME = 0.07; // Duration a pose measurement must remain valid
+    public static final double POSE_LOSS_GRACE_PERIOD = 0.2; // Allowed vision dropout time before aborting alignment
 
-  public static class Dimensions {
-    public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
-    public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
-    public static final Distance FRAME_SIZE_Y = Inches.of(26.25); // left to right (y-axis)
-    public static final Distance FRAME_SIZE_X = Inches.of(28.75); // front to back (x-axis)
+    // Dashboard throttling
+    public static final boolean LIMIT_DASHBOARD_PERIODIC_UPDATES = false; // Enable throttling of dashboard updates
+    public static final int DASHBOARD_UPDATE_PERIOD_CYCLES = 10; // Number of periodic loops between dashboard refreshes
 
-    public static final Distance FULL_WIDTH = FRAME_SIZE_Y.plus(BUMPER_THICKNESS.times(2));
-    public static final Distance FULL_LENGTH = FRAME_SIZE_X.plus(BUMPER_THICKNESS.times(2));
-  }
+    // Object Detection
+    public static final double X_FUEL_SETPOINT = 0.5;
+    public static final double Y_FUEL_SETPOINT = 0.0;
+
+    public static final double X_FUEL_TOLERANCE = 0.1;
+    public static final double Y_FUEL_TOLERANCE = 0.1;
+
+    public static class Dimensions {
+      public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
+      public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
+      public static final Distance FRAME_SIZE_Y = Inches.of(26.25); // left to right (y-axis)
+      public static final Distance FRAME_SIZE_X = Inches.of(28.75); // front to back (x-axis)
+
+      public static final Distance FULL_WIDTH = FRAME_SIZE_Y.plus(BUMPER_THICKNESS.times(2));
+      public static final Distance FULL_LENGTH = FRAME_SIZE_X.plus(BUMPER_THICKNESS.times(2));
+    }
+
+  
 }

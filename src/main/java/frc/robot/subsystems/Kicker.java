@@ -3,15 +3,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.units.Units;
+// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+// import edu.wpi.first.units.Units;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import frc.robot.Constants.KickerConstants;
-import org.littletonrobotics.junction.Logger;
+// import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.PersistMode;
 // import com.revrobotics.spark.ClosedLoopSlot;
@@ -45,8 +45,8 @@ public class Kicker extends SubsystemBase {
 
 
     public void Kick() {
-        KickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
-        KickerRightController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        kickerRightController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
     }
 
     public Command kickCommand() {

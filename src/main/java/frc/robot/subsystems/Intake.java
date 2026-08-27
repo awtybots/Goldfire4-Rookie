@@ -23,25 +23,22 @@ import org.littletonrobotics.junction.Logger;
 public class Intake extends SubsystemBase {
 
     // AdvantageKit logging
-    public SparkFlex IntakeMotorLeft = new SparkFlex(IntakeConstants.INTAKE_LEFT_ID, MotorType.kBrushless);
-    public SparkFlex IntakeMotorRight = new SparkFlex(IntakeConstants.INTAKE_RIGHT_ID, MotorType.kBrushless);
+    public SparkFlex IntakeMotor = new SparkFlex(IntakeConstants.INTAKE_ID, MotorType.kBrushless);
 
-    public SparkClosedLoopController IntakeLeftController = IntakeMotorLeft.getClosedLoopController();
-    public SparkClosedLoopController IntakeRightController = IntakeMotorRight.getClosedLoopController();
+    public SparkClosedLoopController IntakeController = IntakeMotor.getClosedLoopController();
 
     public Intake() {
-        IntakeMotorLeft.configure(Configs.IntakeSubsystem.IntakeMotorLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        IntakeMotorRight.configure(Configs.IntakeSubsystem.IntakeMotorRightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        IntakeMotor.configure(Configs.IntakeSubsystem.IntakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
 
     public void runIntake() { // right motor follows the left motor, so only need to set the left motor speed
-      IntakeLeftController.setSetpoint(IntakeConstants.INTAKE_RPM,
+      IntakeController.setSetpoint(IntakeConstants.INTAKE_RPM,
                 ControlType.kMAXMotionVelocityControl);
      }
 
     public void runOuttake() { // right motor follows the left motor, so only need to set the left motor speed
-      IntakeLeftController.setSetpoint(IntakeConstants.OUTTAKE_RPM,
+      IntakeController.setSetpoint(IntakeConstants.OUTTAKE_RPM,
                 ControlType.kMAXMotionVelocityControl);
      }     
 
@@ -56,18 +53,15 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopIntake() {
-        IntakeMotorLeft.set(0);
+        IntakeMotor.set(0);
     }
     
     @Override
     public void periodic() {
         // AdvantageKit Logging
         // Commanded intake motor percent output.
-        double RightRPM = IntakeMotorRight.getEncoder().getVelocity();
-        double LeftRPM = IntakeMotorLeft.getEncoder().getVelocity();
-
-        Logger.recordOutput("IntakeRightRPM", RightRPM);
-        Logger.recordOutput("IntakeLeftRPM", LeftRPM);
+        double RPM = IntakeMotor.getEncoder().getVelocity();
+        Logger.recordOutput("IntakeRPM", RPM);
         Logger.recordOutput("IntakeTargetRPM", IntakeConstants.INTAKE_RPM);
     }
 }

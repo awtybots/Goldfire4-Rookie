@@ -71,7 +71,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.HubTrackerSubsystem;
 import frc.robot.subsystems.Shooter;
 // import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Pushout;
+import frc.robot.subsystems.Slapdown;
 import frc.robot.subsystems.ObjectDetection;
 
 /**
@@ -97,7 +97,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
-  private final Pushout m_pushout = new Pushout();
+  private final Slapdown m_slapdown = new Slapdown();
 
   // Helper Subsystems
   private final HubTrackerSubsystem m_hubtracker = new HubTrackerSubsystem(drivebase, driverXbox);
@@ -378,6 +378,9 @@ public class RobotContainer {
     PRDrivetoRightTrench = dc().povRight(); // Drive to right trench
     PLDriveToPose = dc().povLeft(); // run hopper in reverse and kick backwards to unjam
 
+
+    dc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
+    
     // Shooter
     LT_Intake = dc().leftTrigger();
 
@@ -472,7 +475,7 @@ public class RobotContainer {
 
     // m_intake.setDefaultCommand(m_intake.runDefaultCommand());
     // m_kicker.setDefaultCommand(m_kicker.runDefaultCommand());
-    // // m_pushout.setDefaultCommand(m_pushout.runDefaultCommand());
+    // // m_slapdown.setDefaultCommand(m_slapdown.runDefaultCommand());
     // m_hopper.setDefaultCommand(m_hopper.runDefaultCommand());
 
     if (RobotBase.isSimulation()) {
@@ -717,7 +720,7 @@ public class RobotContainer {
   // // Dimensions.FULL_LENGTH.div(2).in(Meters),
   // // -Dimensions.FULL_WIDTH.div(2).plus(Inches.of(7)).in(Meters),
   // // -Dimensions.FULL_WIDTH.div(2).in(Meters),
-  // // () -> m_pushout.isRightDeployed() && ableToIntake.getAsBoolean(),
+  // // () -> m_slapdown.isRightDeployed() && ableToIntake.getAsBoolean(),
   // // intakeCallback);
   // }
 
