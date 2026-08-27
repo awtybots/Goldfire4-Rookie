@@ -33,8 +33,7 @@ public class Intake extends SubsystemBase {
 
 
     public void runIntake() { // right motor follows the left motor, so only need to set the left motor speed
-      IntakeController.setSetpoint(IntakeConstants.INTAKE_RPM,
-                ControlType.kMAXMotionVelocityControl);
+      IntakeController.setSetpoint(IntakeConstants.INTAKE_RPM, ControlType.kMAXMotionVelocityControl);
      }
 
     public void runOuttake() { // right motor follows the left motor, so only need to set the left motor speed
@@ -54,6 +53,14 @@ public class Intake extends SubsystemBase {
 
     public void stopIntake() {
         IntakeMotor.set(0);
+    }
+
+    public void runIntakeExample() {
+        IntakeController.setSetpoint(1200, ControlType.kMAXMotionVelocityControl);
+    }
+
+    public Command runIntakeExampleCommand() {
+        return new RunCommand(() -> runIntakeExample(), this).finallyDo(interrupted -> stopIntake());
     }
     
     @Override

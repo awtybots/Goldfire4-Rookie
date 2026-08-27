@@ -29,41 +29,49 @@ import frc.robot.Configs;
 
 public class Shooter extends SubsystemBase {
 
-    // Instantiating the hopper to shooter motor
     private SparkFlex ShooterLeft1Motor = new SparkFlex(ShooterConstants.SHOOTER_L1_ID, MotorType.kBrushless);
-    private SparkClosedLoopController shooterleft1Controller = ShooterLeft1Motor.getClosedLoopController();
+    private SparkClosedLoopController shooterLeft1Controller = ShooterLeft1Motor.getClosedLoopController();
 
     private SparkFlex ShooterRight1Motor = new SparkFlex(ShooterConstants.SHOOTER_R1_ID, MotorType.kBrushless);
-    //private SparkClosedLoopController shooterright1Controller = ShooterRight1Motor.getClosedLoopController();
+    //private SparkClosedLoopController shooterRight1Controller = ShooterRight1Motor.getClosedLoopController();
 
     private SparkFlex ShooterRight2Motor = new SparkFlex(ShooterConstants.SHOOTER_R2_ID, MotorType.kBrushless);
-    //private SparkClosedLoopController shooterright2Controller = ShooterRight2Motor.getClosedLoopController();
+    //private SparkClosedLoopController shooterRight2Controller = ShooterRight2Motor.getClosedLoopController();
 
     private SparkFlex ShooterLeft2Motor = new SparkFlex(ShooterConstants.SHOOTER_L2_ID, MotorType.kBrushless);
-    //private SparkClosedLoopController shooterleft2Controller = ShooterLeft2Motor.getClosedLoopController();
-
+    //private SparkClosedLoopController shooterLeft2Controller = ShooterLeft2Motor.getClosedLoopController();
 
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
 
 
     public Shooter() {
-        ShooterRight1Motor.configure(Configs.ShooterSubsystem.ShooterMotorRight1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         ShooterLeft1Motor.configure(Configs.ShooterSubsystem.ShooterMotorLeft1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        ShooterRight2Motor.configure(Configs.ShooterSubsystem.ShooterMotorRight2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        ShooterRight1Motor.configure(Configs.ShooterSubsystem.ShooterMotorRight1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         ShooterLeft2Motor.configure(Configs.ShooterSubsystem.ShooterMotorLeft2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        ShooterRight2Motor.configure(Configs.ShooterSubsystem.ShooterMotorRight2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+
+
     public void setShooterSpeed(double speed) {
-        shooterleft1Controller.setSetpoint(speed, ControlType.kMAXMotionVelocityControl);
+        shooterLeft1Controller.setSetpoint(speed, ControlType.kMAXMotionVelocityControl);
     }
 
     public void stopShooter() {
-        shooterleft1Controller.setSetpoint(0, ControlType.kDutyCycle);
+        shooterLeft1Controller.setSetpoint(0, ControlType.kDutyCycle);
     }
 
     public Command setShooterSpeedCommand(double speed) {
-            return new RunCommand(() -> setShooterSpeed(speed), this).finallyDo(interrupted -> stopShooter());
-        }
+        return new RunCommand(() -> setShooterSpeed(speed), this).finallyDo(interrupted -> stopShooter());
+    }
+
+    public void setShooterSpeedExample() {
+        shooterLeft1Controller.setSetpoint(1200, ControlType.kMAXMotionVelocityControl);
+    }
+
+    public Command setShooterSpeedExampleCommand() {
+        return new RunCommand(() -> setShooterSpeedExample(), this).finallyDo(interrupted -> stopShooter());
+    }
 
     @Override
     public void periodic() {
