@@ -133,7 +133,8 @@ public final class Constants {
 
   // INTAKE
   public static class IntakeConstants {
-    public static final int INTAKE_ID = 0; // change ids later
+    public static final int INTAKE_LEFT_ID = 18;
+    public static final int INTAKE_RIGHT_ID = 19;
 
     // PID Constants
     public static final double p = 0.0;
@@ -149,7 +150,7 @@ public final class Constants {
 
   }
   public static class SlapdownConstants {
-    public static final int SLAPDOWN_ID = 0; // change ids later
+    public static final int SLAPDOWN_ID = 20; // change ids later
 
     // PID Constants
     public static final double p = 0.0;
@@ -177,7 +178,7 @@ public final class Constants {
 
   }
     public static class HoodConstants {
-      public static final int HOOD_ID = 0; // change ids later
+      public static final int HOOD_ID = 21; // change ids later
 
       // PID Constants
       public static final double p = 0.0;
@@ -186,10 +187,10 @@ public final class Constants {
     }
     public static class ShooterConstants {
 
-      public static final int SHOOTER_R1_ID = 0; // change ids later
-      public static final int SHOOTER_L1_ID = 0;
-      public static final int SHOOTER_R2_ID = 0; 
-      public static final int SHOOTER_L2_ID = 0;
+      public static final int SHOOTER_R1_ID = 9;
+      public static final int SHOOTER_L1_ID = 10;
+      public static final int SHOOTER_R2_ID = 11; 
+      public static final int SHOOTER_L2_ID = 12;
       
        
       // PID Constants
@@ -224,11 +225,11 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final int BELTS_LEFT_ID = 0; // change ids later
-      public static final int BELTS_RIGHT_ID = 0;
+      public static final int BELTS_LEFT_ID = 23;
+      public static final int BELTS_RIGHT_ID = 22;
 
-      public static final double BELTS_SPEED = 0;
-      public static final double REVERSE_BELTS_SPEED = 0;
+      public static final double BELTS_SPEED = 0.75;
+      public static final double REVERSE_BELTS_SPEED = 0.75;
     
       // PID Constants
       public static final double p = 0.0;

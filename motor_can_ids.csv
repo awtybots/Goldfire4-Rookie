@@ -18,3 +18,7 @@ Twindexer,Drive Motor,Twindexer R,SparkFlex,16
 Intake_Extension,Drive Motor,Pushout,SparkFlex,17
 Intake,Drive Motor,Intake L,SparkFlex,18
 Intake,Drive Motor,Intake R,SparkFlex,19
+Slapdown,Drive Motor,Slapdown,SparkFlex,20
+Hood, Drive Motor,Hood,SparkFlex,21
+Belts, Drive Motor,Belts R,SparkFlex,22
+Belts, Drive Motor,Belts L,SparkFlex,23
