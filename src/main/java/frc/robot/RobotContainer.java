@@ -321,7 +321,7 @@ public class RobotContainer {
             m_hopper.runBeltsToConveyorCommand()
         )
     );
-
+/* 
     dc().rightTrigger().whileTrue(Commands.defer(() -> {
       if (isInAllianceZone()) {
         aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
@@ -332,7 +332,7 @@ public class RobotContainer {
         return aimAtFerry;
       }
     }, Set.of(drivebase)));
-
+ */
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
         .headingWhile(true);
