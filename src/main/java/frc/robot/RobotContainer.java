@@ -314,13 +314,13 @@ public class RobotContainer {
         .scaleTranslation(1.0)
         .allianceRelativeControl(true);
 
-dc().rightTrigger().whileTrue(
-    Commands.parallel(
-        m_kicker.kickCommand(),
-        m_shooter.setShooterSpeedCommand(1200),
-        m_hopper.runBeltsToConveyorCommand()
-    )
-);
+    oc().rightTrigger().whileTrue(
+        Commands.parallel(
+            m_kicker.kickCommand(),
+            m_shooter.setShooterSpeedCommand(1200),
+            m_hopper.runBeltsToConveyorCommand()
+        )
+    );
 
     dc().rightTrigger().whileTrue(Commands.defer(() -> {
       if (isInAllianceZone()) {
