@@ -16,5 +16,9 @@ Kicker,Secondary Motor,Kicker R,SparkFlex,14
 Twindexer,Drive Motor,Twindexer L,SparkFlex,15
 Twindexer,Drive Motor,Twindexer R,SparkFlex,16
 Intake_Extension,Drive Motor,Pushout,SparkFlex,17
-Intake,Drive Motor,Intake L,SparkFlex,18
-Intake,Drive Motor,Intake R,SparkFlex,19
+
+Intake,Drive Motor,Intake,SparkFlex,19
+Slapdown,DriveMotor,Slapdown,SparkFlex,20
+Hood,DriveMotor,Hood,SparkFlex,21
+Belts,DriveMotor,Belts Left,SparkFLex,22
+Belts,DriveMotor,Belts Right,SparkFLex,23
