@@ -172,7 +172,7 @@ public final class Constants {
     public static final double v = 0.0;
     public static final double a = 0.0;
 
-    public static final double KICKER_RPM = 16000;
+    public static final double KICKER_RPM = 1600;
     public static final double KICKER_REVERSE_RPM = -16000;
 
   }
