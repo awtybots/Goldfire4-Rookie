@@ -26,7 +26,7 @@ public class Hopper extends SubsystemBase {
     public Hopper() {
         TalonFXConfiguration BeltsConfig = new TalonFXConfiguration();
         BeltsConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        BeltsConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // adjust we have to
+        BeltsConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // adjust we have to
         BeltsConfig.CurrentLimits.StatorCurrentLimit = 120.0;
         BeltsConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
         BeltsConfig.Slot0.kP = HopperConstants.p;
@@ -36,7 +36,7 @@ public class Hopper extends SubsystemBase {
         BeltsConfig.Slot0.kV = HopperConstants.v; 
         BeltsConfig.Slot0.kA = HopperConstants.a;
         BeltsMotorLeft.getConfigurator().apply(BeltsConfig);
-        BeltsConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // adjust we have to
+        BeltsConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // adjust we have to
         BeltsMotorRight.getConfigurator().apply(BeltsConfig);
         
         BeltsMotorLeft.setControl(new Follower(BeltsMotorRight.getDeviceID(), MotorAlignmentValue.Opposed));
