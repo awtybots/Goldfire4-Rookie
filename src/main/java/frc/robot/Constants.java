@@ -165,7 +165,7 @@ public final class Constants {
     public static final int KICKER_RIGHT_ID = 14;
 
     // PID Constants
-    public static final double p = 0.0;
+    public static final double p = 0.001;
     public static final double i = 0.0;
     public static final double d = 0.0;
 
@@ -203,7 +203,7 @@ public final class Constants {
       
        
       // PID Constants
-      public static final double p = 0.0;
+      public static final double p = 0.001;
       public static final double i = 0.0;
       public static final double d = 0.0;
 
