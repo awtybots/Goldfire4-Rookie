@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
@@ -47,7 +46,7 @@ public class Hood extends SubsystemBase {
     }
 
     public Command setHoodPositionCommand(double position) {
-            return new RunCommand(() -> setHoodPosition(position), this);
+            return Commands.runOnce(() -> setHoodPosition(position), this);
         }
 
     @Override

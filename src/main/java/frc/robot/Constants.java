@@ -179,6 +179,9 @@ public final class Constants {
     public static class HoodConstants {
       public static final int HOOD_ID = 21;
 
+      public static final double HOOD_DOWN = 0.0;
+      public static final double HOOD_UP = 0.0;
+
       // PID Constants
       public static final double p = 0.0;
       public static final double i = 0.0;
