@@ -434,8 +434,8 @@ public class RobotContainer {
     // Hood
     POVUP_OP_HoodUp = oc().povUp();
     POVDOWN_OP_HoodDown = oc().povDown();
-    POVUP_OP_HoodUp.onTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
-    POVDOWN_OP_HoodDown.onTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
+    POVUP_OP_HoodUp.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
+    // POVDOWN_OP_HoodDown.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
 
     Command driveFieldOrientedDirectAngle = drivebase
         .driveFieldOriented(() -> applyHeadingBias(driveDirectAngle.get()));

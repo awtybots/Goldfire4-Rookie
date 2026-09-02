@@ -7,18 +7,15 @@ Swerve Drive,Steering Motor,Front Left Angle,SparkMax Neo550,2
 Swerve Drive,Steering Motor,Front Right Angle,SparkMax Neo550,4
 Swerve Drive,Steering Motor,Back Left Angle,SparkMax Neo550,6
 Swerve Drive,Steering Motor,Back Right Angle,SparkMax Neo550,8
-Shooter,Primary Motor,Right Shooter R,SparkFlex,9  
-Shooter,Primary Motor,Right Shooter L,SparkFlex,10
-Shooter,Primary Motor,Left Shooter R,SparkFlex,11
-Shooter,Primary Motor,Left Shooter L,SparkFlex,12
+Shooter,Primary Motor,Right Shooter 1,SparkFlex,9  
+Shooter,Primary Motor,Right Shooter 2,SparkFlex,10
+Shooter,Primary Motor,Left Shooter 1,SparkFlex,11
+Shooter,Primary Motor,Left Shooter 2,SparkFlex,12
 Kicker,Secondary Motor,Kicker L,SparkFlex,13
 Kicker,Secondary Motor,Kicker R,SparkFlex,14
-Twindexer,Drive Motor,Twindexer L,SparkFlex,15
-Twindexer,Drive Motor,Twindexer R,SparkFlex,16
-Intake_Extension,Drive Motor,Pushout,SparkFlex,17
 
 Intake,Drive Motor,Intake,SparkFlex,19
-Slapdown,DriveMotor,Slapdown,SparkFlex,20
-Hood,DriveMotor,Hood,SparkFlex,21
+Slapdown,DriveMotor,Slapdown,SparkFlex,18
+Hood,DriveMotor,Hood,SparkFlex,15
 Belts,DriveMotor,Belts Left,SparkFLex,22
 Belts,DriveMotor,Belts Right,SparkFLex,23

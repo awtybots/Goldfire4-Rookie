@@ -45,7 +45,7 @@ public final class Configs
 
                 static {
 
-                        SlapdownMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+                        SlapdownMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
 
                         SlapdownMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                             // Set PID values for position control. We don't need to pass a closed
@@ -57,7 +57,11 @@ public final class Configs
                             ;
 
                         SlapdownMotorConfig.closedLoop
-                        .maxMotion.maxAcceleration(1000000);
+                        .maxMotion.maxAcceleration(1000)
+                        .cruiseVelocity(1000)
+                        .allowedProfileError(0.2)
+                        ;
+                        
 
                 }
 
@@ -68,7 +72,7 @@ public final class Configs
 
                 static {
 
-                        HoodMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+                        HoodMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
 
                         HoodMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                             // Set PID values for position control. We don't need to pass a closed

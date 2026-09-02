@@ -33,12 +33,12 @@ public class Intake extends SubsystemBase {
 
 
     public void runIntake() { // right motor follows the left motor, so only need to set the left motor speed
-      IntakeController.setSetpoint(IntakeConstants.INTAKE_RPM, ControlType.kMAXMotionVelocityControl);
+      IntakeController.setSetpoint(IntakeConstants.INTAKE_DUTY, ControlType.kDutyCycle);
      }
 
     public void runOuttake() { // right motor follows the left motor, so only need to set the left motor speed
-      IntakeController.setSetpoint(IntakeConstants.OUTTAKE_RPM,
-                ControlType.kMAXMotionVelocityControl);
+      IntakeController.setSetpoint(IntakeConstants.OUTTAKE_DUTY,
+                ControlType.kDutyCycle);
      }     
 
     public Command runIntakeCommand() {
@@ -56,7 +56,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void runIntakeExample() {
-        IntakeController.setSetpoint(1200, ControlType.kMAXMotionVelocityControl);
+        IntakeController.setSetpoint(1200, ControlType.kDutyCycle);
     }
 
     public Command runIntakeExampleCommand() {
@@ -69,6 +69,6 @@ public class Intake extends SubsystemBase {
         // Commanded intake motor percent output.
         double RPM = IntakeMotor.getEncoder().getVelocity();
         Logger.recordOutput("IntakeRPM", RPM);
-        Logger.recordOutput("IntakeTargetRPM", IntakeConstants.INTAKE_RPM);
+        Logger.recordOutput("IntakeTarget", IntakeConstants.INTAKE_DUTY);
     }
 }

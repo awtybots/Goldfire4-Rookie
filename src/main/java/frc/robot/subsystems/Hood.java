@@ -42,11 +42,15 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHoodPosition(double position) {
-        hoodController.setSetpoint(position, ControlType.kMAXMotionPositionControl);
+        hoodController.setSetpoint(position, ControlType.kPosition);
+    }
+
+    public void lowerHood() {
+       hoodController.setSetpoint(HoodConstants.HOOD_DOWN, ControlType.kPosition);
     }
 
     public Command setHoodPositionCommand(double position) {
-            return Commands.runOnce(() -> setHoodPosition(position), this);
+            return Commands.run(() -> setHoodPosition(position), this).finallyDo((interrupted) -> lowerHood());
         }
 
     @Override

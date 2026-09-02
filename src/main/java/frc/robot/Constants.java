@@ -144,17 +144,19 @@ public final class Constants {
     public static final double v = 0.0;
     public static final double a = 0.0;
 
-    public static final double INTAKE_RPM = 12500;
-    public static final double OUTTAKE_RPM = -12500;
+    public static final double INTAKE_DUTY = 1;
+    public static final double OUTTAKE_DUTY = -1;
 
   }
   public static class SlapdownConstants {
-    public static final int SLAPDOWN_ID = 20;
+    public static final int SLAPDOWN_ID = 18;
 
     // PID Constants
-    public static final double p = 0.0;
+    public static final double p = 1.0;
     public static final double i = 0.0;
     public static final double d = 0.0;
+
+    public static final double maxout = 25;
   }
 
   // KICKER
@@ -179,11 +181,14 @@ public final class Constants {
     public static class HoodConstants {
       public static final int HOOD_ID = 21;
 
+      public static final double HOOD_MIN = 0.0;
+      public static final double HOOD_MAX = 2.907;
+
       public static final double HOOD_DOWN = 0.0;
-      public static final double HOOD_UP = 0.0;
+      public static final double HOOD_UP = 2.8;
 
       // PID Constants
-      public static final double p = 0.0;
+      public static final double p = 1.4;
       public static final double i = 0.0;
       public static final double d = 0.0;
     }
