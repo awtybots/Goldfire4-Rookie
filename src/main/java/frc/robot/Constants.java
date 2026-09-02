@@ -179,7 +179,7 @@ public final class Constants {
 
   }
     public static class HoodConstants {
-      public static final int HOOD_ID = 21;
+      public static final int HOOD_ID = 15;
 
       public static final double HOOD_MIN = 0.0;
       public static final double HOOD_MAX = 2.907;
@@ -234,8 +234,8 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final int BELTS_LEFT_ID = 22;
-      public static final int BELTS_RIGHT_ID = 23;
+      public static final int BELTS_LEFT_ID = 16;
+      public static final int BELTS_RIGHT_ID = 17;
 
       public static final double BELTS_SPEED = 0.75;
       public static final double REVERSE_BELTS_SPEED = 0.75;

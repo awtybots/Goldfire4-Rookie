@@ -30,7 +30,8 @@ public class Kicker extends SubsystemBase {
 
 
     public void Kick() {
-        kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        // kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        KickerLeftMotor.set(0.8);
     }
 
     public Command kickCommand() {
@@ -39,7 +40,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public void stopKicking() {
-        kickerLeftController.setSetpoint(0, ControlType.kMAXMotionVelocityControl);
+        KickerLeftMotor.set(0);
     }
 
     public void setKickerSpeedExample() {

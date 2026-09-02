@@ -110,7 +110,8 @@ public class RobotContainer {
   // Factory for ControlAllShooting instances. Create a fresh instance for each
   // composition to avoid WPILib's "composed commands may not be reused" error.
   // private ControlAllShooting makeVariableShoot() {
-  //   return new ControlAllShooting(drivebase::getCachedDynamicHubLocation, m_shooter, drivebase::getPose);
+  // return new ControlAllShooting(drivebase::getCachedDynamicHubLocation,
+  // m_shooter, drivebase::getPose);
   // }
 
   // public FuelSim fuelSim = new FuelSim("FuelSim"); // creates a new fuelSim of
@@ -198,7 +199,7 @@ public class RobotContainer {
   // Pushout
   private Trigger Y_OP_extendIntake; // push out
   private Trigger B_OP_reteactIntake; // pull in
-  private Trigger POVLEFT_OP_agitate; // agitate 
+  private Trigger POVLEFT_OP_agitate; // agitate
 
   // Hood
   private Trigger POVUP_OP_HoodUp;
@@ -206,7 +207,7 @@ public class RobotContainer {
 
   // -----------------------------------------------------------------------
   // Helpers: resolve which physical controller acts as "driver" vs "operator"
-  // based on the SmartDashboard chooser selection.  
+  // based on the SmartDashboard chooser selection.
   // -----------------------------------------------------------------------
   private boolean isAsierSelected() {
     String selected = driverChooser.getSelected();
@@ -242,13 +243,13 @@ public class RobotContainer {
 
     DriverStation.silenceJoystickConnectionWarning(true);
     SmartDashboard.putNumber("Heading Bias Deg", 0.0);
-    // SmartDashboard.putBoolean("Is Shooter Running", m_shooter.isShooterRunning());
+    // SmartDashboard.putBoolean("Is Shooter Running",
+    // m_shooter.isShooterRunning());
     // Tunable gain: radians of bias -> radians/sec of angular velocity
     SmartDashboard.putNumber("Heading Bias Gain", 0);
 
     // Create the NamedCommands that will be used in PathPlanner
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
@@ -315,31 +316,18 @@ public class RobotContainer {
         .scaleTranslation(1.0)
         .allianceRelativeControl(true);
 
-    oc().rightTrigger().whileTrue(
-    Commands.parallel(
-        m_shooter.setShooterSpeedCommand(1200),
-        Commands.sequence(
-            Commands.waitUntil(() -> m_shooter.isShooterFast()),
-            Commands.parallel(
-                m_kicker.kickCommand(),
-                m_hopper.runBeltsToConveyorCommand()
-            )
-        )
-    )
-);
-    
-/* 
-    dc().rightTrigger().whileTrue(Commands.defer(() -> {
-      if (isInAllianceZone()) {
-        aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
-            dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
-        return aimAtHub;
-      } else {
-        aimAtFerry = new AimAtFerry(drivebase, driveAngularVelocity);
-        return aimAtFerry;
-      }
-    }, Set.of(drivebase)));
- */
+    /*
+     * dc().rightTrigger().whileTrue(Commands.defer(() -> {
+     * if (isInAllianceZone()) {
+     * aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
+     * dc()::getLeftX, dc()::getLeftY, dc()::getRightX);
+     * return aimAtHub;
+     * } else {
+     * aimAtFerry = new AimAtFerry(drivebase, driveAngularVelocity);
+     * return aimAtFerry;
+     * }
+     * }, Set.of(drivebase)));
+     */
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
         .headingWhile(true);
@@ -393,9 +381,6 @@ public class RobotContainer {
     PRDrivetoRightTrench = dc().povRight(); // Drive to right trench
     PLDriveToPose = dc().povLeft(); // run hopper in reverse and kick backwards to unjam
 
-
-    dc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
-    
     // Shooter
     LT_Intake = dc().leftTrigger();
 
@@ -434,7 +419,29 @@ public class RobotContainer {
     // Hood
     POVUP_OP_HoodUp = oc().povUp();
     POVDOWN_OP_HoodDown = oc().povDown();
-    POVUP_OP_HoodUp.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
+
+    oc().rightTrigger().whileTrue(
+        Commands.parallel(
+            m_shooter.setShooterSpeedCommand(1200),
+            m_Hood.setHoodPositionCommand(1),
+            Commands.sequence(
+                Commands.waitUntil(() -> m_shooter.isShooterFast()),
+                Commands.parallel(
+                    m_kicker.kickCommand(),
+                    m_hopper.runBeltsToConveyorCommand()))));
+
+    oc().leftTrigger().whileTrue(
+        Commands.parallel(
+            m_slapdown.setHoodPositionCommand(25),
+            m_intake.runIntakeCommand()));
+
+    oc().leftBumper().whileTrue(
+        (m_slapdown.setHoodPositionCommand(0)));
+
+    oc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
+
+    oc().povUp().whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
+    oc().rightTrigger().whileTrue(m_shooter.setShooterSpeedCommand(1200));
     // POVDOWN_OP_HoodDown.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
 
     Command driveFieldOrientedDirectAngle = drivebase
@@ -456,7 +463,7 @@ public class RobotContainer {
     // ======================================
 
     // ======= Driver =======
- 
+
     // Swerve Drive Commands
     dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
@@ -468,7 +475,6 @@ public class RobotContainer {
     // .onlyWhile(autoAimCommand.swerveInputStream.aimLock(Angle.ofBaseUnits(3,
     // Degrees))));
 
-  
     // ========================
 
     // SysId: run shooter quasistatic forward.
@@ -481,12 +487,15 @@ public class RobotContainer {
     // oc().y().whileTrue(m_shooter.sysIdDynamicReverse());
 
     // new Trigger(() -> isInAllianceZone()
-    //     && DriverStation.isTeleop())
-    //     .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
+    // && DriverStation.isTeleop())
+    // .onTrue(Commands.runOnce(() ->
+    // m_shooter.setDefaultCommand(m_shooter.setAllianceIdle())));
     // new Trigger(() -> !isInAllianceZone()
-    //     && DriverStation.isTeleopEnabled())
-    //     .onTrue(Commands.runOnce(() -> m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
-   //  m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() -> DriverStation.isTeleopEnabled()));
+    // && DriverStation.isTeleopEnabled())
+    // .onTrue(Commands.runOnce(() ->
+    // m_shooter.setDefaultCommand(m_shooter.setNeutralIdle())));
+    // m_shooter.setDefaultCommand(m_shooter.setAllianceIdle().onlyWhile(() ->
+    // DriverStation.isTeleopEnabled()));
 
     // m_intake.setDefaultCommand(m_intake.runDefaultCommand());
     // m_kicker.setDefaultCommand(m_kicker.runDefaultCommand());
