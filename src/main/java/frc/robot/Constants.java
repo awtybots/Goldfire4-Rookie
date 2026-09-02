@@ -133,8 +133,7 @@ public final class Constants {
 
   // INTAKE
   public static class IntakeConstants {
-    public static final int INTAKE_LEFT_ID = 18;
-    public static final int INTAKE_RIGHT_ID = 19;
+    public static final int INTAKE_ID = 19;
 
     // PID Constants
     public static final double p = 0.0;
@@ -150,7 +149,7 @@ public final class Constants {
 
   }
   public static class SlapdownConstants {
-    public static final int SLAPDOWN_ID = 20; // change ids later
+    public static final int SLAPDOWN_ID = 20;
 
     // PID Constants
     public static final double p = 0.0;
@@ -173,12 +172,15 @@ public final class Constants {
     public static final double v = 0.0;
     public static final double a = 0.0;
 
-    public static final double KICKER_RPM = 16000;
-    public static final double KICKER_REVERSE_RPM = -16000;
+    public static final double KICKER_RPM = 1600;
+    public static final double KICKER_REVERSE_RPM = -1600;
 
   }
     public static class HoodConstants {
-      public static final int HOOD_ID = 21; // change ids later
+      public static final int HOOD_ID = 21;
+
+      public static final double HOOD_DOWN = 0.0;
+      public static final double HOOD_UP = 0.0;
 
       // PID Constants
       public static final double p = 0.0;
@@ -191,6 +193,8 @@ public final class Constants {
       public static final int SHOOTER_L1_ID = 10;
       public static final int SHOOTER_R2_ID = 11; 
       public static final int SHOOTER_L2_ID = 12;
+
+      public static final double SHOOTER_RPM_TOLERANCE = 25;
       
        
       // PID Constants
@@ -225,8 +229,8 @@ public final class Constants {
     }
 
     public static class HopperConstants {
-      public static final int BELTS_LEFT_ID = 23;
-      public static final int BELTS_RIGHT_ID = 22;
+      public static final int BELTS_LEFT_ID = 22;
+      public static final int BELTS_RIGHT_ID = 23;
 
       public static final double BELTS_SPEED = 0.75;
       public static final double REVERSE_BELTS_SPEED = 0.75;

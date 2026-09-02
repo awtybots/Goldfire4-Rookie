@@ -42,6 +42,7 @@ public class Shooter extends SubsystemBase {
     //private SparkClosedLoopController shooterLeft2Controller = ShooterLeft2Motor.getClosedLoopController();
 
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
+    private double targetShooterRPM = 0;
 
 
     public Shooter() {
@@ -54,7 +55,13 @@ public class Shooter extends SubsystemBase {
 
 
     public void setShooterSpeed(double speed) {
+        targetShooterRPM = speed;
         shooterLeft1Controller.setSetpoint(speed, ControlType.kMAXMotionVelocityControl);
+    }
+
+    public boolean isShooterFast() {
+        return ShooterConstants.SHOOTER_RPM_TOLERANCE >
+            Math.abs(targetShooterRPM - shooterLeft1Encoder.getVelocity());
     }
 
     public void stopShooter() {

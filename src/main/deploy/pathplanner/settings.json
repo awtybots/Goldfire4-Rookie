@@ -3,12 +3,12 @@
   "robotLength": 0.87,
   "holonomicMode": true,
   "pathFolders": [
-    "Worlds Paths",
-    "Worlds Paths 2"
+    "Matias",
+    "TRI Paths"
   ],
   "autoFolders": [
-    "Delayed Autos",
-    "Worlds Autos"
+    "Matias",
+    "TRI Autons"
   ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 3.5,

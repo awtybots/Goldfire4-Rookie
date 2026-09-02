@@ -49,6 +49,7 @@ import frc.robot.Constants.Dimensions;
 import frc.robot.Constants.DrivebaseConstants;
 // import frc.robot.Configs.ShooterSubsystem;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.HoodConstants;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.HubTracker;
@@ -70,6 +71,7 @@ import frc.robot.subsystems.Kicker;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.HubTrackerSubsystem;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Hood;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Slapdown;
 import frc.robot.subsystems.ObjectDetection;
@@ -95,6 +97,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter();
+  private final Hood m_Hood = new Hood();
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
   private final Slapdown m_slapdown = new Slapdown();
@@ -197,11 +200,9 @@ public class RobotContainer {
   private Trigger B_OP_reteactIntake; // pull in
   private Trigger POVLEFT_OP_agitate; // agitate 
 
-  // Climber / Vision
-  private Trigger POVUP_OP_FrontLimelight;
-  private Trigger POVLEFT_OP_LeftLimelight;
-  private Trigger POVRIGHT_OP_VisionToggle;
-  private Trigger POVDown_OP_BackLimelight; // toggle vision
+  // Hood
+  private Trigger POVUP_OP_HoodUp;
+  private Trigger POVDOWN_OP_HoodDown;
 
   // -----------------------------------------------------------------------
   // Helpers: resolve which physical controller acts as "driver" vs "operator"
@@ -314,6 +315,20 @@ public class RobotContainer {
         .scaleTranslation(1.0)
         .allianceRelativeControl(true);
 
+    oc().rightTrigger().whileTrue(
+    Commands.parallel(
+        m_shooter.setShooterSpeedCommand(1200),
+        Commands.sequence(
+            Commands.waitUntil(() -> m_shooter.isShooterFast()),
+            Commands.parallel(
+                m_kicker.kickCommand(),
+                m_hopper.runBeltsToConveyorCommand()
+            )
+        )
+    )
+);
+    
+/* 
     dc().rightTrigger().whileTrue(Commands.defer(() -> {
       if (isInAllianceZone()) {
         aimAtHub = new AimAtHub(drivebase, driveAngularVelocity,
@@ -324,7 +339,7 @@ public class RobotContainer {
         return aimAtFerry;
       }
     }, Set.of(drivebase)));
-
+ */
     driveDirectAngle = driveAngularVelocity.copy()
         .withControllerHeadingAxis(dc()::getRightX, dc()::getRightY)
         .headingWhile(true);
@@ -416,11 +431,11 @@ public class RobotContainer {
     B_OP_reteactIntake = oc().b(); // pull in
     POVLEFT_OP_agitate = oc().povLeft(); // agitate
 
-    // Climber / Vision
-    POVUP_OP_FrontLimelight = oc().povUp();
-    POVLEFT_OP_LeftLimelight = oc().povLeft();
-    POVRIGHT_OP_VisionToggle = oc().povRight();
-    POVDown_OP_BackLimelight = oc().povDown(); // toggle vision
+    // Hood
+    POVUP_OP_HoodUp = oc().povUp();
+    POVDOWN_OP_HoodDown = oc().povDown();
+    POVUP_OP_HoodUp.onTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
+    POVDOWN_OP_HoodDown.onTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
 
     Command driveFieldOrientedDirectAngle = drivebase
         .driveFieldOriented(() -> applyHeadingBias(driveDirectAngle.get()));
