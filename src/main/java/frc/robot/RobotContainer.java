@@ -441,7 +441,7 @@ public class RobotContainer {
     oc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
 
     oc().povUp().whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
-    oc().rightTrigger().whileTrue(m_shooter.setShooterSpeedCommand(1200));
+    // oc().rightTrigger().whileTrue(m_shooter.setShooterSpeedCommand(1200));
     // POVDOWN_OP_HoodDown.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
 
     Command driveFieldOrientedDirectAngle = drivebase
