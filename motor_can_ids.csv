@@ -13,9 +13,9 @@ Shooter,Primary Motor,Left Shooter 1,SparkFlex,11
 Shooter,Primary Motor,Left Shooter 2,SparkFlex,12
 Kicker,Secondary Motor,Kicker L,SparkFlex,13
 Kicker,Secondary Motor,Kicker R,SparkFlex,14
-
-Intake,Drive Motor,Intake,SparkFlex,19
-Slapdown,DriveMotor,Slapdown,SparkFlex,18
 Hood,DriveMotor,Hood,SparkFlex,15
 Belts,DriveMotor,Belts Left,SparkFLex,16
 Belts,DriveMotor,Belts Right,SparkFLex,17
+Slapdown,DriveMotor,Slapdown,SparkFlex,18
+Intake,Drive Motor,Intake,SparkFlex,19
+
