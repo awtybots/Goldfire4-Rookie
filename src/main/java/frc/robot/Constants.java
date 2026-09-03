@@ -144,8 +144,8 @@ public final class Constants {
     public static final double v = 0.0;
     public static final double a = 0.0;
 
-    public static final double INTAKE_DUTY = 1;
-    public static final double OUTTAKE_DUTY = -1;
+    public static final double INTAKE_DUTY = 0.8;
+    public static final double OUTTAKE_DUTY = 0.8;
 
   }
   public static class SlapdownConstants {
