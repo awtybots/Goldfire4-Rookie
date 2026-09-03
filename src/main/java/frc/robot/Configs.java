@@ -9,6 +9,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.SlapdownConstants;
 
 import com.revrobotics.spark.config.SparkBaseConfig.*;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 
 public final class Configs 
@@ -47,19 +48,28 @@ public final class Configs
 
                         SlapdownMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
 
-                        SlapdownMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                            .p(SlapdownConstants.p)
-                            .i(SlapdownConstants.i)
-                            .d(SlapdownConstants.d)
-                            .outputRange(-1, 1)
-                            ;
-
                         SlapdownMotorConfig.closedLoop
-                        .maxMotion.maxAcceleration(1000)
-                        .cruiseVelocity(1000)
-                        .allowedProfileError(0.2)
+                            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                            //slow pid
+                            .p(SlapdownConstants.slowP, ClosedLoopSlot.kSlot0)
+                            .i(SlapdownConstants.slowI, ClosedLoopSlot.kSlot0)
+                            .d(SlapdownConstants.slowD, ClosedLoopSlot.kSlot0)
+                            .outputRange(-1, 1, ClosedLoopSlot.kSlot0)
+                            
+                            //fast
+                            .p(SlapdownConstants.fastP, ClosedLoopSlot.kSlot1)
+                            .i(SlapdownConstants.fastI, ClosedLoopSlot.kSlot1)
+                            .d(SlapdownConstants.fastD, ClosedLoopSlot.kSlot1)
+                            .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+
+                        SlapdownMotorConfig.closedLoop.maxMotion
+                            .maxAcceleration(1000, ClosedLoopSlot.kSlot0)
+                            .cruiseVelocity(1000, ClosedLoopSlot.kSlot0)
+                            .allowedProfileError(0.2, ClosedLoopSlot.kSlot0)
+
+                            .maxAcceleration(6000, ClosedLoopSlot.kSlot1)
+                            .cruiseVelocity(5000, ClosedLoopSlot.kSlot1)
+                            .allowedProfileError(0.2, ClosedLoopSlot.kSlot1)
                         ;
                         
 

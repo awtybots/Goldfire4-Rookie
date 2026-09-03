@@ -152,9 +152,13 @@ public final class Constants {
     public static final int SLAPDOWN_ID = 18;
 
     // PID Constants
-    public static final double p = 1.0;
-    public static final double i = 0.0;
-    public static final double d = 0.0;
+    public static final double slowP = 1.0;
+    public static final double slowI = 0.0;
+    public static final double slowD = 0.0;
+
+    public static final double fastP = 1.0;
+    public static final double fastI = 0.0;
+    public static final double fastD = 0.0;
 
     public static final double maxout = 25;
   }
