@@ -67,8 +67,8 @@ public final class Configs
                             .cruiseVelocity(1000, ClosedLoopSlot.kSlot0)
                             .allowedProfileError(0.2, ClosedLoopSlot.kSlot0)
 
-                            .maxAcceleration(6000, ClosedLoopSlot.kSlot1)
-                            .cruiseVelocity(5000, ClosedLoopSlot.kSlot1)
+                            .maxAcceleration(500, ClosedLoopSlot.kSlot1)
+                            .cruiseVelocity(500, ClosedLoopSlot.kSlot1)
                             .allowedProfileError(0.2, ClosedLoopSlot.kSlot1)
                         ;
                         
