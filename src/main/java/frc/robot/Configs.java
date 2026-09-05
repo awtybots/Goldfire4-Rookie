@@ -55,12 +55,17 @@ public final class Configs
                             .i(SlapdownConstants.slowI, ClosedLoopSlot.kSlot0)
                             .d(SlapdownConstants.slowD, ClosedLoopSlot.kSlot0)
                             .outputRange(-1, 1, ClosedLoopSlot.kSlot0)
-                            
                             //fast
                             .p(SlapdownConstants.fastP, ClosedLoopSlot.kSlot1)
                             .i(SlapdownConstants.fastI, ClosedLoopSlot.kSlot1)
                             .d(SlapdownConstants.fastD, ClosedLoopSlot.kSlot1)
-                            .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+                            .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
+                            .feedForward.
+                                kS(0.01, ClosedLoopSlot.kSlot0)
+                            
+                            
+                            //fast
+                            ;
 
                         SlapdownMotorConfig.closedLoop.maxMotion
                             .maxAcceleration(1000, ClosedLoopSlot.kSlot0)

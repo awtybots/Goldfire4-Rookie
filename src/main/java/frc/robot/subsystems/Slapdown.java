@@ -29,7 +29,7 @@ public class Slapdown extends SubsystemBase {
     }
 
     public void setHoodPosition(double position) {
-        slapdownController.setSetpoint(position, ControlType.kMAXMotionPositionControl);
+        slapdownController.setSetpoint(position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
     
     public void retract() {
