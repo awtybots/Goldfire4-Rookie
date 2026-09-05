@@ -428,8 +428,8 @@ public class RobotContainer {
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
                 Commands.parallel(
                     m_kicker.kickCommand(),
+                    m_slapdown.retractCommand(),
                     m_hopper.runBeltsToConveyorCommand()))));
-
     oc().leftTrigger().whileTrue(
         Commands.parallel(
             m_slapdown.setHoodPositionCommand(25),

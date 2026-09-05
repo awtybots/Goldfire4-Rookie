@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
@@ -29,9 +31,16 @@ public class Slapdown extends SubsystemBase {
     public void setHoodPosition(double position) {
         slapdownController.setSetpoint(position, ControlType.kMAXMotionPositionControl);
     }
+    
+    public void retract() {
+        slapdownController.setSetpoint(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    }
 
     public Command setHoodPositionCommand(double position) {
             return new RunCommand(() -> setHoodPosition(position), this);
+        }
+    public Command retractCommand() {
+            return new RunCommand(() -> retract(), this);
         }
 
     @Override
