@@ -62,6 +62,7 @@ public final class Configs
                             .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
                             .feedForward.
                                 kS(0.01, ClosedLoopSlot.kSlot0).kS(0.01, ClosedLoopSlot.kSlot1)
+                                .kG(1.2, ClosedLoopSlot.kSlot1)
                         
                              
                             
