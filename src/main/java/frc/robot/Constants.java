@@ -156,7 +156,7 @@ public final class Constants {
     public static final double slowI = 0.0;
     public static final double slowD = 0.0;
 
-    public static final double fastP = 4.0;
+    public static final double fastP = 6.0;
     public static final double fastI = 0.0;
     public static final double fastD = 0.0;
 
