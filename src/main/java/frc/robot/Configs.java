@@ -63,7 +63,7 @@ public final class Configs
                             .feedForward.
                                 kS(0.01, ClosedLoopSlot.kSlot0).kS(0.01, ClosedLoopSlot.kSlot1)
                                 .kG(1.2, ClosedLoopSlot.kSlot1)
-                                .kV(1.01, ClosedLoopSlot.kSlot1)
+                                .kV(0.1, ClosedLoopSlot.kSlot1)
                                 .kA(0.16, ClosedLoopSlot.kSlot1)
                         
                              
