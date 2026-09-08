@@ -158,7 +158,7 @@ public final class Constants {
 
     public static final double fastP = 0.01;
     public static final double fastI = 0.0;
-    public static final double fastD = 0.5;
+    public static final double fastD = 0.1;
 
     public static final double maxout = 25;
   }
