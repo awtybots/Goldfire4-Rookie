@@ -61,10 +61,10 @@ public final class Configs
                             .d(SlapdownConstants.fastD, ClosedLoopSlot.kSlot1)
                             .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
                             .feedForward.
-                                kS(0.01, ClosedLoopSlot.kSlot0).kS(0.01, ClosedLoopSlot.kSlot1)
+                                kS(0, ClosedLoopSlot.kSlot0).kS(0, ClosedLoopSlot.kSlot1)
                                 .kG(0, ClosedLoopSlot.kSlot1)
-                                .kV(0.02, ClosedLoopSlot.kSlot1)
-                                .kA(0.02, ClosedLoopSlot.kSlot1)
+                                .kV(0.001, ClosedLoopSlot.kSlot1)
+                                .kA(0.0001, ClosedLoopSlot.kSlot1)
                         
                              
                             
