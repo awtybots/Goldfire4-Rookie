@@ -213,7 +213,7 @@ public final class Constants {
 
       // Feed-Forward Constants
       public static final double s = 0.0;
-      public static final double v = 0.0;
+      public static final double v = 0.001935;
       public static final double a = 0.0;
 
 
