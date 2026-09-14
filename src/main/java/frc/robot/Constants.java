@@ -43,11 +43,11 @@ public final class Constants {
   public static final boolean USE_SHOOTER_ONLY = false;
   public static final boolean SIM_REPLAY_MODE = false;
   // not used
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+  public static final double ROBOT_MASS = 130 * 0.453592;
   public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   // used
-  public static final double MAX_SPEED = Units.feetToMeters(16.5);
+  public static final double MAX_SPEED = Units.feetToMeters(17.5);
 
   // RobotContainer or a constants class
   public static final double LOOKAHEAD_BASE_SEC = 0.03; // minimum lead
@@ -145,7 +145,7 @@ public final class Constants {
     public static final double a = 0.0;
 
     public static final double INTAKE_DUTY = 0.8;
-    public static final double OUTTAKE_DUTY = 0.8;
+    public static final double OUTTAKE_DUTY = -0.8;
 
   }
   public static class SlapdownConstants {
@@ -242,7 +242,7 @@ public final class Constants {
       public static final int BELTS_RIGHT_ID = 17;
 
       public static final double BELTS_SPEED = 0.75;
-      public static final double REVERSE_BELTS_SPEED = 0.75;
+      public static final double REVERSE_BELTS_SPEED = -0.75;
     
       // PID Constants
       public static final double p = 0.0;
@@ -296,8 +296,8 @@ public final class Constants {
     public static class Dimensions {
       public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
       public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
-      public static final Distance FRAME_SIZE_Y = Inches.of(26.25); // left to right (y-axis)
-      public static final Distance FRAME_SIZE_X = Inches.of(28.75); // front to back (x-axis)
+      public static final Distance FRAME_SIZE_Y = Inches.of(27); // left to right (y-axis)
+      public static final Distance FRAME_SIZE_X = Inches.of(27); // front to back (x-axis)
 
       public static final Distance FULL_WIDTH = FRAME_SIZE_Y.plus(BUMPER_THICKNESS.times(2));
       public static final Distance FULL_LENGTH = FRAME_SIZE_X.plus(BUMPER_THICKNESS.times(2));
