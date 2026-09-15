@@ -373,8 +373,8 @@ public final class Constants {
       public static final int BELTS_LEFT_ID = 16;
       public static final int BELTS_RIGHT_ID = 17;
 
-      public static final double BELTS_SPEED = 0.75;
-      public static final double REVERSE_BELTS_SPEED = -0.75;
+      public static final double BELTS_SPEED = 0.45;
+      public static final double REVERSE_BELTS_SPEED = -0.45;
     
       // PID Constants
       public static final double p = 0.0;
