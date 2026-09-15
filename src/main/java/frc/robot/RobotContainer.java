@@ -308,9 +308,9 @@ public class RobotContainer {
 
     // ======== Operator ========
     // shooter
-    oc().rightTrigger().whileTrue(
+    dc().rightTrigger().whileTrue(
         Commands.parallel(
-            m_shooter.setShooterSpeedCommand(2000),
+            m_shooter.setShooterSpeedCommand(1000),
             m_Hood.setHoodPositionCommand(0.6),
             Commands.sequence(
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
@@ -319,15 +319,15 @@ public class RobotContainer {
                     m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
                     m_hopper.runBeltsToConveyorCommand()))));
 
-    oc().leftTrigger().whileTrue(
+    dc().leftTrigger().whileTrue(
         Commands.parallel(
             m_slapdown.extendCommand(),
             m_intake.runIntakeCommand()));
 
-    oc().leftBumper().whileTrue(
+    dc().leftBumper().whileTrue(
         (m_slapdown.retractCommand()));
 
-    oc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
+    dc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
 
     // hood manual controls for testing/tuning
     oc().povUp().whileTrue(m_Hood.raiseHoodCommand());
