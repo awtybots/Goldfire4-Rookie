@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import edu.wpi.first.wpilibj.util.Color;
 public class HubTrackerSubsystem extends SubsystemBase
 {
 
-    private Field2d field = new Field2d();
+    private final Field2d field;
     private final SwerveSubsystem drivebase;
     private FieldObject2d circle;
     private FieldObject2d dynamicHubCircle;
@@ -50,17 +51,11 @@ public class HubTrackerSubsystem extends SubsystemBase
     {
         SmartDashboard.putString("Hub Color For Xavier", RED.toHexString());
         this.drivebase = drivebase;
+        this.field = drivebase.getField();
         circle = field.getObject("Circle"); 
         traj = field.getObject("Trajectory");
         dynamicHubCircle = field.getObject("DynamicHubCircle");
-        Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
-        hubPose = switch (alliance)
-        {
-            case Blue -> new Pose2d(4.6, 4, new Rotation2d());
-            case Red -> new Pose2d(11.9, 4, new Rotation2d());
-            default -> new Pose2d(4.6, 4.1, new Rotation2d());
-        };
-        SmartDashboard.putData("Field", field);
+        hubPose = Constants.DrivebaseConstants.getHubPose2D();
         this.driverController = driverController;
     }
 
@@ -201,9 +196,8 @@ public class HubTrackerSubsystem extends SubsystemBase
 
   public void runPeriodic()
   {
-    Pose2d robotPose = drivebase.getPose();
+    hubPose = Constants.DrivebaseConstants.getHubPose2D();
 
-    field.setRobotPose(robotPose);
     active = isHubActive();
 
     x = (x == 1) ? 0 : 1;
@@ -243,9 +237,4 @@ public class HubTrackerSubsystem extends SubsystemBase
     runPeriodic();
   }
 
-  @Override
-  public void simulationPeriodic()
-  {
-    runPeriodic();
-  }
 }

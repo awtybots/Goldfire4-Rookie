@@ -89,6 +89,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public int allMegaTagNumber = 1;
 
+  private int lastAllMegatagSelection = 1;
+  private int lastFrontMegatagSelection = 1;
+  private int lastBackMegatagSelection = 1;
+  private int lastLeftMegatagSelection = 1;
+
   public int frontMegatagNumber = 1;
   public int backMegatagNumber = 1;
   public int leftMegatagNumber = 1;
@@ -246,7 +251,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Command VisionToggle()
   {
-    return run(() ->
+    return runOnce(() ->
     {
       useFrontLimelight = visionToggleAll;
       useBackLimelight = visionToggleAll;
@@ -258,7 +263,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Command FrontToggle()
   {
-    return run(() ->
+    return runOnce(() ->
     {
       useFrontLimelight = !useFrontLimelight;
     });
@@ -266,7 +271,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Command BackToggle()
   {
-    return run(() ->
+    return runOnce(() ->
     {
       useBackLimelight = !useBackLimelight;
     });
@@ -274,7 +279,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Command LeftToggle()
   {
-    return run(() ->
+    return runOnce(() ->
     {
       useLeftLimelight = !useLeftLimelight;
     });
@@ -287,18 +292,29 @@ public class SwerveSubsystem extends SubsystemBase {
     // useClimberLimelight = limelightClimberChooser.getSelected();
 
 
-    frontMegatagNumber = frontMegatagChooser.getSelected();
-    backMegatagNumber = backMegatagChooser.getSelected();
-    leftMegatagNumber = leftMegatagChooser.getSelected();
+    int allSelection = AllMegatagChooser.getSelected();
+    int frontSelection = frontMegatagChooser.getSelected();
+    int backSelection = backMegatagChooser.getSelected();
+    int leftSelection = leftMegatagChooser.getSelected();
 
-    if(AllMegatagChooser.getSelected() != allMegaTagNumber)
+    if(allSelection != lastAllMegatagSelection)
     {
-      allMegaTagNumber = AllMegatagChooser.getSelected();
-
-      frontMegatagNumber = allMegaTagNumber;
-      backMegatagNumber = allMegaTagNumber;
-      leftMegatagNumber = allMegaTagNumber;
+      allMegaTagNumber = allSelection;
+      frontMegatagNumber = allSelection;
+      backMegatagNumber = allSelection;
+      leftMegatagNumber = allSelection;
     }
+    else
+    {
+      if(frontSelection != lastFrontMegatagSelection) frontMegatagNumber = frontSelection;
+      if(backSelection != lastBackMegatagSelection) backMegatagNumber = backSelection;
+      if(leftSelection != lastLeftMegatagSelection) leftMegatagNumber = leftSelection;
+    }
+
+    lastAllMegatagSelection = allSelection;
+    lastFrontMegatagSelection = frontSelection;
+    lastBackMegatagSelection = backSelection;
+    lastLeftMegatagSelection = leftSelection;
     
     SmartDashboard.putNumber("FrontMegatagNumber", frontMegatagNumber);
 
@@ -476,7 +492,7 @@ public class SwerveSubsystem extends SubsystemBase {
       {
         if (shouldAimAtHubAuto)
         {
-          return Optional.of(getDynamicHubLocation().getRotation());
+          return Optional.of(getDynamicHubLocation().getRotation().plus(Rotation2d.fromDegrees(180)));
         }
         return Optional.empty();
       });
@@ -882,7 +898,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // Trust vision more while disabled to lock in pose before match
         if(DriverStation.isDisabled()) xyStd *= 0.25;
 
-        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(xyStd, xyStd, 9999999));
+        double thetaStd = DriverStation.isDisabled() ? Units.degreesToRadians(10) : 9999999;
+
+        swerveDrive.setVisionMeasurementStdDevs(VecBuilder.fill(xyStd, xyStd, thetaStd));
         swerveDrive.addVisionMeasurement(
             mt1.pose,
             mt1.timestampSeconds);
@@ -1175,7 +1193,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     if(locked)
     {
-      return new Pose2d(Constants.DrivebaseConstants.getHubPose2D().getTranslation(), new Rotation2d(0));
+      Translation2d lockedHub = Constants.DrivebaseConstants.getHubPose2D().getTranslation();
+      return new Pose2d(lockedHub, lockedHub.minus(getPose().getTranslation()).getAngle());
     }
 
     Translation2d hubVec = Constants.DrivebaseConstants.getHubPose2D().getTranslation();

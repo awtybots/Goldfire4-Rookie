@@ -51,6 +51,7 @@ public class HubTracker {
      */
     public static Optional<Shift> getNextShift() {
         double matchTime = getMatchTime();
+        if (matchTime < 0) return Optional.empty();
 
         for (Shift shift : Shift.values()) {
             if (matchTime < shift.startTime) {

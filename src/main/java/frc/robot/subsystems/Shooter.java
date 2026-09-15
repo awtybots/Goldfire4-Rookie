@@ -65,6 +65,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void stopShooter() {
+        targetShooterRPM = 0;
         shooterLeft1Controller.setSetpoint(0, ControlType.kDutyCycle);
     }
 
