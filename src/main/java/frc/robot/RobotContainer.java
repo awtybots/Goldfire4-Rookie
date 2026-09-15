@@ -297,12 +297,12 @@ public class RobotContainer {
     //         return Commands.parallel(
     //             makeVariableShoot(),
     //             makeAimHoodHub(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1));
+    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
     //       } else {
     //         return Commands.parallel(
     //             makeVariableShoot(),
     //             makeAimHoodFerry(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1));
+    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
     //       }
     //     }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
 
@@ -316,7 +316,7 @@ public class RobotContainer {
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
                 Commands.parallel(
                     m_kicker.kickCommand(),
-                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1)),
+                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
                     m_hopper.runBeltsToConveyorCommand()))));
 
     oc().leftTrigger().whileTrue(
