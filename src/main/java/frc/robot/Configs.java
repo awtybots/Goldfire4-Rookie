@@ -12,161 +12,153 @@ import com.revrobotics.spark.config.SparkBaseConfig.*;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.FeedbackSensor;
 
-public final class Configs 
-{
-        public static final class IntakeSubsystem {
-                
-            public static final SparkFlexConfig IntakeMotorConfig = new SparkFlexConfig();
+public final class Configs {
+    public static final class IntakeSubsystem {
 
-                static {
+        public static final SparkFlexConfig IntakeMotorConfig = new SparkFlexConfig();
 
-                        IntakeMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
+        static {
 
-                        IntakeMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                            .p(IntakeConstants.p)
-                            .i(IntakeConstants.i)
-                            .d(IntakeConstants.d)
-                            .outputRange(-1, 1)
-                            .feedForward
-                            .kS(IntakeConstants.s)
-                            .kV(IntakeConstants.v)
-                            .kA(IntakeConstants.a)
-                            ;
+            IntakeMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
 
-                        IntakeMotorConfig.closedLoop
-                        .maxMotion.maxAcceleration(1000000);
-                }
+            IntakeMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed
+                    // loop slot, as it will default to slot 0.
+                    .p(IntakeConstants.p)
+                    .i(IntakeConstants.i)
+                    .d(IntakeConstants.d)
+                    .outputRange(-1, 1).feedForward
+                    .kS(IntakeConstants.s)
+                    .kV(IntakeConstants.v)
+                    .kA(IntakeConstants.a);
 
-        };
-        public static final class SlapdownSubsystem {
-                
-            public static final SparkFlexConfig SlapdownMotorConfig = new SparkFlexConfig();
+            IntakeMotorConfig.closedLoop.maxMotion.maxAcceleration(1000000);
+        }
 
-                static {
+    };
 
-                        SlapdownMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
+    public static final class SlapdownSubsystem {
 
-                        SlapdownMotorConfig.closedLoop
-                            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            //slow pid
-                            .p(SlapdownConstants.slowP, ClosedLoopSlot.kSlot0)
-                            .i(SlapdownConstants.slowI, ClosedLoopSlot.kSlot0)
-                            .d(SlapdownConstants.slowD, ClosedLoopSlot.kSlot0)
-                            .outputRange(-1, 1, ClosedLoopSlot.kSlot0)
-                            //fast
-                            .p(SlapdownConstants.fastP, ClosedLoopSlot.kSlot1)
-                            .i(SlapdownConstants.fastI, ClosedLoopSlot.kSlot1)
-                            .d(SlapdownConstants.fastD, ClosedLoopSlot.kSlot1)
-                            .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
-                            .feedForward.
-                                kS(0, ClosedLoopSlot.kSlot0).kS(0, ClosedLoopSlot.kSlot1)
-                                .kG(0, ClosedLoopSlot.kSlot1)
-                                .kV(0.001, ClosedLoopSlot.kSlot1)
-                                .kA(0.0001, ClosedLoopSlot.kSlot1)
-                        
-                             
-                            
-                            
-                            //fast
-                            ;
+        public static final SparkFlexConfig SlapdownMotorConfig = new SparkFlexConfig();
 
-                        SlapdownMotorConfig.closedLoop.maxMotion
-                            .maxAcceleration(1000, ClosedLoopSlot.kSlot0)
-                            .cruiseVelocity(1000, ClosedLoopSlot.kSlot0)
-                            .allowedProfileError(0.2, ClosedLoopSlot.kSlot0)
+        static {
 
-                            .maxAcceleration(2000, ClosedLoopSlot.kSlot1)
-                            .cruiseVelocity(2000, ClosedLoopSlot.kSlot1)
-                            .allowedProfileError(0.2, ClosedLoopSlot.kSlot1)
-                        ;
-                        
+            SlapdownMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).inverted(true);
 
-                }
+            SlapdownMotorConfig.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // slow pid
+                    .p(SlapdownConstants.slowP, ClosedLoopSlot.kSlot0)
+                    .i(SlapdownConstants.slowI, ClosedLoopSlot.kSlot0)
+                    .d(SlapdownConstants.slowD, ClosedLoopSlot.kSlot0)
+                    .outputRange(-1, 1, ClosedLoopSlot.kSlot0)
+                    // fast
+                    .p(SlapdownConstants.fastP, ClosedLoopSlot.kSlot1)
+                    .i(SlapdownConstants.fastI, ClosedLoopSlot.kSlot1)
+                    .d(SlapdownConstants.fastD, ClosedLoopSlot.kSlot1)
+                    .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
+                    
+                    .feedForward
+                  
+                    .kV(0.001, ClosedLoopSlot.kSlot0)
+                    .kA(0.0001, ClosedLoopSlot.kSlot0)
+                    .kV(0.001, ClosedLoopSlot.kSlot1)
+                    .kA(0.0001, ClosedLoopSlot.kSlot1)
 
-        };
-        public static final class HoodSubsystem {
-                
-            public static final SparkFlexConfig HoodMotorConfig = new SparkFlexConfig();
+            // fast
+            ;
 
-                static {
+            SlapdownMotorConfig.closedLoop.maxMotion
+                    .maxAcceleration(1000, ClosedLoopSlot.kSlot0)
+                    .cruiseVelocity(1000, ClosedLoopSlot.kSlot0)
+                    .allowedProfileError(0.2, ClosedLoopSlot.kSlot0)
 
-                        HoodMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
+                    .maxAcceleration(2000, ClosedLoopSlot.kSlot1)
+                    .cruiseVelocity(2000, ClosedLoopSlot.kSlot1)
+                    .allowedProfileError(0.2, ClosedLoopSlot.kSlot1);
 
-                        HoodMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                            .p(HoodConstants.p)
-                            .i(HoodConstants.i)
-                            .d(HoodConstants.d)
-                            .outputRange(-1, 1)
-                            ;
+        }
 
-                        HoodMotorConfig.closedLoop
-                        .maxMotion.maxAcceleration(1000000);
+    };
 
-                }
+    public static final class HoodSubsystem {
 
-        };
-        public static final class ShooterSubsystem {
-                
-            public static final SparkFlexConfig ShooterMotorLeft1Config = new SparkFlexConfig();
-            public static final SparkFlexConfig ShooterMotorRight1Config = new SparkFlexConfig();
-            public static final SparkFlexConfig ShooterMotorLeft2Config = new SparkFlexConfig();
-            public static final SparkFlexConfig ShooterMotorRight2Config = new SparkFlexConfig();
+        public static final SparkFlexConfig HoodMotorConfig = new SparkFlexConfig();
 
-                static {
+        static {
 
-                        ShooterMotorLeft1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
-                        ShooterMotorRight1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).follow(ShooterConstants.SHOOTER_L1_ID, true);
-                        ShooterMotorLeft2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).follow(ShooterConstants.SHOOTER_L1_ID, true);
-                        ShooterMotorRight2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).follow(ShooterConstants.SHOOTER_L1_ID, false);
-                        ShooterMotorLeft1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                            .p(ShooterConstants.p)
-                            .i(ShooterConstants.i)
-                            .d(ShooterConstants.d)
-                            .outputRange(-1, 1)
-                            .feedForward
-                            .kS(ShooterConstants.s)
-                            .kV(ShooterConstants.v)
-                            .kA(ShooterConstants.a)
-                            ;
-                        
-                        ShooterMotorLeft1Config.closedLoop
-                        .maxMotion.maxAcceleration(1000000);
-                }
-            
-        };
-        public static final class KickerSubsystem {
-                
-            public static final SparkFlexConfig KickerMotorLeftConfig = new SparkFlexConfig();
-            public static final SparkFlexConfig KickerMotorRightConfig = new SparkFlexConfig();
+            HoodMotorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(40).voltageCompensation(12);
 
-                static {
+            HoodMotorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed
+                    // loop slot, as it will default to slot 0.
+                    .p(HoodConstants.p)
+                    .i(HoodConstants.i)
+                    .d(HoodConstants.d)
+                    .outputRange(-1, 1);
 
-                        KickerMotorLeftConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
-                        KickerMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12).follow(KickerConstants.KICKER_LEFT_ID, true);
-                        KickerMotorLeftConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                            // Set PID values for position control. We don't need to pass a closed
-                            // loop slot, as it will default to slot 0.
-                            .p(KickerConstants.p)
-                            .i(KickerConstants.i)
-                            .d(KickerConstants.d)
-                            .outputRange(-1, 1)
-                            .feedForward
-                            .kS(KickerConstants.s)
-                            .kV(KickerConstants.v)
-                            .kA(KickerConstants.a)
-                            ;
+            HoodMotorConfig.closedLoop.maxMotion.maxAcceleration(10000);
 
-                        KickerMotorLeftConfig.closedLoop
-                        .maxMotion.maxAcceleration(1000000);
-                }
+        }
 
-        };
-        
+    };
+
+    public static final class ShooterSubsystem {
+
+        public static final SparkFlexConfig ShooterMotorLeft1Config = new SparkFlexConfig();
+        public static final SparkFlexConfig ShooterMotorRight1Config = new SparkFlexConfig();
+        public static final SparkFlexConfig ShooterMotorLeft2Config = new SparkFlexConfig();
+        public static final SparkFlexConfig ShooterMotorRight2Config = new SparkFlexConfig();
+
+        static {
+
+            ShooterMotorLeft1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+            ShooterMotorRight1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                    .follow(ShooterConstants.SHOOTER_L1_ID, true);
+            ShooterMotorLeft2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                    .follow(ShooterConstants.SHOOTER_L1_ID, true);
+            ShooterMotorRight2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                    .follow(ShooterConstants.SHOOTER_L1_ID, false);
+            ShooterMotorLeft1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed
+                    // loop slot, as it will default to slot 0.
+                    .p(ShooterConstants.p)
+                    .i(ShooterConstants.i)
+                    .d(ShooterConstants.d)
+                    .outputRange(-1, 1).feedForward
+                    .kS(ShooterConstants.s)
+                    .kV(ShooterConstants.v)
+                    .kA(ShooterConstants.a);
+
+            ShooterMotorLeft1Config.closedLoop.maxMotion.maxAcceleration(10000);
+        }
+
+    };
+
+    public static final class KickerSubsystem {
+
+        public static final SparkFlexConfig KickerMotorLeftConfig = new SparkFlexConfig();
+        public static final SparkFlexConfig KickerMotorRightConfig = new SparkFlexConfig();
+
+        static {
+
+            KickerMotorLeftConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+            KickerMotorRightConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
+                    .follow(KickerConstants.KICKER_LEFT_ID, true);
+            KickerMotorLeftConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // Set PID values for position control. We don't need to pass a closed
+                    // loop slot, as it will default to slot 0.
+                    .p(KickerConstants.p)
+                    .i(KickerConstants.i)
+                    .d(KickerConstants.d)
+                    .outputRange(-1, 1).feedForward
+                    .kS(KickerConstants.s)
+                    .kV(KickerConstants.v)
+                    .kA(KickerConstants.a);
+
+            KickerMotorLeftConfig.closedLoop.maxMotion.maxAcceleration(1000000);
+        }
+
+    };
 
 }

@@ -24,8 +24,9 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.commands.AimAtHub;
-import frc.robot.commands.AimAtFerry;
+import frc.robot.commands.AimAtTarget;
+import frc.robot.commands.AimHood;
+import frc.robot.commands.ControlAllShooting;
 import java.util.Optional;
 import java.util.Set;
 
@@ -147,56 +148,35 @@ public class RobotContainer {
   // Derive the heading axis with math!
   SwerveInputStream driveDirectAngleKeyboard;
 
-  private AimAtHub aimAtHub;
-  private AimAtFerry aimAtFerry;
+  // Factory for ControlAllShooting instances. Create a fresh instance for each
+  // composition to avoid WPILib's "composed commands may not be reused" error.
+  private ControlAllShooting makeVariableShoot() {
+    return new ControlAllShooting(m_shooter, m_hopper, m_kicker, m_Hood, drivebase);
+  }
+
+  // Factory for AimHood instances, same fresh-instance rule as above.
+  // Hub mode uses the hub LUT, ferry mode uses the ferry LUT.
+  private AimHood makeAimHoodHub() {
+    return new AimHood(m_Hood, drivebase::getCachedDynamicHubLocation, drivebase::getPose, false);
+  }
+
+  private AimHood makeAimHoodFerry() {
+    return new AimHood(m_Hood, drivebase::getCachedDynamicFerryLocation, drivebase::getPose, true);
+  }
+
+  /** Returns the controller that should be treated as the driving controller. */
+  private CommandXboxController dc() {
+      return driverXbox;
+  }
+
+  private CommandXboxController oc() {
+      return operatorXbox;
+  }
+
+  private AimAtTarget aimAtTarget;
   private PathConstraints autoConstraints;
 
-  SwerveInputStream aimAtHubStream;
-  SwerveInputStream aimAtFerryStream;
-  // ========= DRIVER TRIGGERS ===========
-  // Parallel Commands
-  private Trigger RTtransfer_kick_shoot; // index to kicker, kick, agitate, and shoot only when up to speed
-  private Trigger RBFerry; // Run hopper and kicker in reverse
-  private Trigger LBretract_and_stop; // retract 4 bar and stop intake
-  private Trigger PRDrivetoRightTrench; // Drive to right trench
-  private Trigger PLDriveToPose; // run hopper in reverse and kick backwards to unjam
-
-  // Shooter
-  private Trigger LT_Intake;
-
-  // Intake
-  private Trigger X_runIntake;
-  private Trigger A_runOuttake;
-
-  // Pushout
-  private Trigger Y_extendIntake;
-  private Trigger B_agitate;
-
-  // Climber
-  private Trigger Climb;
-  private Trigger ClimbDown;
-
-  // ========= OPERATOR TRIGGERS ===========
-  // Shooter
-  private Trigger LT_OP_1900Shot; // just shoot
-  private Trigger RT_OP_VariableShoot; // Shoot, Kick, Index, Agitate, and Run Intake
-
-  // Get to Shooter
-  private Trigger RB_OP_Pass; // kick, index
-  private Trigger LB_OP_unjam; // unjam
-
-  // Intake
-  private Trigger X_OP_intake; // intake fuel
-  private Trigger A_OP_outtake; // outtake fuel
-
-  // Pushout
-  private Trigger Y_OP_extendIntake; // push out
-  private Trigger B_OP_reteactIntake; // pull in
-  private Trigger POVLEFT_OP_agitate; // agitate
-
-  // Hood
-  private Trigger POVUP_OP_HoodUp;
-  private Trigger POVDOWN_OP_HoodDown;
+  SwerveInputStream aimStream;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -301,72 +281,34 @@ public class RobotContainer {
         .translationHeadingOffset(true)
         .translationHeadingOffset(Rotation2d.fromDegrees(0));
 
-    aimAtHubStream = SwerveInputStream.of(drivebase.getSwerveDrive(),
-        () -> 0.0, () -> 0.0)
-        .withControllerRotationAxis(() -> 0.0)
-        .aim(() -> drivebase.getCachedDynamicHubLocation())
-        .aimWhile(true)
-        .aimLookahead(Time.ofBaseUnits(0.2, Seconds))
-        .aimFeedforward(0.0001, 0.0001, 0.00013)
-        .aimHeadingOffset(Rotation2d.fromDegrees(180))
-        .aimHeadingOffset(true);
+    aimStream = driveAngularVelocity.copy();
 
-    aimAtFerryStream = SwerveInputStream.of(drivebase.getSwerveDrive(),
-        () -> 0.0, () -> 0.0)
-        .withControllerRotationAxis(() -> 0.0)
-        .aim(() -> drivebase.getCachedDynamicFerryLocation())
-        .aimWhile(true)
-        .aimLookahead(Time.ofBaseUnits(0.2, Seconds))
-        .aimFeedforward(0.0001, 0.0001, 0.00013)
-        .aimHeadingOffset(Rotation2d.fromDegrees(180))
-        .aimHeadingOffset(true);
 
-    // ========= DRIVER TRIGGERS ===========
-    // Parallel Commands
-    RTtransfer_kick_shoot = driverXbox.rightTrigger(); // index to kicker, kick, agitate, and shoot only when up to speed
-    RBFerry = driverXbox.rightBumper(); // Run hopper and kicker in reverse
-    LBretract_and_stop = driverXbox.leftBumper(); // retract 4 bar and stop intake
-    PRDrivetoRightTrench = driverXbox.povRight(); // Drive to right trench
-    PLDriveToPose = driverXbox.povLeft(); // run hopper in reverse and kick backwards to unjam
+    aimAtTarget = new AimAtTarget(drivebase, aimStream,
+        dc()::getLeftX, dc()::getLeftY);
 
-    // Shooter
-    LT_Intake = driverXbox.leftTrigger();
 
-    // Intake
-    X_runIntake = driverXbox.x();
-    A_runOuttake = driverXbox.a();
+    // dc().rightTrigger().whileTrue(aimAtTarget);
 
-    // Pushout
-    Y_extendIntake = driverXbox.y();
-    B_agitate = driverXbox.b();
 
-    // Climber
-    Climb = driverXbox.povUp();
-    ClimbDown = driverXbox.povDown();
+    // dc().rightTrigger().whileTrue(
+    //     Commands.defer(() -> {
+    //       if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+    //         return Commands.parallel(
+    //             makeVariableShoot(),
+    //             makeAimHoodHub(),
+    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1));
+    //       } else {
+    //         return Commands.parallel(
+    //             makeVariableShoot(),
+    //             makeAimHoodFerry(),
+    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1));
+    //       }
+    //     }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
 
-    // ========= OPERATOR TRIGGERS ===========
-    // Shooter
-    LT_OP_1900Shot = operatorXbox.leftTrigger(); // just shoot
-    RT_OP_VariableShoot = operatorXbox.rightTrigger(); // Shoot, Kick, Index, Agitate, and Run Intake
-
-    // Get to Shooter
-    RB_OP_Pass = operatorXbox.rightBumper(); // kick, index
-    LB_OP_unjam = operatorXbox.leftBumper(); // unjam
-
-    // Intake
-    X_OP_intake = operatorXbox.x(); // intake fuel
-    A_OP_outtake = operatorXbox.a(); // outtake fuel
-
-    // Pushout
-    Y_OP_extendIntake = operatorXbox.y(); // push out
-    B_OP_reteactIntake = operatorXbox.b(); // pull in
-    POVLEFT_OP_agitate = operatorXbox.povLeft(); // agitate
-
-    // Hood
-    POVUP_OP_HoodUp = operatorXbox.povUp();
-    POVDOWN_OP_HoodDown = operatorXbox.povDown();
-
-    RT_OP_VariableShoot.whileTrue(
+    // ======== Operator ========
+    // shooter
+    oc().rightTrigger().whileTrue(
         Commands.parallel(
             m_shooter.setShooterSpeedCommand(2000),
             m_Hood.setHoodPositionCommand(0.6),
@@ -374,19 +316,22 @@ public class RobotContainer {
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
                 Commands.parallel(
                     m_kicker.kickCommand(),
-                    m_slapdown.retractCommand(),
+                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1)),
                     m_hopper.runBeltsToConveyorCommand()))));
-    LT_OP_1900Shot.whileTrue(
+
+    oc().leftTrigger().whileTrue(
         Commands.parallel(
-            m_slapdown.setHoodPositionCommand(25),
+            m_slapdown.extendCommand(),
             m_intake.runIntakeCommand()));
 
-    LB_OP_unjam.whileTrue(
-        (m_slapdown.setHoodPositionCommand(0)));
+    oc().leftBumper().whileTrue(
+        (m_slapdown.retractCommand()));
 
-    A_OP_outtake.whileTrue(m_hopper.runBeltsToConveyorCommand());
+    oc().a().whileTrue(m_hopper.runBeltsToConveyorCommand());
 
-    POVUP_OP_HoodUp.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_UP));
+    // hood manual controls for testing/tuning
+    oc().povUp().whileTrue(m_Hood.raiseHoodCommand());
+    oc().povDown().whileTrue(m_Hood.lowerHoodCommand());
     // operatorXbox.rightTrigger().whileTrue(m_shooter.setShooterSpeedCommand(1200));
     // POVDOWN_OP_HoodDown.whileTrue(m_Hood.setHoodPositionCommand(HoodConstants.HOOD_DOWN));
 
@@ -407,7 +352,7 @@ public class RobotContainer {
     // ======= Driver =======
 
     // Swerve Drive Commands
-    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    dc().start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     // A_runOuttake.whileTrue(drivebase.lockCommand(
     // driverXbox::getLeftX,
@@ -444,6 +389,9 @@ public class RobotContainer {
     // // m_slapdown.setDefaultCommand(m_slapdown.runDefaultCommand());
     // m_hopper.setDefaultCommand(m_hopper.runDefaultCommand());
 
+ 
+    m_Hood.setDefaultCommand(m_Hood.tuckCommand());
+
     if (RobotBase.isSimulation()) {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
     } else {
@@ -470,9 +418,9 @@ public class RobotContainer {
               0,
               new Constraints(Units.degreesToRadians(360),
                   Units.degreesToRadians(180))));
-      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
+      dc().start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      dc().button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+      dc().button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
           () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
       // driverXbox.b().whileTrue(
@@ -571,20 +519,18 @@ public class RobotContainer {
     Logger.recordOutput("Input/Operator/RightTrigger", operatorXbox.getRightTriggerAxis());
 
     // --- Shooting sequence state ---
-    boolean rtHeld = RTtransfer_kick_shoot.getAsBoolean();
+    boolean rtHeld = dc().rightTrigger().getAsBoolean();
     Logger.recordOutput("Shooting/RTHeld", rtHeld);
     Logger.recordOutput("Shooting/InAllianceZone", isInAllianceZone());
 
-    if (aimAtHub != null) {
+    if (aimAtTarget != null) {
       Logger.recordOutput("Shooting/AimLock1Deg",
-          aimAtHub.swerveInputStream.aimLock(Degrees.of(1.0)).getAsBoolean());
+          aimAtTarget.swerveInputStream.aimLock(Degrees.of(1.0)).getAsBoolean());
       Logger.recordOutput("Shooting/AimLock3Deg",
-          aimAtHub.swerveInputStream.aimLock(Degrees.of(3.0)).getAsBoolean());
+          aimAtTarget.swerveInputStream.aimLock(Degrees.of(3.0)).getAsBoolean());
     }
-    if (aimAtFerry != null) {
-      Logger.recordOutput("Shooting/FerryAimLock3Deg",
-          aimAtFerry.swerveInputStream.aimLock(Degrees.of(3.0)).getAsBoolean());
-    }
+    Logger.recordOutput("Shooting/InAllianceZone", drivebase.isInAllianceZone());
+    Logger.recordOutput("Shooting/InNeutralZone", drivebase.isInNeutralZone());
   }
 
   private Alliance getAlliance() {

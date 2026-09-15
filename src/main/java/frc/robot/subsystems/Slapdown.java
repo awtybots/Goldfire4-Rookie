@@ -33,15 +33,33 @@ public class Slapdown extends SubsystemBase {
     }
     
     public void retract() {
-        slapdownController.setSetpoint(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        slapdownController.setSetpoint(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
 
-    public Command setHoodPositionCommand(double position) {
+    public void slowretract() {
+
+        slapdownController.setSetpoint(0,  ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+    }
+
+    public void extend() {
+
+        slapdownController.setSetpoint(25, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    }
+
+    public Command setSlapdownPositionCommand(double position) {
             return new RunCommand(() -> setHoodPosition(position), this);
         }
     public Command retractCommand() {
             return new RunCommand(() -> retract(), this);
         }
+    
+    public Command slowretractCommand () {
+         return new RunCommand(() -> slowretract(), this);
+    }
+
+    public Command extendCommand () {
+        return new RunCommand(() -> extend(), this);
+    }
 
     @Override
     public void periodic() {

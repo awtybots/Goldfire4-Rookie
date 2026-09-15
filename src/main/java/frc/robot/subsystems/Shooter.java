@@ -44,6 +44,8 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
     private double targetShooterRPM = 0;
 
+    public double RPMOffset = 0.0;
+
 
     public Shooter() {
         ShooterLeft1Motor.configure(Configs.ShooterSubsystem.ShooterMotorLeft1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -60,8 +62,28 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean isShooterFast() {
-        return ShooterConstants.SHOOTER_RPM_TOLERANCE >
+        return ShooterConstants.ERROR_MARGIN >
             Math.abs(targetShooterRPM - shooterLeft1Encoder.getVelocity());
+    }
+
+    public double getRPM() {
+        return shooterLeft1Encoder.getVelocity();
+    }
+
+    public double getTargetRPM() {
+        return targetShooterRPM;
+    }
+
+    public void setTargetRPM(double rpm) {
+        setShooterSpeed(rpm);
+    }
+
+    public boolean isAtSpeed() {
+        return targetShooterRPM > 0 && isShooterFast();
+    }
+
+    public void stopShooting() {
+        stopShooter();
     }
 
     public void stopShooter() {
@@ -83,5 +105,9 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Logger.recordOutput("Shooter/TargetRPM", targetShooterRPM);
+        Logger.recordOutput("Shooter/ActualRPM", shooterLeft1Encoder.getVelocity());
+        Logger.recordOutput("Shooter/RPMOffset", RPMOffset);
+        Logger.recordOutput("Shooter/AtSpeed", isAtSpeed());
     }
 }

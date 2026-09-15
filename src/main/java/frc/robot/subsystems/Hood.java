@@ -1,59 +1,105 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.RelativeEncoder;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.revrobotics.PersistMode;
-// import com.revrobotics.spark.ClosedLoopSlot;
-// import com.revrobotics.REVLibError;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-// import au.grapplerobotics.LaserCan;
-
-import com.revrobotics.spark.SparkBase.ControlType;
-
-import frc.robot.Constants.HoodConstants;
-// import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import frc.robot.Configs;
+import frc.robot.Constants.HoodConstants;
 
 public class Hood extends SubsystemBase {
 
-    // Instantiating the hopper to shooter motor
     private SparkFlex HoodMotor = new SparkFlex(HoodConstants.HOOD_ID, MotorType.kBrushless);
-    private SparkClosedLoopController hoodController = HoodMotor.getClosedLoopController();
+    private SparkClosedLoopController HoodController = HoodMotor.getClosedLoopController();
+    private RelativeEncoder HoodEncoder = HoodMotor.getEncoder();
 
-
-    private final RelativeEncoder hoodEncoder = HoodMotor.getEncoder();
-
+    private double currentTargetRotations = HoodConstants.HOOD_MIN;
 
     public Hood() {
-        HoodMotor.configure(Configs.HoodSubsystem.HoodMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        HoodMotor.configure(Configs.HoodSubsystem.HoodMotorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
+
+        HoodEncoder.setPosition(HoodConstants.HOOD_MIN);
     }
 
-    public void setHoodPosition(double position) {
-        hoodController.setSetpoint(position, ControlType.kPosition);
+    public double getRotations() {
+        return HoodEncoder.getPosition();
+    }
+
+    public double getTargetRotations() {
+        return currentTargetRotations;
+    }
+
+    public double getAngleDegrees() {
+        return HoodConstants.rotationsToDegrees(getRotations());
+    }
+
+    public boolean isAtPosition() {
+        return Math.abs(getRotations() - currentTargetRotations) <= HoodConstants.POSITION_TOLERANCE_ROTATIONS;
+    }
+
+    public void setHoodPosition(double rotations) {
+        double clamped = HoodConstants.clampRotations(rotations);
+        currentTargetRotations = clamped;
+        HoodController.setSetpoint(clamped, ControlType.kPosition);
+    }
+
+    public void setAngle(double degrees) {
+        setHoodPosition(HoodConstants.degreesToRotations(degrees));
     }
 
     public void lowerHood() {
-       hoodController.setSetpoint(HoodConstants.HOOD_DOWN, ControlType.kPosition);
+        setHoodPosition(HoodConstants.HOOD_MIN);
     }
 
-    public Command setHoodPositionCommand(double position) {
-            return Commands.run(() -> setHoodPosition(position), this).finallyDo((interrupted) -> lowerHood());
-        }
+    public void raiseHood() {
+        setHoodPosition(HoodConstants.HOOD_MAX);
+    }
+
+    public void stopHood() {
+        HoodMotor.set(0);
+    }
+
+    public Command setHoodPositionCommand(double rotations) {
+        return this.run(() -> {
+            setHoodPosition(rotations);
+        }).finallyDo(interrupted -> stopHood());
+    }
+
+    public Command lowerHoodCommand() {
+        return this.run(() -> {
+            lowerHood();
+        }).finallyDo(interrupted -> stopHood());
+    }
+
+    public Command raiseHoodCommand() {
+        return this.run(() -> {
+            raiseHood();
+        }).finallyDo(interrupted -> stopHood());
+    }
+
+    public Command tuckCommand() {
+        return this.run(() -> {
+            lowerHood();
+        });
+    }
 
     @Override
     public void periodic() {
+        Logger.recordOutput("Hood/Rotations", getRotations());
+        Logger.recordOutput("Hood/TargetRotations", currentTargetRotations);
+        Logger.recordOutput("Hood/AngleDegrees", getAngleDegrees());
+        Logger.recordOutput("Hood/IsAtPosition", isAtPosition());
+        Logger.recordOutput("Hood/AppliedVolts", HoodMotor.getAppliedOutput() * HoodMotor.getBusVoltage());
+        Logger.recordOutput("Hood/StatorCurrent", HoodMotor.getOutputCurrent());
     }
 }

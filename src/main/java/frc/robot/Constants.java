@@ -1,6 +1,8 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -188,6 +190,64 @@ public final class Constants {
       public static final double HOOD_MIN = 0.0;
       public static final double HOOD_MAX = 2.907;
 
+      public static final double POSITION_TOLERANCE_ROTATIONS = 0.05;
+
+      public static final double HOOD_MIN_DEGREES = 22.5279443;
+      public static final double HOOD_MAX_DEGREES = 45.334706;
+
+      public static final double DEGREES_PER_ROTATION =
+          (HOOD_MAX_DEGREES - HOOD_MIN_DEGREES) / (HOOD_MAX - HOOD_MIN);
+
+      public static double rotationsToDegrees(double rotations) {
+        return HOOD_MIN_DEGREES + (rotations - HOOD_MIN) * DEGREES_PER_ROTATION;
+      }
+
+      public static double degreesToRotations(double degrees) {
+        return HOOD_MIN + (degrees - HOOD_MIN_DEGREES) / DEGREES_PER_ROTATION;
+      }
+
+      public static double clampRotations(double rotations) {
+        return Math.max(HOOD_MIN, Math.min(HOOD_MAX, rotations));
+      }
+
+      public static final InterpolatingDoubleTreeMap hubHoodTable = new InterpolatingDoubleTreeMap();
+      public static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
+
+      static {
+        for (var entry : List.of(
+          Pair.of(Meters.of(2.0), Degrees.of(27.78)),
+          Pair.of(Meters.of(2.5), Degrees.of(31.23)),
+          Pair.of(Meters.of(3.0), Degrees.of(33.73)),
+          Pair.of(Meters.of(3.5), Degrees.of(35.63)),
+          Pair.of(Meters.of(4.0), Degrees.of(37.18)),
+          Pair.of(Meters.of(4.5), Degrees.of(38.43)),
+          Pair.of(Meters.of(5.0), Degrees.of(39.43)),
+          Pair.of(Meters.of(5.5), Degrees.of(40.33)),
+          Pair.of(Meters.of(6.0), Degrees.of(41.13)),
+          Pair.of(Meters.of(6.5), Degrees.of(41.78)),
+          Pair.of(Meters.of(7.0), Degrees.of(42.43)),
+          Pair.of(Meters.of(7.5), Degrees.of(42.98)),
+          Pair.of(Meters.of(8.0), Degrees.of(43.48)),
+          Pair.of(Meters.of(8.5), Degrees.of(43.98)),
+          Pair.of(Meters.of(9.0), Degrees.of(44.43)))) {
+          hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        }
+
+        for (var entry : List.of(
+          Pair.of(Meters.of(2.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(2.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(3.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(4.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(5.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(6.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(7.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(8.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(9.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(10.0), Degrees.of(45.33)))) {
+          ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        }
+      }
+
       public static final double HOOD_DOWN = 0.0;
       public static final double HOOD_UP = 2.8;
 
@@ -203,7 +263,7 @@ public final class Constants {
       public static final int SHOOTER_R2_ID = 11; 
       public static final int SHOOTER_L2_ID = 12;
 
-      public static final double SHOOTER_RPM_TOLERANCE = 100;
+      public static final double ERROR_MARGIN = 100.0;
       
        
       // PID Constants
@@ -216,23 +276,95 @@ public final class Constants {
       public static final double v = 0.001935;
       public static final double a = 0.0;
 
+      public static final double MIN_HUB_DISTANCE_M = 2.0;
+      public static final double MAX_HUB_DISTANCE_M = 9.0;
+      public static final double MIN_FERRY_DISTANCE_M = 2.0;
+      public static final double MAX_FERRY_DISTANCE_M = 10.0;
+
+      public static final double ALLIANCE_IDLE_RPM = 1500.0;
+
+      public static final double ROLLER_RADIUS_BOTTOM_M = 2.0 * 0.0254;
+      public static final double ROLLER_RADIUS_TOP_M = 0.625 * 0.0254;
+      public static final double PULLEY_TOP_PER_BOTTOM = 1.0;
+
+      public static final double FUEL_MASS_KG = 0.215;
+      public static final double DRAG_COEFFICIENT = 0.50;
+      public static final double AIR_DENSITY_KG_PER_M3 = 1.204;
 
       public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
-
-      static { // 7-12 are estimates - Aditya
+      static {
         for (var entry : List.of(
-            Pair.of(Meters.of(2), Seconds.of(0.85)),
-            Pair.of(Meters.of(3), Seconds.of(0.95)),
-            Pair.of(Meters.of(4), Seconds.of(1.13)),
-            Pair.of(Meters.of(5), Seconds.of(1.31)),
-            Pair.of(Meters.of(6), Seconds.of(1.49)),
-            Pair.of(Meters.of(7), Seconds.of(1.67)),
-            Pair.of(Meters.of(8), Seconds.of(1.85)),
-            Pair.of(Meters.of(9), Seconds.of(2.03)),
-            Pair.of(Meters.of(10), Seconds.of(2.21)),
-            Pair.of(Meters.of(11), Seconds.of(2.39)),
-            Pair.of(Meters.of(12), Seconds.of(2.57)))) {
+          Pair.of(Meters.of(2.0), Seconds.of(0.669)),
+          Pair.of(Meters.of(2.5), Seconds.of(0.731)),
+          Pair.of(Meters.of(3.0), Seconds.of(0.792)),
+          Pair.of(Meters.of(3.5), Seconds.of(0.851)),
+          Pair.of(Meters.of(4.0), Seconds.of(0.906)),
+          Pair.of(Meters.of(4.5), Seconds.of(0.960)),
+          Pair.of(Meters.of(5.0), Seconds.of(1.012)),
+          Pair.of(Meters.of(5.5), Seconds.of(1.062)),
+          Pair.of(Meters.of(6.0), Seconds.of(1.109)),
+          Pair.of(Meters.of(6.5), Seconds.of(1.157)),
+          Pair.of(Meters.of(7.0), Seconds.of(1.201)),
+          Pair.of(Meters.of(7.5), Seconds.of(1.245)),
+          Pair.of(Meters.of(8.0), Seconds.of(1.288)),
+          Pair.of(Meters.of(8.5), Seconds.of(1.329)),
+          Pair.of(Meters.of(9.0), Seconds.of(1.369)))) {
           TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
+        }
+      }
+
+      public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
+      static {
+        for (var entry : List.of(
+          Pair.of(Meters.of(2.0), Seconds.of(0.689)),
+          Pair.of(Meters.of(2.5), Seconds.of(0.764)),
+          Pair.of(Meters.of(3.0), Seconds.of(0.833)),
+          Pair.of(Meters.of(4.0), Seconds.of(0.960)),
+          Pair.of(Meters.of(5.0), Seconds.of(1.076)),
+          Pair.of(Meters.of(6.0), Seconds.of(1.184)),
+          Pair.of(Meters.of(7.0), Seconds.of(1.287)),
+          Pair.of(Meters.of(8.0), Seconds.of(1.386)),
+          Pair.of(Meters.of(9.0), Seconds.of(1.481)),
+          Pair.of(Meters.of(10.0), Seconds.of(1.574)))) {
+          ferryTOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
+        }
+      }
+
+      public static final InterpolatingDoubleTreeMap hubShooterTable = new InterpolatingDoubleTreeMap();
+      public static final InterpolatingDoubleTreeMap ferryShooterTable = new InterpolatingDoubleTreeMap();
+      static {
+
+        for (var entry : List.of(
+          Pair.of(Meters.of(2.0), RPM.of(1720)),
+          Pair.of(Meters.of(2.5), RPM.of(1825)),
+          Pair.of(Meters.of(3.0), RPM.of(1935)),
+          Pair.of(Meters.of(3.5), RPM.of(2040)),
+          Pair.of(Meters.of(4.0), RPM.of(2145)),
+          Pair.of(Meters.of(4.5), RPM.of(2245)),
+          Pair.of(Meters.of(5.0), RPM.of(2345)),
+          Pair.of(Meters.of(5.5), RPM.of(2445)),
+          Pair.of(Meters.of(6.0), RPM.of(2540)),
+          Pair.of(Meters.of(6.5), RPM.of(2635)),
+          Pair.of(Meters.of(7.0), RPM.of(2725)),
+          Pair.of(Meters.of(7.5), RPM.of(2820)),
+          Pair.of(Meters.of(8.0), RPM.of(2910)),
+          Pair.of(Meters.of(8.5), RPM.of(2995)),
+          Pair.of(Meters.of(9.0), RPM.of(3085)))) {
+          hubShooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));
+        }
+
+        for (var entry : List.of(
+          Pair.of(Meters.of(2.0), RPM.of(1065)),
+          Pair.of(Meters.of(2.5), RPM.of(1240)),
+          Pair.of(Meters.of(3.0), RPM.of(1400)),
+          Pair.of(Meters.of(4.0), RPM.of(1680)),
+          Pair.of(Meters.of(5.0), RPM.of(1930)),
+          Pair.of(Meters.of(6.0), RPM.of(2160)),
+          Pair.of(Meters.of(7.0), RPM.of(2375)),
+          Pair.of(Meters.of(8.0), RPM.of(2575)),
+          Pair.of(Meters.of(9.0), RPM.of(2770)),
+          Pair.of(Meters.of(10.0), RPM.of(2955)))) {
+          ferryShooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));
         }
       }
     }

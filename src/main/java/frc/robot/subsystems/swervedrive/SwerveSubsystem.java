@@ -1182,6 +1182,18 @@ public class SwerveSubsystem extends SubsystemBase {
     return cachedDynamicFerry;
   }
 
+  public boolean isHubShot() {
+    return isInAllianceZone();
+  }
+
+  public Pose2d getCachedDynamicAimLocation() {
+    return isHubShot() ? cachedDynamicHub : cachedDynamicFerry;
+  }
+
+  public Pose2d getAimTargetPose() {
+    return getCachedDynamicAimLocation();
+  }
+
   /**
    * Computes a virtual hub location that compensates for robot velocity,
    * so the robot aims ahead of the actual hub when moving (shoot-on-the-move).
@@ -1230,7 +1242,7 @@ public class SwerveSubsystem extends SubsystemBase {
     Translation2d CompensatedFerry = ferryVec;
     for (int i = 0; i < 4; i++) {
       double distance = CompensatedFerry.minus(robotVec).getNorm();
-      double tof = Constants.ShooterConstants.TOF.get(distance);
+      double tof = Constants.ShooterConstants.ferryTOF.get(distance);
       CompensatedFerry = ferryVec.minus(robotVel.times(tof));
     }
 
@@ -1255,7 +1267,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return DriverStation.getAlliance().orElse(Alliance.Red);
   }
 
-  private boolean isInAllianceZone() {
+  public boolean isInAllianceZone() {
     Alliance alliance = getAlliance();
     Distance blueZone = Inches.of(182);
     Distance redZone = Inches.of(469);
@@ -1267,6 +1279,24 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     return false;
+  }
+
+  public boolean isInOpponentAllianceZone() {
+    Alliance alliance = getAlliance();
+    Distance blueZone = Inches.of(182);
+    Distance redZone = Inches.of(469);
+
+    if (alliance == Alliance.Red && getPose().getMeasureX().lt(blueZone)) {
+      return true;
+    } else if (alliance == Alliance.Blue && getPose().getMeasureX().gt(redZone)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean isInNeutralZone() {
+    return !isInAllianceZone() && !isInOpponentAllianceZone();
   }
 
   private Pose2d GetDriveToPose()

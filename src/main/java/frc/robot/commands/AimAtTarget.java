@@ -1,24 +1,37 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.util.List;
+import java.util.function.DoubleSupplier;
 import swervelib.SwerveInputStream;
 
-public class AimAtFerry extends Command {
+public class AimAtTarget extends Command {
 
   public final SwerveSubsystem swerveSubsystem;
   public final SwerveInputStream swerveInputStream;
 
-  public AimAtFerry(SwerveSubsystem swerveSubsystem, SwerveInputStream swerveInputStream) {
+  public boolean readyToLock = false;
+
+  private final DoubleSupplier leftX;
+  private final DoubleSupplier leftY;
+
+  public AimAtTarget(SwerveSubsystem swerveSubsystem, SwerveInputStream swerveInputStream,
+      DoubleSupplier leftX, DoubleSupplier leftY) {
     this.swerveSubsystem = swerveSubsystem;
+    this.leftX = leftX;
+    this.leftY = leftY;
     this.swerveInputStream = swerveInputStream.copy()
-        .aim(swerveSubsystem::getCachedDynamicFerryLocation)
+        .aim(swerveSubsystem::getCachedDynamicAimLocation)
         .aimFeedforward(0.00045, 0.0001, 0.00022)
         .aimHeadingOffset(Rotation2d.fromDegrees(180))
-        .aimHeadingOffset(true);
+        .aimHeadingOffset(true)
+        .aimLookahead(Time.ofBaseUnits(0.2, Seconds));
     addRequirements(this.swerveSubsystem);
   }
 
@@ -31,10 +44,15 @@ public class AimAtFerry extends Command {
 
   @Override
   public void execute() {
-    // shoot at the nearest ferry pos
-    // Pose2d ferry = swerveSubsystem.getCachedDynamicFerryLocation();
-
     swerveSubsystem.driveFieldOriented(swerveInputStream.get());
+
+    double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
+    if (leftMag < Constants.OperatorConstants.DEADBAND && readyToLock) {
+      swerveSubsystem.lock();
+      SmartDashboard.putBoolean("Wheel Lock", true);
+    } else {
+      SmartDashboard.putBoolean("Wheel Lock", false);
+    }
   }
 
   @Override
@@ -46,6 +64,5 @@ public class AimAtFerry extends Command {
   public void end(boolean interrupted) {
     swerveSubsystem.isAiming = false;
     swerveInputStream.aimWhile(false);
-    // swerveSubsystem.getField().getObject("AimTarget").setPoses(List.of());
   }
 }
