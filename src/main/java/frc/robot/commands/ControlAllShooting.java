@@ -46,7 +46,7 @@ public class ControlAllShooting extends Command {
     }
 
     private double aimTolerance(double dist) {
-        return 1.0;
+        return 3.0;
     }
 
     private double aimErrorTo(Translation2d target, Translation2d robotPos) {
