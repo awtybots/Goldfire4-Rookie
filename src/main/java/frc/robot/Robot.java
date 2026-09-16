@@ -148,10 +148,10 @@ public class Robot extends LoggedRobot {
     if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
       m_robotContainer.setUseMegaTag2(true); // Use MT1 during disabled to calibrate heading
     }
-    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_FRONT, 1); // Seed internal IMU
+    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_RIGHT, 1); // Seed internal IMU
     LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_BACK, 1); // Seed internal IMU
     LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_LEFT, 1); // Seed internal IMU 
-    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_FRONT, 200);
+    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_RIGHT, 200);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_BACK, 200);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_LEFT, 200);
     disabledTimer.reset();
@@ -178,14 +178,14 @@ public class Robot extends LoggedRobot {
     if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
       m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
     }
-    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_FRONT, 0);
+    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_RIGHT, 0);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_BACK, 0);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_LEFT, 0);
-    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_FRONT, 3); // Use internal IMU + external IMU
+    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_RIGHT, 3); // Use internal IMU + external IMU
     LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_BACK, 3); // Use internal IMU + external IMU
     LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_LEFT, 3); // Use internal IMU + external IMU
     // // Set the complementary filter alpha (optional, default is 0.001)
-    LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_FRONT, 0.1);
+    LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_RIGHT, 0.1);
     LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_BACK, 0.1);
     LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_LEFT, 0.1);
     m_robotContainer.setMotorBrake(true);
@@ -212,10 +212,10 @@ public class Robot extends LoggedRobot {
     if (!Constants.USE_DRIVE_ONLY && !Constants.USE_SHOOTER_ONLY) {
       m_robotContainer.setUseMegaTag2(true); // Switch to MT2 for accurate x/y with calibrated gyro
     }
-    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_FRONT, 0);
-    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_FRONT, 3); // Use internal IMU + external IMU
+    LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_RIGHT, 0);
+    LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_RIGHT, 3); // Use internal IMU + external IMU
     // // Set the complementary filter alpha (optional, default is 0.001)
-    LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_FRONT, 0.1);
+    LimelightHelpers.SetIMUAssistAlpha(LimelightConstants.LIMELIGHT_RIGHT, 0.1);
     LimelightHelpers.SetThrottle(LimelightConstants.LIMELIGHT_BACK, 0);
     LimelightHelpers.SetIMUMode(LimelightConstants.LIMELIGHT_BACK, 3); // Use internal IMU + external IMU
     // // Set the complementary filter alpha (optional, default is 0.001)

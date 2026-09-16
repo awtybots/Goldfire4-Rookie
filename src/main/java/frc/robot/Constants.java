@@ -119,8 +119,8 @@ public final class Constants {
   }
 
   public static class LimelightConstants {
-    public static final String LIMELIGHT_FRONT = "limelight-front";
-    public static final String LIMELIGHT_BACK = "limelight-back";
+    public static final String LIMELIGHT_RIGHT = "limelight-right";//10.58.29.17
+    public static final String LIMELIGHT_BACK = "limelight-back"; //10.58.29.16
     public static final String LIMELIGHT_LEFT = "limelight-left"; //10.58.29.15
   }
 
