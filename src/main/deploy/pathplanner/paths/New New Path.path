@@ -64,12 +64,12 @@
     },
     {
       "anchor": {
-        "x": 2.455332175925926,
-        "y": 5.6498720341435185
+        "x": 3.589395469432315,
+        "y": 7.2149926651200875
       },
       "prevControl": {
-        "x": 3.2990605786500233,
-        "y": 5.6018724089759795
+        "x": 4.433123872156412,
+        "y": 7.1669930399525485
       },
       "nextControl": null,
       "isLocked": false,
@@ -99,10 +99,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 141.285
+    "rotation": 0.08374121414129028
   },
   "reversed": false,
-  "folder": "Matias",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

@@ -7,13 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New New Path"
+            "pathName": "swipe test"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shoot1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Path 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Matias",
+  "folder": null,
   "choreoAuto": false
 }
