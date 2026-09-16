@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.455332175925926,
-        "y": 5.6498720341435185
+        "x": 6.676438261917758,
+        "y": 6.953346752183406
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.455332175925926,
-        "y": 5.6498720341435185
+        "x": 7.093375519199906,
+        "y": 6.507773964761552
       },
       "isLocked": false,
-      "linkedName": "matias"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.127744646990741,
-        "y": 6.996068938078704
+        "x": 7.006500068231441,
+        "y": 4.284727983988356
       },
       "prevControl": {
-        "x": 3.127744646990741,
-        "y": 6.996068938078704
+        "x": 6.844914825272472,
+        "y": 4.911713827567868
+      },
+      "nextControl": {
+        "x": 7.068890812922344,
+        "y": 4.042638341547969
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.676438261917758,
+        "y": 6.654899870360262
+      },
+      "prevControl": {
+        "x": 6.514688316782588,
+        "y": 6.464277323821901
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 92.15791807432537
   },
   "reversed": false,
-  "folder": "Matias",
+  "folder": "Trial",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 141.285
+    "rotation": 90.85302090941344
   },
   "useDefaultConstraints": true
 }
