@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.Dimensions;
@@ -41,6 +42,15 @@ public class SimRobot {
     public static final double[] LANE_Y_M = {-0.225, -0.075, 0.075, 0.225};
     public static final double LAUNCH_YAW_OFFSET_DEG = 180.0;
     public static final double VOLLEYS_PER_SECOND = 3.0;
+    public static final double RELEASE_STAGGER_S = 0.06;
+    public static final double SPEED_SIGMA = 0.02;
+    public static final double LAUNCH_ANGLE_SIGMA_DEG = 0.8;
+    public static final double YAW_SIGMA_DEG = 1.0;
+    public static final double SPIN_SIGMA = 0.08;
+    public static final double LANE_POSITION_SIGMA_M = 0.012;
+    public static boolean FLYWHEEL_SAG = true;
+    public static final double FUEL_MOI_FACTOR = 0.4;
+    public static final long RANDOM_SEED = 5829L;
 
     public static final double HOPPER_X_MIN = -0.17;
     public static final double HOPPER_X_MAX = 0.336;
@@ -86,7 +96,9 @@ public class SimRobot {
   private final FuelSim fuelSim = new FuelSim("FuelSim");
 
   private int fuelStored = 0;
-  private double volleyAccumulator = 0.0;
+  private double lastVolleyTime = Double.NEGATIVE_INFINITY;
+  private final java.util.Random rng = new java.util.Random(SimConstants.RANDOM_SEED);
+  private final java.util.List<double[]> pendingBalls = new java.util.ArrayList<>();
   private int hubShotsFired = 0;
 
   public SimRobot(SwerveSubsystem drivebase, Shooter shooter, Hood hood, Kicker kicker,
@@ -146,7 +158,8 @@ public class SimRobot {
     fuelSim.spawnStartingFuel();
     fuelStored = 0;
     hubShotsFired = 0;
-    volleyAccumulator = 0.0;
+    lastVolleyTime = Double.NEGATIVE_INFINITY;
+    pendingBalls.clear();
     FuelSim.Hub.BLUE_HUB.resetScore();
     FuelSim.Hub.RED_HUB.resetScore();
   }
@@ -193,6 +206,9 @@ public class SimRobot {
     Logger.recordOutput("Sim/FuelStored", fuelStored);
     Logger.recordOutput("Sim/HeldFuel", heldFuelPositions());
     Logger.recordOutput("Sim/FuelOnField", fuelSim.getFuelCount());
+    Logger.recordOutput("Sim/FuelInFlight", fuelSim.getFuelInFlightCount());
+    Logger.recordOutput("Sim/ShooterRPM", shooter.getRPM());
+    Logger.recordOutput("Sim/ShooterTargetRPM", shooter.getTargetRPM());
     Logger.recordOutput("Sim/BlueHubScore", FuelSim.Hub.BLUE_HUB.getScore());
     Logger.recordOutput("Sim/RedHubScore", FuelSim.Hub.RED_HUB.getScore());
     Logger.recordOutput("Sim/BallSpeed", ballSpeedMetersPerSecond(shooter.getRPM()));
@@ -204,50 +220,79 @@ public class SimRobot {
   }
 
   private void updateVolleys() {
-    if (!kicker.isFeeding() || fuelStored <= 0) {
-      volleyAccumulator = 0.0;
-      return;
+    double now = Timer.getFPGATimestamp();
+
+    if (kicker.isFeeding() && now - lastVolleyTime >= 1.0 / SimConstants.VOLLEYS_PER_SECOND) {
+      int available = fuelStored - pendingBalls.size();
+      int count = Math.min(SimConstants.LANE_Y_M.length, available);
+      if (count > 0) {
+        lastVolleyTime = now;
+        java.util.List<Integer> lanes = new java.util.ArrayList<>();
+        for (int i = 0; i < SimConstants.LANE_Y_M.length; i++) {
+          lanes.add(i);
+        }
+        java.util.Collections.shuffle(lanes, rng);
+        for (int k = 0; k < count; k++) {
+          pendingBalls.add(new double[] {now + rng.nextDouble() * SimConstants.RELEASE_STAGGER_S,
+              lanes.get(k)});
+        }
+        pendingBalls.sort(java.util.Comparator.comparingDouble(b -> b[0]));
+      }
     }
-    volleyAccumulator += 0.020 * SimConstants.VOLLEYS_PER_SECOND;
-    while (volleyAccumulator >= 1.0 && fuelStored > 0) {
-      volleyAccumulator -= 1.0;
-      launchVolley();
+
+    while (!pendingBalls.isEmpty() && pendingBalls.get(0)[0] <= now && fuelStored > 0) {
+      launchBall((int) pendingBalls.remove(0)[1]);
     }
   }
 
   public void launchVolley() {
     int count = Math.min(SimConstants.LANE_Y_M.length, fuelStored);
-    if (count <= 0) {
-      return;
+    for (int lane = 0; lane < count; lane++) {
+      launchBall(lane);
     }
+  }
 
+  private double gaussian(double sigma) {
+    return rng.nextGaussian() * sigma;
+  }
+
+  private void launchBall(int lane) {
     Pose2d pose = drivebase.getPose();
     ChassisSpeeds field = drivebase.getFieldVelocity();
     double rpm = shooter.getRPM();
-    double speed = ballSpeedMetersPerSecond(rpm);
-    double spin = backspinRadPerSec(rpm);
-    double elevation = Math.toRadians(launchAngleDegrees(hood.getAngleDegrees()));
-    double yaw = pose.getRotation().getRadians() + Math.toRadians(SimConstants.LAUNCH_YAW_OFFSET_DEG);
+
+    double speed = ballSpeedMetersPerSecond(rpm) * (1.0 + gaussian(SimConstants.SPEED_SIGMA));
+    double spin = backspinRadPerSec(rpm) * (1.0 + gaussian(SimConstants.SPIN_SIGMA));
+    double elevation = Math.toRadians(launchAngleDegrees(hood.getAngleDegrees())
+        + gaussian(SimConstants.LAUNCH_ANGLE_SIGMA_DEG));
+    double yaw = pose.getRotation().getRadians()
+        + Math.toRadians(SimConstants.LAUNCH_YAW_OFFSET_DEG + gaussian(SimConstants.YAW_SIGMA_DEG));
+
+    Translation2d offset = new Translation2d(SimConstants.EXIT_X_M,
+        SimConstants.LANE_Y_M[lane] + gaussian(SimConstants.LANE_POSITION_SIGMA_M))
+        .rotateBy(pose.getRotation());
+    Translation2d exit = offset.plus(pose.getTranslation());
+    double omega = field.omegaRadiansPerSecond;
     double horizontal = speed * Math.cos(elevation);
 
-    for (int i = 0; i < count; i++) {
-      int lane = SimConstants.LANE_Y_M.length == count ? i
-          : (SimConstants.LANE_Y_M.length - count) / 2 + i;
-      Translation2d exit = new Translation2d(SimConstants.EXIT_X_M, SimConstants.LANE_Y_M[lane])
-          .rotateBy(pose.getRotation())
-          .plus(pose.getTranslation());
-      fuelSim.spawnFuel(
-          new Translation3d(exit.getX(), exit.getY(), SimConstants.EXIT_Z_M),
-          new Translation3d(
-              horizontal * Math.cos(yaw) + field.vxMetersPerSecond,
-              horizontal * Math.sin(yaw) + field.vyMetersPerSecond,
-              speed * Math.sin(elevation)),
-          spin);
+    fuelSim.spawnFuel(
+        new Translation3d(exit.getX(), exit.getY(), SimConstants.EXIT_Z_M),
+        new Translation3d(
+            horizontal * Math.cos(yaw) + field.vxMetersPerSecond - omega * offset.getY(),
+            horizontal * Math.sin(yaw) + field.vyMetersPerSecond + omega * offset.getX(),
+            speed * Math.sin(elevation)),
+        spin);
+
+    if (SimConstants.FLYWHEEL_SAG) {
+      double mass = ShooterConstants.FUEL_MASS_KG;
+      double ballMoi = SimConstants.FUEL_MOI_FACTOR * mass
+          * SimConstants.FUEL_RADIUS_M * SimConstants.FUEL_RADIUS_M;
+      shooter.drawFlywheelEnergy(0.5 * mass * speed * speed + 0.5 * ballMoi * spin * spin);
     }
 
-    fuelStored -= count;
+    fuelStored--;
     if (drivebase.isInAllianceZone()) {
-      hubShotsFired += count;
+      hubShotsFired++;
     }
   }
 

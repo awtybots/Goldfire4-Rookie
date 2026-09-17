@@ -430,8 +430,28 @@ public class FuelSim {
      * both over NetworkTables and when replaying the .wpilog.
      */
     public void logFuels() {
-        Logger.recordOutput(fuelLogKey, fuels.stream().map((fuel) -> fuel.pos).toArray(Translation3d[]::new));
+        Logger.recordOutput(fuelLogKey, fuels.stream()
+                .filter(fuel -> !isInFlight(fuel))
+                .map((fuel) -> fuel.pos)
+                .toArray(Translation3d[]::new));
         Logger.recordOutput(fuelLogKey + "Count", fuels.size());
+    }
+
+    public void logFuelsInFlight() {
+        Translation3d[] airborne = fuels.stream()
+                .filter(FuelSim::isInFlight)
+                .map((fuel) -> fuel.pos)
+                .toArray(Translation3d[]::new);
+        Logger.recordOutput(fuelLogKey + "InFlight", airborne);
+        Logger.recordOutput(fuelLogKey + "InFlightCount", airborne.length);
+    }
+
+    public int getFuelInFlightCount() {
+        return (int) fuels.stream().filter(FuelSim::isInFlight).count();
+    }
+
+    protected static boolean isInFlight(Fuel fuel) {
+        return fuel.pos.getZ() > FUEL_RADIUS + 0.03 && fuel.vel.getNorm() > 0.05;
     }
 
     /**
@@ -607,6 +627,7 @@ public class FuelSim {
             }
         }
 
+        logFuelsInFlight();
         if (loggingTimer.advanceIfElapsed(1.0 / loggingFreqHz)) {
             logFuels();
         }

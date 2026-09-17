@@ -127,6 +127,15 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/AtSpeed", isAtSpeed());
     }
 
+    public void drawFlywheelEnergy(double joules) {
+        if (flywheelSim == null || joules <= 0.0) {
+            return;
+        }
+        double w = flywheelSim.getAngularVelocityRadPerSec();
+        double remaining = Math.max(0.0, w * w - 2.0 * joules / SIM_FLYWHEEL_MOI);
+        flywheelSim.setAngularVelocity(Math.sqrt(remaining));
+    }
+
     @Override
     public void simulationPeriodic() {
         double vbus = RobotController.getBatteryVoltage();
