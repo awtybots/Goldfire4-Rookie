@@ -76,6 +76,7 @@ import frc.robot.subsystems.Hood;
 // import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Slapdown;
 import frc.robot.subsystems.ObjectDetection;
+import frc.robot.sim.SimRobot;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -174,6 +175,8 @@ public class RobotContainer {
   }
 
   private AimAtTarget aimAtTarget;
+
+  private SimRobot simRobot;
   private PathConstraints autoConstraints;
 
   SwerveInputStream aimStream;
@@ -185,6 +188,10 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+
+    if (RobotBase.isSimulation()) {
+      simRobot = new SimRobot(drivebase, m_shooter, m_Hood, m_kicker, m_intake);
+    }
 
     // configureFuelSim();
     // configureFuelSimRobot();
@@ -241,7 +248,8 @@ public class RobotContainer {
         () -> driverXbox.getLeftX() * -1)
         .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
         .deadband(OperatorConstants.DEADBAND)
-        .scaleTranslation(1.0)
+        .scaleTranslation(RobotBase.isSimulation() ? 0.70 : 1.0)
+        .scaleRotation(RobotBase.isSimulation() ? 1.10 : 1.0)
         .allianceRelativeControl(true);
 
     /*
@@ -288,36 +296,36 @@ public class RobotContainer {
         dc()::getLeftX, dc()::getLeftY);
 
 
-    // dc().rightTrigger().whileTrue(aimAtTarget);
+    dc().rightTrigger().whileTrue(aimAtTarget);
 
 
-    // dc().rightTrigger().whileTrue(
-    //     Commands.defer(() -> {
-    //       if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
-    //         return Commands.parallel(
-    //             makeVariableShoot(),
-    //             makeAimHoodHub(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
-    //       } else {
-    //         return Commands.parallel(
-    //             makeVariableShoot(),
-    //             makeAimHoodFerry(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
-    //       }
-    //     }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
+    dc().rightTrigger().whileTrue(
+        Commands.defer(() -> {
+          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodHub(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          } else {
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodFerry(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          }
+        }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
 
     // ======== Operator ========
     // shooter
-    dc().rightTrigger().whileTrue(
-        Commands.parallel(
-            m_shooter.setShooterSpeedCommand(1000),
-            m_Hood.setHoodPositionCommand(0.6),
-            Commands.sequence(
-                Commands.waitUntil(() -> m_shooter.isShooterFast()),
-                Commands.parallel(
-                    m_kicker.kickCommand(),
-                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
-                    m_hopper.runBeltsToConveyorCommand()))));
+    // dc().rightTrigger().whileTrue(
+    //     Commands.parallel(
+    //         m_shooter.setShooterSpeedCommand(1000),
+    //         m_Hood.setHoodPositionCommand(0.6),
+    //         Commands.sequence(
+    //             Commands.waitUntil(() -> m_shooter.isShooterFast()),
+    //             Commands.parallel(
+    //                 m_kicker.kickCommand(),
+    //                 m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
+    //                 m_hopper.runBeltsToConveyorCommand()))));
 
     dc().leftTrigger().whileTrue(
         Commands.parallel(
@@ -393,7 +401,7 @@ public class RobotContainer {
     m_Hood.setDefaultCommand(m_Hood.tuckCommand());
 
     if (RobotBase.isSimulation()) {
-      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     } else {
       if (Constants.USE_ROBOT_RELATIVE) {
         drivebase.setDefaultCommand(
@@ -419,7 +427,7 @@ public class RobotContainer {
               new Constraints(Units.degreesToRadians(360),
                   Units.degreesToRadians(180))));
       dc().start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      dc().button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+      // dc().button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
       dc().button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
           () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
 
@@ -481,6 +489,12 @@ public class RobotContainer {
     // }
 
     return selected;
+  }
+
+  public void simulationPeriodic() {
+    if (simRobot != null) {
+      simRobot.periodic();
+    }
   }
 
   public void setMotorBrake(boolean brake) {

@@ -1,0 +1,12 @@
+{
+  "name": "Goldfire4",
+  "sourceUrl": "",
+  "disableSimplification": false,
+  "rotations": [
+    { "axis": "x", "degrees": 90 },
+    { "axis": "z", "degrees": 90 }
+  ],
+  "position": [0.043, 0, 0.000],
+  "cameras": [],
+  "components": []
+}

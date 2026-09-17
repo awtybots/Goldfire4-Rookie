@@ -47,6 +47,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.sim.Arena2026;
+import frc.robot.sim.SimRobot;
+import edu.wpi.first.wpilibj.RobotBase;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
+import swervelib.simulation.ironmaple.simulation.SimulatedArena;
+import swervelib.simulation.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation;
 
 import java.io.File;
 import java.io.IOException;
@@ -147,6 +154,9 @@ public class SwerveSubsystem extends SubsystemBase {
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
     // objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    if (RobotBase.isSimulation()) {
+      SimulatedArena.overrideInstance(new Arena2026());
+    }
     try {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
       // Alternative method if you don't want to supply the conversion factor via JSON
@@ -157,6 +167,9 @@ public class SwerveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
     swerveDrive.stopOdometryThread();
+    if (RobotBase.isSimulation()) {
+      swerveDrive.getMapleSimDrive().ifPresent(SwerveSubsystem::useRealBumperSize);
+    }
 
     // Enable heading correction to reduce drift when rotation input is near zero.
     swerveDrive.setHeadingCorrection(false);
@@ -848,7 +861,21 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return The robot's pose
    */
   public Pose2d getPose() {
+    if (RobotBase.isSimulation()) {
+      return swerveDrive.getSimulationDriveTrainPose().orElseGet(swerveDrive::getPose);
+    }
     return swerveDrive.getPose();
+  }
+
+  private static void useRealBumperSize(AbstractDriveTrainSimulation body) {
+    double length = SimRobot.SimConstants.BUMPER_LENGTH_M;
+    double width = SimRobot.SimConstants.BUMPER_WIDTH_M;
+    double massKg = body.getMass().getMass();
+    body.removeAllFixtures();
+    body.addFixture(Geometry.createRectangle(length, width), massKg / (length * width),
+        AbstractDriveTrainSimulation.BUMPER_COEFFICIENT_OF_FRICTION,
+        AbstractDriveTrainSimulation.BUMPER_COEFFICIENT_OF_RESTITUTION);
+    body.setMass(MassType.NORMAL);
   }
 
   private void updateLimelight(String cameraName, int megaTag)

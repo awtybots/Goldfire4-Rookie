@@ -14,6 +14,10 @@ import com.revrobotics.RelativeEncoder;
 import org.littletonrobotics.junction.Logger;
 
 import frc.robot.Configs;
+import com.revrobotics.sim.SparkFlexSim;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Constants.HoodConstants;
 
 public class Hood extends SubsystemBase {
@@ -23,6 +27,12 @@ public class Hood extends SubsystemBase {
     private RelativeEncoder HoodEncoder = HoodMotor.getEncoder();
 
     private double currentTargetRotations = HoodConstants.HOOD_MIN;
+
+    private static final double SIM_MAX_DEG_PER_SEC = 200.0;
+    private final SparkFlexSim hoodSim = RobotBase.isSimulation()
+            ? new SparkFlexSim(HoodMotor, DCMotor.getNeoVortex(1))
+            : null;
+    private double simRotations = HoodConstants.HOOD_MIN;
 
     public Hood() {
         HoodMotor.configure(Configs.HoodSubsystem.HoodMotorConfig, ResetMode.kResetSafeParameters,
@@ -101,5 +111,13 @@ public class Hood extends SubsystemBase {
         Logger.recordOutput("Hood/IsAtPosition", isAtPosition());
         Logger.recordOutput("Hood/AppliedVolts", HoodMotor.getAppliedOutput() * HoodMotor.getBusVoltage());
         Logger.recordOutput("Hood/StatorCurrent", HoodMotor.getOutputCurrent());
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        double step = SIM_MAX_DEG_PER_SEC / HoodConstants.DEGREES_PER_ROTATION * 0.020;
+        simRotations += MathUtil.clamp(currentTargetRotations - simRotations, -step, step);
+        simRotations = HoodConstants.clampRotations(simRotations);
+        hoodSim.getRelativeEncoderSim().setPosition(simRotations);
     }
 }

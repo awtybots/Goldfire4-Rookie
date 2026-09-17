@@ -32,11 +32,19 @@ public class Intake extends SubsystemBase {
     }
 
 
+    private boolean intaking = false;
+
+    public boolean isIntaking() {
+        return intaking;
+    }
+
     public void runIntake() { // right motor follows the left motor, so only need to set the left motor speed
+      intaking = true;
       IntakeController.setSetpoint(IntakeConstants.INTAKE_DUTY, ControlType.kDutyCycle);
      }
 
     public void runOuttake() { // right motor follows the left motor, so only need to set the left motor speed
+      intaking = false;
       IntakeController.setSetpoint(IntakeConstants.OUTTAKE_DUTY,
                 ControlType.kDutyCycle);
      }     
@@ -52,6 +60,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void stopIntake() {
+        intaking = false;
         IntakeMotor.set(0);
     }
 

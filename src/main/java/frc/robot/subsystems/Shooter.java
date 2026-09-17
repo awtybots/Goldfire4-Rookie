@@ -23,6 +23,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import au.grapplerobotics.LaserCan;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.sim.SparkFlexSim;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.Constants.ShooterConstants;
 // import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import frc.robot.Configs;
@@ -42,6 +48,16 @@ public class Shooter extends SubsystemBase {
     //private SparkClosedLoopController shooterLeft2Controller = ShooterLeft2Motor.getClosedLoopController();
 
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
+
+    private static final double SIM_FLYWHEEL_MOI = 0.004;
+    private static final DCMotor SIM_GEARBOX = DCMotor.getNeoVortex(4);
+    private final FlywheelSim flywheelSim = RobotBase.isSimulation()
+            ? new FlywheelSim(LinearSystemId.createFlywheelSystem(SIM_GEARBOX, SIM_FLYWHEEL_MOI, 1.0),
+                    SIM_GEARBOX)
+            : null;
+    private final SparkFlexSim leaderSim = RobotBase.isSimulation()
+            ? new SparkFlexSim(ShooterLeft1Motor, DCMotor.getNeoVortex(1))
+            : null;
     private double targetShooterRPM = 0;
 
     public double RPMOffset = 0.0;
@@ -109,5 +125,13 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/ActualRPM", shooterLeft1Encoder.getVelocity());
         Logger.recordOutput("Shooter/RPMOffset", RPMOffset);
         Logger.recordOutput("Shooter/AtSpeed", isAtSpeed());
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        double vbus = RobotController.getBatteryVoltage();
+        flywheelSim.setInputVoltage(leaderSim.getAppliedOutput() * vbus);
+        flywheelSim.update(0.020);
+        leaderSim.iterate(flywheelSim.getAngularVelocityRPM(), vbus, 0.020);
     }
 }

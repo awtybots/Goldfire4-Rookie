@@ -29,8 +29,15 @@ public class Kicker extends SubsystemBase {
     }
 
 
+    private boolean feeding = false;
+
+    public boolean isFeeding() {
+        return feeding;
+    }
+
     public void Kick() {
         // kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
+        feeding = true;
         KickerLeftMotor.set(0.8);
         KickerRightMotor.set(-0.8);
     }
@@ -41,6 +48,7 @@ public class Kicker extends SubsystemBase {
     }
 
     public void stopKicking() {
+        feeding = false;
         KickerLeftMotor.set(0);
         KickerRightMotor.set(0);
     }
