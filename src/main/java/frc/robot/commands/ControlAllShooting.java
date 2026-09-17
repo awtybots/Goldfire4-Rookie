@@ -24,7 +24,9 @@ public class ControlAllShooting extends Command {
     private boolean isFiring = false;
     private boolean isAtSpeed = false;
     private boolean inShootingZone = true; // false in the opponent alliance zone
+    private boolean tooClose = false;
     private double aimErrorDegrees = 180.0;
+    private double aimToleranceDegrees = 0.0;
 
     public ControlAllShooting(Shooter shooter, Hopper hopper, Kicker kicker, Hood hood,
             SwerveSubsystem swerve) {
@@ -45,8 +47,8 @@ public class ControlAllShooting extends Command {
         return isFiring;
     }
 
-    private double aimTolerance(double dist) {
-        return 3.0;
+    private double aimTolerance(double dist, double allowedMissMeters) {
+        return Math.toDegrees(Math.atan2(allowedMissMeters, dist));
     }
 
     private double aimErrorTo(Translation2d target, Translation2d robotPos) {
@@ -57,16 +59,20 @@ public class ControlAllShooting extends Command {
 
     private boolean isReadyToFire() {
         return inShootingZone
+                && !tooClose
+                && !m_hood.isTrenchLocked()
                 && isAtSpeed
                 && m_hood.isAtPosition()
-                && aimErrorDegrees <= aimTolerance(distance);
+                && aimErrorDegrees <= aimToleranceDegrees;
     }
 
     @Override
     public void initialize() {
         isFiring = false;
         isAtSpeed = false;
+        tooClose = false;
         aimErrorDegrees = 180.0;
+        aimToleranceDegrees = 0.0;
     }
 
     @Override
@@ -81,6 +87,8 @@ public class ControlAllShooting extends Command {
             distance = dist;
             aimErrorDegrees = aimErrorTo(
                     drivebase.getCachedDynamicHubLocation().getTranslation(), robotPos);
+            aimToleranceDegrees = aimTolerance(dist, ShooterConstants.HUB_AIM_TOLERANCE_M);
+            tooClose = dist < ShooterConstants.MIN_HUB_SHOT_DISTANCE_M;
 
             double targetRPM = ShooterConstants.hubShooterTable.get(MathUtil.clamp(dist,
                     ShooterConstants.MIN_HUB_DISTANCE_M, ShooterConstants.MAX_HUB_DISTANCE_M));
@@ -92,7 +100,6 @@ public class ControlAllShooting extends Command {
 
             Logger.recordOutput("Shooting/Mode", "Hub");
             Logger.recordOutput("Shooting/DistanceToHub", dist);
-            Logger.recordOutput("Shooting/AimTolerance", aimTolerance(dist));
         } else if (drivebase.isInNeutralZone()) { // ferry
             Translation2d robotToFerry = drivebase.getCachedDynamicFerryLocation()
                     .getTranslation().minus(robotPos);
@@ -100,6 +107,8 @@ public class ControlAllShooting extends Command {
             distance = dist;
             aimErrorDegrees = aimErrorTo(
                     drivebase.getCachedDynamicFerryLocation().getTranslation(), robotPos);
+            aimToleranceDegrees = aimTolerance(dist, ShooterConstants.FERRY_AIM_TOLERANCE_M);
+            tooClose = false;
 
             double targetRPM = ShooterConstants.ferryShooterTable.get(MathUtil.clamp(dist,
                     ShooterConstants.MIN_FERRY_DISTANCE_M, ShooterConstants.MAX_FERRY_DISTANCE_M));
@@ -111,12 +120,13 @@ public class ControlAllShooting extends Command {
 
             Logger.recordOutput("Shooting/Mode", "Ferry");
             Logger.recordOutput("Shooting/DistanceToFerry", dist);
-            Logger.recordOutput("Shooting/AimTolerance", aimTolerance(dist));
         } else { // opponent alliance zone - we never shoot or ferry from here
             recordedTargetRPM = ShooterConstants.ALLIANCE_IDLE_RPM;
             m_shooter.setTargetRPM(ShooterConstants.ALLIANCE_IDLE_RPM);
             isAtSpeed = false;
+            tooClose = false;
             aimErrorDegrees = 180.0;
+            aimToleranceDegrees = 0.0;
             Logger.recordOutput("Shooting/Mode", "HoldOpponentZone");
         }
 
@@ -136,6 +146,9 @@ public class ControlAllShooting extends Command {
         Logger.recordOutput("Shooting/IsFiring", isFiring);
         Logger.recordOutput("Shooting/IsReadyToFire", isReadyToFire());
         Logger.recordOutput("Shooting/AimErrorDeg", aimErrorDegrees);
+        Logger.recordOutput("Shooting/AimToleranceDeg", aimToleranceDegrees);
+        Logger.recordOutput("Shooting/TooClose", tooClose);
+        Logger.recordOutput("Shooting/HoodTrenchLocked", m_hood.isTrenchLocked());
         Logger.recordOutput("Shooting/HoodAtPosition", m_hood.isAtPosition());
         Logger.recordOutput("Shooting/Distance", distance);
         Logger.recordOutput("Shooting/InShootingZone", inShootingZone);

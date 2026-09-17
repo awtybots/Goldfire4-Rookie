@@ -53,6 +53,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.HoodConstants;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.util.FieldConstants;
 import frc.robot.util.HubTracker;
 // import frc.robot.utils.FuelSim;
 
@@ -98,7 +99,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter();
-  private final Hood m_Hood = new Hood();
+  private final Hood m_Hood = new Hood(drivebase::isNearTrench);
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
   private final Slapdown m_slapdown = new Slapdown();
@@ -539,8 +540,8 @@ public class RobotContainer {
 
   private boolean isInAllianceZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Blue && drivebase.getPose().getMeasureX().lt(blueZone)) {
       return true;
@@ -553,8 +554,8 @@ public class RobotContainer {
 
   private boolean isInOpponentZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Red && drivebase.getPose().getMeasureX().lt(blueZone)) {
       return true;

@@ -215,7 +215,11 @@ public final class Constants {
 
       static {
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), Degrees.of(27.78)),
+          Pair.of(Meters.of(1.4), Degrees.of(22.53)),
+          Pair.of(Meters.of(1.6), Degrees.of(22.53)),
+          Pair.of(Meters.of(1.8), Degrees.of(22.53)),
+          Pair.of(Meters.of(2.0), Degrees.of(25.58)),
+          Pair.of(Meters.of(2.25), Degrees.of(29.13)),
           Pair.of(Meters.of(2.5), Degrees.of(31.23)),
           Pair.of(Meters.of(3.0), Degrees.of(33.73)),
           Pair.of(Meters.of(3.5), Degrees.of(35.63)),
@@ -251,6 +255,9 @@ public final class Constants {
       public static final double HOOD_DOWN = 0.0;
       public static final double HOOD_UP = 2.8;
 
+      public static final double TRENCH_BUFFER_M = 0.80;
+      public static final double TRENCH_LOOKAHEAD_S = 0.5;
+
       // PID Constants
       public static final double p = 1.4;
       public static final double i = 0.0;
@@ -276,10 +283,14 @@ public final class Constants {
       public static final double v = 0.001935;
       public static final double a = 0.0;
 
-      public static final double MIN_HUB_DISTANCE_M = 2.0;
+      public static final double MIN_HUB_DISTANCE_M = 1.4;
       public static final double MAX_HUB_DISTANCE_M = 9.0;
       public static final double MIN_FERRY_DISTANCE_M = 2.0;
       public static final double MAX_FERRY_DISTANCE_M = 10.0;
+
+      public static final double MIN_HUB_SHOT_DISTANCE_M = 1.15;
+      public static final double HUB_AIM_TOLERANCE_M = 0.35;
+      public static final double FERRY_AIM_TOLERANCE_M = 1.0;
 
       public static final double ALLIANCE_IDLE_RPM = 1500.0;
 
@@ -294,7 +305,11 @@ public final class Constants {
       public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
       static {
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), Seconds.of(0.669)),
+          Pair.of(Meters.of(1.4), Seconds.of(0.575)),
+          Pair.of(Meters.of(1.6), Seconds.of(0.660)),
+          Pair.of(Meters.of(1.8), Seconds.of(0.737)),
+          Pair.of(Meters.of(2.0), Seconds.of(0.723)),
+          Pair.of(Meters.of(2.25), Seconds.of(0.712)),
           Pair.of(Meters.of(2.5), Seconds.of(0.731)),
           Pair.of(Meters.of(3.0), Seconds.of(0.792)),
           Pair.of(Meters.of(3.5), Seconds.of(0.851)),
@@ -337,7 +352,11 @@ public final class Constants {
       static {
 
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), RPM.of(1720*RPM_SCALE)),
+          Pair.of(Meters.of(1.4), RPM.of(1605*RPM_SCALE)),
+          Pair.of(Meters.of(1.6), RPM.of(1645*RPM_SCALE)),
+          Pair.of(Meters.of(1.8), RPM.of(1700*RPM_SCALE)),
+          Pair.of(Meters.of(2.0), RPM.of(1730*RPM_SCALE)),
+          Pair.of(Meters.of(2.25), RPM.of(1775*RPM_SCALE)),
           Pair.of(Meters.of(2.5), RPM.of(1825*RPM_SCALE)),
           Pair.of(Meters.of(3.0), RPM.of(1935*RPM_SCALE)),
           Pair.of(Meters.of(3.5), RPM.of(2040*RPM_SCALE)),
@@ -428,7 +447,7 @@ public final class Constants {
     public static final double Y_FUEL_TOLERANCE = 0.1;
 
     public static class Dimensions {
-      public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
+      public static final Distance BUMPER_THICKNESS = Inches.of(3.82); // frame to edge of bumper
       public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
       public static final Distance FRAME_SIZE_Y = Inches.of(27); // left to right (y-axis)
       public static final Distance FRAME_SIZE_X = Inches.of(27); // front to back (x-axis)

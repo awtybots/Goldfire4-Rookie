@@ -42,6 +42,9 @@ public class Shooter extends SubsystemBase {
     //private SparkClosedLoopController shooterLeft2Controller = ShooterLeft2Motor.getClosedLoopController();
 
     private final RelativeEncoder shooterLeft1Encoder = ShooterLeft1Motor.getEncoder();
+    private final RelativeEncoder shooterRight1Encoder = ShooterRight1Motor.getEncoder();
+    private final RelativeEncoder shooterLeft2Encoder = ShooterLeft2Motor.getEncoder();
+    private final RelativeEncoder shooterRight2Encoder = ShooterRight2Motor.getEncoder();
     private double targetShooterRPM = 0;
 
     public double RPMOffset = 0.0;
@@ -109,5 +112,21 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("Shooter/ActualRPM", shooterLeft1Encoder.getVelocity());
         Logger.recordOutput("Shooter/RPMOffset", RPMOffset);
         Logger.recordOutput("Shooter/AtSpeed", isAtSpeed());
+        Logger.recordOutput("Shooter/RPMError", targetShooterRPM - shooterLeft1Encoder.getVelocity());
+
+        Logger.recordOutput("Shooter/L1/RPM", shooterLeft1Encoder.getVelocity());
+        Logger.recordOutput("Shooter/R1/RPM", shooterRight1Encoder.getVelocity());
+        Logger.recordOutput("Shooter/L2/RPM", shooterLeft2Encoder.getVelocity());
+        Logger.recordOutput("Shooter/R2/RPM", shooterRight2Encoder.getVelocity());
+
+        Logger.recordOutput("Shooter/L1/AppliedVolts", ShooterLeft1Motor.getAppliedOutput() * ShooterLeft1Motor.getBusVoltage());
+        Logger.recordOutput("Shooter/R1/AppliedVolts", ShooterRight1Motor.getAppliedOutput() * ShooterRight1Motor.getBusVoltage());
+        Logger.recordOutput("Shooter/L2/AppliedVolts", ShooterLeft2Motor.getAppliedOutput() * ShooterLeft2Motor.getBusVoltage());
+        Logger.recordOutput("Shooter/R2/AppliedVolts", ShooterRight2Motor.getAppliedOutput() * ShooterRight2Motor.getBusVoltage());
+
+        Logger.recordOutput("Shooter/L1/Current", ShooterLeft1Motor.getOutputCurrent());
+        Logger.recordOutput("Shooter/R1/Current", ShooterRight1Motor.getOutputCurrent());
+        Logger.recordOutput("Shooter/L2/Current", ShooterLeft2Motor.getOutputCurrent());
+        Logger.recordOutput("Shooter/R2/Current", ShooterRight2Motor.getOutputCurrent());
     }
 }

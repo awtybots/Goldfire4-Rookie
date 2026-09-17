@@ -7,6 +7,7 @@ package frc.robot.subsystems.swervedrive;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Meters;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -47,6 +48,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.LimelightHelpers;
+import frc.robot.util.FieldConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -1269,8 +1271,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean isInAllianceZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Blue && getPose().getMeasureX().lt(blueZone)) {
       return true;
@@ -1283,8 +1285,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean isInOpponentAllianceZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Red && getPose().getMeasureX().lt(blueZone)) {
       return true;
@@ -1297,6 +1299,31 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public boolean isInNeutralZone() {
     return !isInAllianceZone() && !isInOpponentAllianceZone();
+  }
+
+  public boolean isNearTrench() {
+    Translation2d robotVec = getPose().getTranslation();
+    ChassisSpeeds vel = getFieldVelocity();
+    Translation2d robotVel = new Translation2d(vel.vxMetersPerSecond, vel.vyMetersPerSecond);
+
+    for (double t = 0.0; t <= Constants.HoodConstants.TRENCH_LOOKAHEAD_S + 1e-9; t += 0.05) {
+      if (isInTrench(robotVec.plus(robotVel.times(t)))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isInTrench(Translation2d position) {
+    double halfDepth = FieldConstants.LeftTrench.depth / 2.0 + Constants.HoodConstants.TRENCH_BUFFER_M;
+    double openingWidth = FieldConstants.LeftTrench.openingWidth + Constants.HoodConstants.TRENCH_BUFFER_M;
+
+    boolean inTrenchX = Math.abs(position.getX() - FieldConstants.LinesVertical.hubCenter) <= halfDepth
+        || Math.abs(position.getX() - FieldConstants.LinesVertical.oppHubCenter) <= halfDepth;
+    boolean inTrenchY = position.getY() <= openingWidth
+        || position.getY() >= FieldConstants.fieldWidth - openingWidth;
+
+    return inTrenchX && inTrenchY;
   }
 
   private Pose2d GetDriveToPose()

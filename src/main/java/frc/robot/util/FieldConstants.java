@@ -23,7 +23,7 @@ import edu.wpi.first.math.util.Units;
 public class FieldConstants
 {
 
-  public static final FieldType fieldType = FieldType.WELDED;
+  public static final FieldType fieldType = FieldType.ANDYMARK;
 
   // AprilTag related constants
   public static final AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
