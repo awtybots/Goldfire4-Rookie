@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5879403770924307,
-        "y": 7.053876228165938
+        "x": -0.0415783751819494,
+        "y": 7.007670919759831
       },
       "isLocked": false,
       "linkedName": "shoot place"
@@ -20,12 +20,12 @@
         "y": 7.423182428129548
       },
       "prevControl": {
-        "x": 3.6088431359170308,
-        "y": 7.397800730076419
+        "x": 3.0164250292722796,
+        "y": 7.428594835854142
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "fun 2"
     }
   ],
   "rotationTargets": [],

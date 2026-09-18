@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot1"
+            "pathName": "Shoot 2"
           }
         },
         {
@@ -38,6 +38,24 @@
           "type": "path",
           "data": {
             "pathName": "Shoot 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path 3"
           }
         }
       ]
