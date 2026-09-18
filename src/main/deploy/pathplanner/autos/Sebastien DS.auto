@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot 2"
+            "name": "shoot"
           }
         },
         {
@@ -62,6 +62,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Sebastien",
   "choreoAuto": false
 }

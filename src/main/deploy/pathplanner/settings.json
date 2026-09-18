@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.880,
-  "robotLength": 0.880,
+  "robotWidth": 0.88,
+  "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
     "Matias",
@@ -8,6 +8,7 @@
   ],
   "autoFolders": [
     "Matias",
+    "Sebastien",
     "TRI Autons"
   ],
   "defaultMaxVel": 3.5,
