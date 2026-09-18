@@ -18,6 +18,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
@@ -439,6 +440,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
       final boolean enableFeedforward = true;
       // Configure AutoBuilder last
+      FlippingUtil.fieldSizeX = FieldConstants.fieldLength;
+      FlippingUtil.fieldSizeY = FieldConstants.fieldWidth;
+
       AutoBuilder.configure(
           this::getPose,
           // Robot pose supplier

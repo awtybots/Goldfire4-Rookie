@@ -165,6 +165,25 @@ public class RobotContainer {
     return new AimHood(m_Hood, drivebase::getCachedDynamicFerryLocation, drivebase::getPose, true);
   }
 
+  private Command makeAutoShoot() {
+    return Commands.parallel(
+        new AimAtTarget(drivebase, autoAimStream, () -> 0.0, () -> 0.0),
+        Commands.defer(() -> {
+          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodHub(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          } else {
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodFerry(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          }
+        }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)))
+        .withTimeout(5);
+  }
+
   /** Returns the controller that should be treated as the driving controller. */
   private CommandXboxController dc() {
       return driverXbox;
@@ -178,6 +197,7 @@ public class RobotContainer {
   private PathConstraints autoConstraints;
 
   SwerveInputStream aimStream;
+  SwerveInputStream autoAimStream;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -196,6 +216,9 @@ public class RobotContainer {
     // m_shooter.isShooterRunning());
     // Create the NamedCommands that will be used in PathPlanner
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("extend", m_slapdown.extendCommand());
+    NamedCommands.registerCommand("Intake", m_intake.runIntakeCommand());
+    NamedCommands.registerCommand("shoot", makeAutoShoot());
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
@@ -283,6 +306,10 @@ public class RobotContainer {
         .translationHeadingOffset(Rotation2d.fromDegrees(0));
 
     aimStream = driveAngularVelocity.copy();
+
+    autoAimStream = SwerveInputStream.of(drivebase.getSwerveDrive(), () -> 0.0, () -> 0.0)
+        .withControllerRotationAxis(() -> 0.0)
+        .allianceRelativeControl(true);
 
 
     aimAtTarget = new AimAtTarget(drivebase, aimStream,

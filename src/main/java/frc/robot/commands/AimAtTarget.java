@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,16 +36,29 @@ public class AimAtTarget extends Command {
     addRequirements(this.swerveSubsystem);
   }
 
+  private double aimTolerance(double distance) {
+    if (distance < 2)
+      return 5.0;
+    else if (distance < 3.5)
+      return 2.0;
+    return 1.0;
+  }
+
   @Override
   public void initialize() {
     swerveSubsystem.setAimLocations();
     swerveSubsystem.isAiming = true;
     swerveInputStream.aimWhile(true);
+    readyToLock = false;
   }
 
   @Override
   public void execute() {
     swerveSubsystem.driveFieldOriented(swerveInputStream.get());
+
+    double distance = swerveSubsystem.getCachedDynamicAimLocation().getTranslation()
+        .getDistance(swerveSubsystem.getPose().getTranslation());
+    readyToLock = swerveInputStream.aimLock(Degrees.of(aimTolerance(distance))).getAsBoolean();
 
     double leftMag = Math.hypot(leftX.getAsDouble(), leftY.getAsDouble());
     if (leftMag < Constants.OperatorConstants.DEADBAND && readyToLock) {
@@ -62,6 +76,7 @@ public class AimAtTarget extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    readyToLock = false;
     swerveSubsystem.isAiming = false;
     swerveInputStream.aimWhile(false);
   }
