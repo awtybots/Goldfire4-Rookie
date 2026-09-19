@@ -348,7 +348,11 @@ public class RobotContainer {
     //                 m_hopper.runBeltsToConveyorCommand()))));
 
     dc().rightBumper().whileTrue(
-      m_intake.runOuttakeCommand()
+      Commands.parallel(
+        m_intake.runOuttakeCommand(),
+        m_hopper.runReverseBeltsCommand(),
+        m_kicker.backwardsKickCommand()
+      )
     );
 
     dc().leftTrigger().whileTrue(
