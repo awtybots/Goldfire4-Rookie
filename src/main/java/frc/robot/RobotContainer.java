@@ -316,41 +316,41 @@ public class RobotContainer {
         dc()::getLeftX, dc()::getLeftY);
 
 
-    // dc().rightTrigger().whileTrue(aimAtTarget);
+    dc().rightTrigger().whileTrue(aimAtTarget);
 
 
-    // dc().rightTrigger().whileTrue(
-    //     Commands.defer(() -> {
-    //       if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
-    //         return Commands.parallel(
-    //             makeVariableShoot(),
-    //             makeAimHoodHub(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
-    //       } else {
-    //         return Commands.parallel(
-    //             makeVariableShoot(),
-    //             makeAimHoodFerry(),
-    //             m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3));
-    //       }
-    //     }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
+    dc().rightTrigger().whileTrue(
+        Commands.defer(() -> {
+          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodHub(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          } else {
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodFerry(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          }
+        }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)));
 
     // ======== Operator ========
-    // shooter
-    dc().rightTrigger().whileTrue(
-        Commands.parallel(
-            m_shooter.setShooterSpeedCommand(1000),
-            m_Hood.setHoodPositionCommand(0.6),
-            Commands.sequence(
-                Commands.waitUntil(() -> m_shooter.isShooterFast()),
-                Commands.parallel(
-                    m_kicker.kickCommand(),
-                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
-                    m_hopper.runBeltsToConveyorCommand()))));
+    // // shooter
+    // dc().rightTrigger().whileTrue(
+    //     Commands.parallel(
+    //         m_shooter.setShooterSpeedCommand(1000),
+    //         m_Hood.setHoodPositionCommand(0.6),
+    //         Commands.sequence(
+    //             Commands.waitUntil(() -> m_shooter.isShooterFast()),
+    //             Commands.parallel(
+    //                 m_kicker.kickCommand(),
+    //                 m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
+    //                 m_hopper.runBeltsToConveyorCommand()))));
 
     dc().leftTrigger().whileTrue(
         Commands.parallel(
             m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand().onlyWhile(m_slapdown::isSlapdownOut)));
+            m_intake.runIntakeCommand().onlyIf(m_slapdown::isSlapdownOut)));
 
     dc().leftBumper().whileTrue(
         (m_slapdown.retractCommand()));

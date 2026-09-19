@@ -68,5 +68,6 @@ public class Slapdown extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // position = slapdownEncoder.getPosition();
     }
 }
