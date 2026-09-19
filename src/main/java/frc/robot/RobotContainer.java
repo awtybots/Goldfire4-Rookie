@@ -350,7 +350,11 @@ public class RobotContainer {
     dc().leftTrigger().whileTrue(
         Commands.parallel(
             m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand().onlyWhile(m_slapdown::isSlapdownOut)));
+            m_intake.runIntakeCommand().onlyWhile(m_slapdown::isSlapdownOut)
+            //,
+           
+            // m_intake.runIntakeCommand().beforeStarting(Commands.waitSeconds(1.5)).onlyWhile(m_slapdown::isSlapdownIn)
+            ));
 
     dc().leftBumper().whileTrue(
         (m_slapdown.retractCommand()));
