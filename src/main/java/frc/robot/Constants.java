@@ -214,26 +214,53 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
 
       static {
+        // double tuningRatio = 0.5;
+        // double min = HOOD_MIN_DEGREES;
+        // double max = HOOD_MAX_DEGREES;
+        // for (var entry : List.of(
+        //     Pair.of(Meters.of(1.4),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(1.6),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(1.8),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.0),  Degrees.of(min + (3.05 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.25), Degrees.of(min + (6.60 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.5),  Degrees.of(min + (8.7 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(3.0),  Degrees.of(min + (11.2 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(3.5),  Degrees.of(min + (13.1 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(4.0),  Degrees.of(min + (14.65 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(4.5),  Degrees.of(min + (15.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(5.0),  Degrees.of(min + (16.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(5.5),  Degrees.of(min + (17.8 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(6.0),  Degrees.of(min + (18.6 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(6.5),  Degrees.of(min + (19.25 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(7.0),  Degrees.of(min + (19.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(7.5),  Degrees.of(min + (20.45 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(8.0),  Degrees.of(min + (20.95 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(8.5),  Degrees.of(min + (21.45 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(9.0),  Degrees.of(min + (21.9 * (tuningRatio / (max - min))))))) {
+        //     hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        // }
+        
+        double tuningAngle = 0.5;
         for (var entry : List.of(
           Pair.of(Meters.of(1.4), Degrees.of(22.53)),
           Pair.of(Meters.of(1.6), Degrees.of(22.53)),
           Pair.of(Meters.of(1.8), Degrees.of(22.53)),
-          Pair.of(Meters.of(2.0), Degrees.of(25.58)),
-          Pair.of(Meters.of(2.25), Degrees.of(29.13)),
-          Pair.of(Meters.of(2.5), Degrees.of(31.23)),
-          Pair.of(Meters.of(3.0), Degrees.of(33.73)),
-          Pair.of(Meters.of(3.5), Degrees.of(35.63)),
-          Pair.of(Meters.of(4.0), Degrees.of(37.18)),
-          Pair.of(Meters.of(4.5), Degrees.of(38.43)),
-          Pair.of(Meters.of(5.0), Degrees.of(39.43)),
-          Pair.of(Meters.of(5.5), Degrees.of(40.33)),
-          Pair.of(Meters.of(6.0), Degrees.of(41.13)),
-          Pair.of(Meters.of(6.5), Degrees.of(41.78)),
-          Pair.of(Meters.of(7.0), Degrees.of(42.43)),
-          Pair.of(Meters.of(7.5), Degrees.of(42.98)),
-          Pair.of(Meters.of(8.0), Degrees.of(43.48)),
-          Pair.of(Meters.of(8.5), Degrees.of(43.98)),
-          Pair.of(Meters.of(9.0), Degrees.of(44.43)))) {
+          Pair.of(Meters.of(2.0), Degrees.of(25.58-tuningAngle)),
+          Pair.of(Meters.of(2.25), Degrees.of(29.13-tuningAngle)),
+          Pair.of(Meters.of(2.5), Degrees.of(31.23-tuningAngle)),
+          Pair.of(Meters.of(3.0), Degrees.of(33.73-tuningAngle)),
+          Pair.of(Meters.of(3.5), Degrees.of(35.63-tuningAngle)),
+          Pair.of(Meters.of(4.0), Degrees.of(37.18-tuningAngle)),
+          Pair.of(Meters.of(4.5), Degrees.of(38.43-tuningAngle)),
+          Pair.of(Meters.of(5.0), Degrees.of(39.43-tuningAngle)),
+          Pair.of(Meters.of(5.5), Degrees.of(40.33-tuningAngle)),
+          Pair.of(Meters.of(6.0), Degrees.of(41.13-tuningAngle)),
+          Pair.of(Meters.of(6.5), Degrees.of(41.78-tuningAngle)),
+          Pair.of(Meters.of(7.0), Degrees.of(42.43-tuningAngle)),
+          Pair.of(Meters.of(7.5), Degrees.of(42.98-tuningAngle)),
+          Pair.of(Meters.of(8.0), Degrees.of(43.48-tuningAngle)),
+          Pair.of(Meters.of(8.5), Degrees.of(43.98-tuningAngle)),
+          Pair.of(Meters.of(9.0), Degrees.of(44.43-tuningAngle)))) {
           hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
 
