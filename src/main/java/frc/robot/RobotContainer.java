@@ -347,10 +347,26 @@ public class RobotContainer {
     //                 m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
     //                 m_hopper.runBeltsToConveyorCommand()))));
 
+    dc().rightBumper().whileTrue(
+      Commands.parallel(
+        m_intake.runOuttakeCommand(),
+        m_hopper.runReverseBeltsCommand(),
+        m_kicker.backwardsKickCommand()
+      )
+    );
+
     dc().leftTrigger().whileTrue(
+      Commands.either(
         Commands.parallel(
             m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand().onlyWhile(m_slapdown::isSlapdownOut)));
+            m_intake.runIntakeCommand())
+        ,
+        Commands.parallel(
+            m_slapdown.extendCommand(),
+            m_intake.runIntakeCommand().beforeStarting(Commands.waitSeconds(0.7)))
+        ,
+        m_slapdown::isSlapdownOut
+    ));
 
     dc().leftBumper().whileTrue(
         (m_slapdown.retractCommand()));
