@@ -240,7 +240,7 @@ public final class Constants {
         //     hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         // }
         
-        double tuningAngle = 1.5;
+        double tuningAngle = 3.0;
         for (var entry : List.of(
           Pair.of(Meters.of(1.4), Degrees.of(22.53)),
           Pair.of(Meters.of(1.6), Degrees.of(22.53)),
@@ -355,7 +355,7 @@ public final class Constants {
         }
       }
 
-      public final static double RPM_SCALE = 1.0; 
+      public final static double RPM_SCALE = 1.03; 
 
       public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
       static {
