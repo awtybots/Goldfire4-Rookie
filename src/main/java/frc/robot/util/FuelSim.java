@@ -95,6 +95,10 @@ public class FuelSim {
         protected Translation3d pos;
         protected Translation3d vel;
         protected double spin;
+        protected double hubReturn = 0.0;
+        protected Translation3d hubEntry = new Translation3d();
+        protected Translation3d hubExit = new Translation3d();
+        protected Translation3d hubExitVel = new Translation3d();
 
         protected Fuel(Translation3d pos, Translation3d vel, double spin) {
             this.pos = pos;
@@ -112,6 +116,21 @@ public class FuelSim {
 
         protected void update(boolean simulateAirResistance, int subticks,
                 double dragK, double liftK, double groundFriction) {
+            if (hubReturn > 0.0) {
+                // Scored fuel rides down the inside of the hub to the return chute. Dropping it
+                // straight onto the chute moved it a metre and a half in one frame, which reads
+                // as a fuel teleporting across the field. Interpolating the trip rather than
+                // integrating it keeps the arrival exact even if a collision pass nudged the fuel
+                // on the tick it scored.
+                hubReturn -= PERIOD / subticks;
+                if (hubReturn <= 0.0) {
+                    pos = hubExit;
+                    vel = hubExitVel;
+                } else {
+                    pos = hubEntry.interpolate(hubExit, 1.0 - hubReturn / Hub.RETURN_TIME);
+                }
+                return;
+            }
             pos = pos.plus(vel.times(PERIOD / subticks));
             if (pos.getZ() > FUEL_RADIUS) {
                 Translation3d Fg = GRAVITY.times(FUEL_MASS);
@@ -194,7 +213,9 @@ public class FuelSim {
         }
 
         protected void handleHubCollisions(Hub hub, int subticks) {
+            if (hubReturn > 0.0) return; // already on its way down to the chute
             hub.handleHubInteraction(this, subticks);
+            if (hubReturn > 0.0) return; // just scored, the hub walls no longer apply
             hub.fuelCollideSide(this);
 
             double netCollision = hub.fuelHitNet(this);
@@ -430,8 +451,9 @@ public class FuelSim {
      * both over NetworkTables and when replaying the .wpilog.
      */
     public void logFuels() {
+        // Every fuel, in flight or not, in one array at loop rate. Splitting it made balls pop
+        // between two keys as they landed, and the grounded half only refreshed at 15 Hz.
         Logger.recordOutput(fuelLogKey, fuels.stream()
-                .filter(fuel -> !isInFlight(fuel))
                 .map((fuel) -> fuel.pos)
                 .toArray(Translation3d[]::new));
         Logger.recordOutput(fuelLogKey + "Count", fuels.size());
@@ -459,6 +481,11 @@ public class FuelSim {
      */
     public int getFuelCount() {
         return fuels.size();
+    }
+
+    /** @return every fuel's position, in the same order and content as the logged array */
+    public Translation3d[] getFuelPositions() {
+        return fuels.stream().map(fuel -> fuel.pos).toArray(Translation3d[]::new);
     }
 
     /**
@@ -628,7 +655,7 @@ public class FuelSim {
         }
 
         logFuelsInFlight();
-        if (loggingTimer.advanceIfElapsed(1.0 / loggingFreqHz)) {
+        if (loggingFreqHz >= 1.0 / PERIOD || loggingTimer.advanceIfElapsed(1.0 / loggingFreqHz)) {
             logFuels();
         }
     }
@@ -899,6 +926,8 @@ public class FuelSim {
         protected static final double ENTRY_RADIUS = 0.56;
 
         protected static final double SIDE = 1.2;
+        protected static final double RETURN_TIME = 0.35;
+        protected static final double RETURN_SPREAD = 0.6;
 
         protected static final double NET_HEIGHT_MAX = 3.057;
         protected static final double NET_HEIGHT_MIN = 1.5;
@@ -919,8 +948,12 @@ public class FuelSim {
 
         protected void handleHubInteraction(Fuel fuel, int subticks) {
             if (didFuelScore(fuel, subticks)) {
-                fuel.pos = exit;
-                fuel.vel = getDispersalVelocity();
+                fuel.hubReturn = RETURN_TIME;
+                fuel.hubEntry = fuel.pos;
+                // Spread the returns across the chute. Landing every scored fuel on the same
+                // point spawns them inside each other, and the overlap fix flings them apart.
+                fuel.hubExit = exit.plus(new Translation3d(0, (Math.random() - 0.5) * RETURN_SPREAD, 0));
+                fuel.hubExitVel = getDispersalVelocity();
                 score++;
             }
         }

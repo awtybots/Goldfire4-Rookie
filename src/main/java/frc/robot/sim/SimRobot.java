@@ -41,8 +41,12 @@ public class SimRobot {
     public static final double EXIT_Z_M = Units.inchesToMeters(20.313);
     public static final double[] LANE_Y_M = {-0.225, -0.075, 0.075, 0.225};
     public static final double LAUNCH_YAW_OFFSET_DEG = 180.0;
-    public static final double VOLLEYS_PER_SECOND = 3.0;
+    public static final double VOLLEYS_PER_SECOND = 3.0; // only used by launchVolley()
     public static final double RELEASE_STAGGER_S = 0.06;
+    // The feed is continuous now, so fuel leaves as an even stream rather than clumps of four.
+    // 12/s is the same throughput the old 3 volleys x 4 lanes produced.
+    public static final double BALLS_PER_SECOND = 12.0;
+    public static final double RELEASE_JITTER = 0.15;
     public static final double SPEED_SIGMA = 0.02;
     public static final double LAUNCH_ANGLE_SIGMA_DEG = 0.8;
     public static final double YAW_SIGMA_DEG = 1.0;
@@ -59,7 +63,7 @@ public class SimRobot {
     public static final double HOPPER_Z_MAX = 0.521;
 
     public static final double GROUND_FRICTION_PER_SEC = 1.6;
-    public static final double LOGGING_HZ = 15.0;
+    public static final double LOGGING_HZ = 50.0; // every loop: fuel positions must not stutter
     public static final int SUBTICKS = 10;
 
     public static final double FIELD_LENGTH_M = 16.51;
@@ -96,9 +100,9 @@ public class SimRobot {
   private final FuelSim fuelSim = new FuelSim("FuelSim");
 
   private int fuelStored = 0;
-  private double lastVolleyTime = Double.NEGATIVE_INFINITY;
+  private double nextReleaseTime = Double.NEGATIVE_INFINITY;
+  private int laneCursor = 0;
   private final java.util.Random rng = new java.util.Random(SimConstants.RANDOM_SEED);
-  private final java.util.List<double[]> pendingBalls = new java.util.ArrayList<>();
   private int hubShotsFired = 0;
 
   public SimRobot(SwerveSubsystem drivebase, Shooter shooter, Hood hood, Kicker kicker,
@@ -158,8 +162,8 @@ public class SimRobot {
     fuelSim.spawnStartingFuel();
     fuelStored = 0;
     hubShotsFired = 0;
-    lastVolleyTime = Double.NEGATIVE_INFINITY;
-    pendingBalls.clear();
+    nextReleaseTime = Double.NEGATIVE_INFINITY;
+    laneCursor = 0;
     FuelSim.Hub.BLUE_HUB.resetScore();
     FuelSim.Hub.RED_HUB.resetScore();
   }
@@ -222,26 +226,22 @@ public class SimRobot {
   private void updateVolleys() {
     double now = Timer.getFPGATimestamp();
 
-    if (kicker.isFeeding() && now - lastVolleyTime >= 1.0 / SimConstants.VOLLEYS_PER_SECOND) {
-      int available = fuelStored - pendingBalls.size();
-      int count = Math.min(SimConstants.LANE_Y_M.length, available);
-      if (count > 0) {
-        lastVolleyTime = now;
-        java.util.List<Integer> lanes = new java.util.ArrayList<>();
-        for (int i = 0; i < SimConstants.LANE_Y_M.length; i++) {
-          lanes.add(i);
-        }
-        java.util.Collections.shuffle(lanes, rng);
-        for (int k = 0; k < count; k++) {
-          pendingBalls.add(new double[] {now + rng.nextDouble() * SimConstants.RELEASE_STAGGER_S,
-              lanes.get(k)});
-        }
-        pendingBalls.sort(java.util.Comparator.comparingDouble(b -> b[0]));
-      }
+    if (!kicker.isFeeding() || fuelStored <= 0) {
+      nextReleaseTime = Double.NEGATIVE_INFINITY; // first ball of a burst leaves immediately
+      return;
     }
 
-    while (!pendingBalls.isEmpty() && pendingBalls.get(0)[0] <= now && fuelStored > 0) {
-      launchBall((int) pendingBalls.remove(0)[1]);
+    if (nextReleaseTime == Double.NEGATIVE_INFINITY) {
+      nextReleaseTime = now;
+    }
+
+    // Release on a fixed cadence, catching up if a loop ran long, so the stream stays even
+    // instead of arriving in clumps.
+    double gap = 1.0 / SimConstants.BALLS_PER_SECOND;
+    while (fuelStored > 0 && nextReleaseTime <= now) {
+      launchBall(SimConstants.LANE_Y_M.length == 0 ? 0 : laneCursor % SimConstants.LANE_Y_M.length);
+      laneCursor++;
+      nextReleaseTime += gap * (1.0 + gaussian(SimConstants.RELEASE_JITTER));
     }
   }
 
