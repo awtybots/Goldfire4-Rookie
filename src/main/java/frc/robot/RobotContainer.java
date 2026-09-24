@@ -53,6 +53,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.HoodConstants;
 // import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.util.FieldConstants;
 import frc.robot.util.HubTracker;
 // import frc.robot.utils.FuelSim;
 
@@ -99,7 +100,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Hopper m_hopper = new Hopper();
   private final Shooter m_shooter = new Shooter();
-  private final Hood m_Hood = new Hood();
+  private final Hood m_Hood = new Hood(drivebase::isNearTrench);
   // private final Climber m_climber = new Climber();
   private final Kicker m_kicker = new Kicker();
   private final Slapdown m_slapdown = new Slapdown();
@@ -165,6 +166,25 @@ public class RobotContainer {
     return new AimHood(m_Hood, drivebase::getCachedDynamicFerryLocation, drivebase::getPose, true);
   }
 
+  private Command makeAutoShoot() {
+    return Commands.parallel(
+        new AimAtTarget(drivebase, autoAimStream, () -> 0.0, () -> 0.0),
+        Commands.defer(() -> {
+          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodHub(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          } else {
+            return Commands.parallel(
+                makeVariableShoot(),
+                makeAimHoodFerry(),
+                m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)));
+          }
+        }, Set.of(m_shooter, m_hopper, m_kicker, m_Hood, m_slapdown)))
+        .withTimeout(5);
+  }
+
   /** Returns the controller that should be treated as the driving controller. */
   private CommandXboxController dc() {
       return driverXbox;
@@ -180,6 +200,7 @@ public class RobotContainer {
   private PathConstraints autoConstraints;
 
   SwerveInputStream aimStream;
+  SwerveInputStream autoAimStream;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -202,6 +223,9 @@ public class RobotContainer {
     // m_shooter.isShooterRunning());
     // Create the NamedCommands that will be used in PathPlanner
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+    NamedCommands.registerCommand("extend", m_slapdown.extendCommand());
+    NamedCommands.registerCommand("Intake", m_intake.runIntakeCommand());
+    NamedCommands.registerCommand("shoot", makeAutoShoot());
 
     // setup the flip chooser
     flipChooser.setDefaultOption("Not Flipped", false);
@@ -291,6 +315,10 @@ public class RobotContainer {
 
     aimStream = driveAngularVelocity.copy();
 
+    autoAimStream = SwerveInputStream.of(drivebase.getSwerveDrive(), () -> 0.0, () -> 0.0)
+        .withControllerRotationAxis(() -> 0.0)
+        .allianceRelativeControl(true);
+
 
     aimAtTarget = new AimAtTarget(drivebase, aimStream,
         dc()::getLeftX, dc()::getLeftY);
@@ -316,6 +344,7 @@ public class RobotContainer {
 
     // ======== Operator ========
     // shooter
+    // // shooter
     // dc().rightTrigger().whileTrue(
     //     Commands.parallel(
     //         m_shooter.setShooterSpeedCommand(1000),
@@ -327,10 +356,26 @@ public class RobotContainer {
     //                 m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
     //                 m_hopper.runBeltsToConveyorCommand()))));
 
+    dc().rightBumper().whileTrue(
+      Commands.parallel(
+        m_intake.runOuttakeCommand(),
+        m_hopper.runReverseBeltsCommand(),
+        m_kicker.backwardsKickCommand()
+      )
+    );
+
     dc().leftTrigger().whileTrue(
+      Commands.either(
         Commands.parallel(
             m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand()));
+            m_intake.runIntakeCommand())
+        ,
+        Commands.parallel(
+            m_slapdown.extendCommand(),
+            m_intake.runIntakeCommand().beforeStarting(Commands.waitSeconds(0.7)))
+        ,
+        m_slapdown::isSlapdownOut
+    ));
 
     dc().leftBumper().whileTrue(
         (m_slapdown.retractCommand()));
@@ -553,8 +598,8 @@ public class RobotContainer {
 
   private boolean isInAllianceZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Blue && drivebase.getPose().getMeasureX().lt(blueZone)) {
       return true;
@@ -567,8 +612,8 @@ public class RobotContainer {
 
   private boolean isInOpponentZone() {
     Alliance alliance = getAlliance();
-    Distance blueZone = Inches.of(182);
-    Distance redZone = Inches.of(469);
+    Distance blueZone = Meters.of(FieldConstants.LinesVertical.allianceZone);
+    Distance redZone = Meters.of(FieldConstants.LinesVertical.oppAllianceZone);
 
     if (alliance == Alliance.Red && drivebase.getPose().getMeasureX().lt(blueZone)) {
       return true;

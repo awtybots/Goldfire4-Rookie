@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "shoot1"
+            "pathName": "Shoot 2"
           }
         },
         {
@@ -39,11 +39,29 @@
           "data": {
             "pathName": "Shoot 2"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path 3"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Sebastien",
   "choreoAuto": false
 }

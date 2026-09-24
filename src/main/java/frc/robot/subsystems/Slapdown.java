@@ -61,7 +61,17 @@ public class Slapdown extends SubsystemBase {
         return new RunCommand(() -> extend(), this);
     }
 
+    public Boolean isSlapdownOut () {
+        return slapdownController.getSetpoint() > 15;
+    }
+    public Boolean isSlapdownIn () {
+        return slapdownEncoder.getPosition() < 5;
+    }
+
     @Override
     public void periodic() {
+        // position = slapdownEncoder.getPosition();
+        isSlapdownOut();
+        isSlapdownIn();
     }
 }

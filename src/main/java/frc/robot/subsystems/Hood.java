@@ -20,6 +20,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Constants.HoodConstants;
 
+import java.util.function.BooleanSupplier;
+
 public class Hood extends SubsystemBase {
 
     private SparkFlex HoodMotor = new SparkFlex(HoodConstants.HOOD_ID, MotorType.kBrushless);
@@ -34,7 +36,11 @@ public class Hood extends SubsystemBase {
             : null;
     private double simRotations = HoodConstants.HOOD_MIN;
 
-    public Hood() {
+    private final BooleanSupplier nearTrench;
+
+    public Hood(BooleanSupplier nearTrench) {
+        this.nearTrench = nearTrench;
+
         HoodMotor.configure(Configs.HoodSubsystem.HoodMotorConfig, ResetMode.kResetSafeParameters,
                 PersistMode.kPersistParameters);
 
@@ -53,12 +59,16 @@ public class Hood extends SubsystemBase {
         return HoodConstants.rotationsToDegrees(getRotations());
     }
 
+    public boolean isTrenchLocked() {
+        return nearTrench.getAsBoolean();
+    }
+
     public boolean isAtPosition() {
         return Math.abs(getRotations() - currentTargetRotations) <= HoodConstants.POSITION_TOLERANCE_ROTATIONS;
     }
 
     public void setHoodPosition(double rotations) {
-        double clamped = HoodConstants.clampRotations(rotations);
+        double clamped = isTrenchLocked() ? HoodConstants.HOOD_MIN : HoodConstants.clampRotations(rotations);
         currentTargetRotations = clamped;
         HoodController.setSetpoint(clamped, ControlType.kPosition);
     }
@@ -76,6 +86,10 @@ public class Hood extends SubsystemBase {
     }
 
     public void stopHood() {
+        if (isTrenchLocked()) {
+            lowerHood();
+            return;
+        }
         HoodMotor.set(0);
     }
 
@@ -105,6 +119,11 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (isTrenchLocked()) {
+            lowerHood();
+        }
+
+        Logger.recordOutput("Hood/TrenchLocked", isTrenchLocked());
         Logger.recordOutput("Hood/Rotations", getRotations());
         Logger.recordOutput("Hood/TargetRotations", currentTargetRotations);
         Logger.recordOutput("Hood/AngleDegrees", getAngleDegrees());

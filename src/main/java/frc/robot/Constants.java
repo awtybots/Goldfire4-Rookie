@@ -214,22 +214,53 @@ public final class Constants {
       public static final InterpolatingDoubleTreeMap ferryHoodTable = new InterpolatingDoubleTreeMap();
 
       static {
+        // double tuningRatio = 0.5;
+        // double min = HOOD_MIN_DEGREES;
+        // double max = HOOD_MAX_DEGREES;
+        // for (var entry : List.of(
+        //     Pair.of(Meters.of(1.4),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(1.6),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(1.8),  Degrees.of(min + (0 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.0),  Degrees.of(min + (3.05 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.25), Degrees.of(min + (6.60 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(2.5),  Degrees.of(min + (8.7 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(3.0),  Degrees.of(min + (11.2 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(3.5),  Degrees.of(min + (13.1 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(4.0),  Degrees.of(min + (14.65 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(4.5),  Degrees.of(min + (15.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(5.0),  Degrees.of(min + (16.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(5.5),  Degrees.of(min + (17.8 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(6.0),  Degrees.of(min + (18.6 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(6.5),  Degrees.of(min + (19.25 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(7.0),  Degrees.of(min + (19.9 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(7.5),  Degrees.of(min + (20.45 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(8.0),  Degrees.of(min + (20.95 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(8.5),  Degrees.of(min + (21.45 * (tuningRatio / (max - min))))),
+        //     Pair.of(Meters.of(9.0),  Degrees.of(min + (21.9 * (tuningRatio / (max - min))))))) {
+        //     hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
+        // }
+        
+        double tuningAngle = 0;
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), Degrees.of(27.78)),
-          Pair.of(Meters.of(2.5), Degrees.of(31.23)),
-          Pair.of(Meters.of(3.0), Degrees.of(33.73)),
-          Pair.of(Meters.of(3.5), Degrees.of(35.63)),
-          Pair.of(Meters.of(4.0), Degrees.of(37.18)),
-          Pair.of(Meters.of(4.5), Degrees.of(38.43)),
-          Pair.of(Meters.of(5.0), Degrees.of(39.43)),
-          Pair.of(Meters.of(5.5), Degrees.of(40.33)),
-          Pair.of(Meters.of(6.0), Degrees.of(41.13)),
-          Pair.of(Meters.of(6.5), Degrees.of(41.78)),
-          Pair.of(Meters.of(7.0), Degrees.of(42.43)),
-          Pair.of(Meters.of(7.5), Degrees.of(42.98)),
-          Pair.of(Meters.of(8.0), Degrees.of(43.48)),
-          Pair.of(Meters.of(8.5), Degrees.of(43.98)),
-          Pair.of(Meters.of(9.0), Degrees.of(44.43)))) {
+          Pair.of(Meters.of(1.4), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(1.6), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(1.8), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(2.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(2.25), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(2.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(3.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(3.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(4.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(4.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(5.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(5.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(6.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(6.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(7.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(7.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(8.0), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(8.5), Degrees.of(22.53-tuningAngle)),
+          Pair.of(Meters.of(9.0), Degrees.of(22.53-tuningAngle)))) {
           hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
 
@@ -250,6 +281,9 @@ public final class Constants {
 
       public static final double HOOD_DOWN = 0.0;
       public static final double HOOD_UP = 2.8;
+
+      public static final double TRENCH_BUFFER_M = 0.80;
+      public static final double TRENCH_LOOKAHEAD_S = 0.5;
 
       // PID Constants
       public static final double p = 1.4;
@@ -276,10 +310,19 @@ public final class Constants {
       public static final double v = 0.001935;
       public static final double a = 0.0;
 
-      public static final double MIN_HUB_DISTANCE_M = 2.0;
+      public static final double MIN_HUB_DISTANCE_M = 1.4;
       public static final double MAX_HUB_DISTANCE_M = 9.0;
       public static final double MIN_FERRY_DISTANCE_M = 2.0;
       public static final double MAX_FERRY_DISTANCE_M = 10.0;
+
+      public static final double MIN_HUB_SHOT_DISTANCE_M = 1.15;
+      public static final double HUB_AIM_TOLERANCE_M = 0.35;
+      public static final double FERRY_AIM_TOLERANCE_DEG = 25.0;
+
+      public static final double KEEP_FEEDING_MARGIN = 175.0;
+      public static final double FERRY_ERROR_MARGIN = 250.0;
+      public static final double FERRY_KEEP_FEEDING_MARGIN = 400.0;
+      public static final double FERRY_SWITCH_MARGIN_M = 2.0;
 
       public static final double ALLIANCE_IDLE_RPM = 1500.0;
 
@@ -294,21 +337,25 @@ public final class Constants {
       public final static InterpolatingDoubleTreeMap TOF = new InterpolatingDoubleTreeMap();
       static {
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), Seconds.of(0.669)),
-          Pair.of(Meters.of(2.5), Seconds.of(0.731)),
-          Pair.of(Meters.of(3.0), Seconds.of(0.792)),
-          Pair.of(Meters.of(3.5), Seconds.of(0.851)),
-          Pair.of(Meters.of(4.0), Seconds.of(0.906)),
-          Pair.of(Meters.of(4.5), Seconds.of(0.960)),
-          Pair.of(Meters.of(5.0), Seconds.of(1.012)),
-          Pair.of(Meters.of(5.5), Seconds.of(1.062)),
-          Pair.of(Meters.of(6.0), Seconds.of(1.109)),
-          Pair.of(Meters.of(6.5), Seconds.of(1.157)),
-          Pair.of(Meters.of(7.0), Seconds.of(1.201)),
-          Pair.of(Meters.of(7.5), Seconds.of(1.245)),
-          Pair.of(Meters.of(8.0), Seconds.of(1.288)),
-          Pair.of(Meters.of(8.5), Seconds.of(1.329)),
-          Pair.of(Meters.of(9.0), Seconds.of(1.369)))) {
+          Pair.of(Meters.of(1.4), Seconds.of(0.575)),
+          Pair.of(Meters.of(1.6), Seconds.of(0.660)),
+          Pair.of(Meters.of(1.8), Seconds.of(0.737)),
+          Pair.of(Meters.of(2.0), Seconds.of(0.807)),
+          Pair.of(Meters.of(2.25), Seconds.of(0.888)),
+          Pair.of(Meters.of(2.5), Seconds.of(0.963)),
+          Pair.of(Meters.of(3.0), Seconds.of(1.101)),
+          Pair.of(Meters.of(3.5), Seconds.of(1.227)),
+          Pair.of(Meters.of(4.0), Seconds.of(1.344)),
+          Pair.of(Meters.of(4.5), Seconds.of(1.456)),
+          Pair.of(Meters.of(5.0), Seconds.of(1.563)),
+          Pair.of(Meters.of(5.5), Seconds.of(1.666)),
+          Pair.of(Meters.of(6.0), Seconds.of(1.766)),
+          Pair.of(Meters.of(6.5), Seconds.of(1.865)),
+          Pair.of(Meters.of(7.0), Seconds.of(1.962)),
+          Pair.of(Meters.of(7.5), Seconds.of(2.058)),
+          Pair.of(Meters.of(8.0), Seconds.of(2.153)),
+          Pair.of(Meters.of(8.5), Seconds.of(2.248)),
+          Pair.of(Meters.of(9.0), Seconds.of(2.344)))) {
           TOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
         }
       }
@@ -337,21 +384,25 @@ public final class Constants {
       static {
 
         for (var entry : List.of(
-          Pair.of(Meters.of(2.0), RPM.of(1720*RPM_SCALE)),
-          Pair.of(Meters.of(2.5), RPM.of(1825*RPM_SCALE)),
-          Pair.of(Meters.of(3.0), RPM.of(1935*RPM_SCALE)),
-          Pair.of(Meters.of(3.5), RPM.of(2040*RPM_SCALE)),
-          Pair.of(Meters.of(4.0), RPM.of(2145*RPM_SCALE)),
-          Pair.of(Meters.of(4.5), RPM.of(2245*RPM_SCALE)),
-          Pair.of(Meters.of(5.0), RPM.of(2345*RPM_SCALE)),
-          Pair.of(Meters.of(5.5), RPM.of(2445*RPM_SCALE)),
-          Pair.of(Meters.of(6.0), RPM.of(2540*RPM_SCALE)),
-          Pair.of(Meters.of(6.5), RPM.of(2635*RPM_SCALE)),
-          Pair.of(Meters.of(7.0), RPM.of(2725*RPM_SCALE)),
-          Pair.of(Meters.of(7.5), RPM.of(2820*RPM_SCALE)),
-          Pair.of(Meters.of(8.0), RPM.of(2910*RPM_SCALE)),
-          Pair.of(Meters.of(8.5), RPM.of(2995*RPM_SCALE)),
-          Pair.of(Meters.of(9.0), RPM.of(3085*RPM_SCALE)))) {
+          Pair.of(Meters.of(1.4), RPM.of(1605*RPM_SCALE)),
+          Pair.of(Meters.of(1.6), RPM.of(1645*RPM_SCALE)),
+          Pair.of(Meters.of(1.8), RPM.of(1700*RPM_SCALE)),
+          Pair.of(Meters.of(2.0), RPM.of(1760*RPM_SCALE)),
+          Pair.of(Meters.of(2.25), RPM.of(1840*RPM_SCALE)),
+          Pair.of(Meters.of(2.5), RPM.of(1925*RPM_SCALE)),
+          Pair.of(Meters.of(3.0), RPM.of(2085*RPM_SCALE)),
+          Pair.of(Meters.of(3.5), RPM.of(2250*RPM_SCALE)),
+          Pair.of(Meters.of(4.0), RPM.of(2410*RPM_SCALE)),
+          Pair.of(Meters.of(4.5), RPM.of(2565*RPM_SCALE)),
+          Pair.of(Meters.of(5.0), RPM.of(2720*RPM_SCALE)),
+          Pair.of(Meters.of(5.5), RPM.of(2875*RPM_SCALE)),
+          Pair.of(Meters.of(6.0), RPM.of(3030*RPM_SCALE)),
+          Pair.of(Meters.of(6.5), RPM.of(3185*RPM_SCALE)),
+          Pair.of(Meters.of(7.0), RPM.of(3340*RPM_SCALE)),
+          Pair.of(Meters.of(7.5), RPM.of(3495*RPM_SCALE)),
+          Pair.of(Meters.of(8.0), RPM.of(3650*RPM_SCALE)),
+          Pair.of(Meters.of(8.5), RPM.of(3810*RPM_SCALE)),
+          Pair.of(Meters.of(9.0), RPM.of(3975*RPM_SCALE)))) {
           hubShooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));
         }
 
@@ -428,7 +479,7 @@ public final class Constants {
     public static final double Y_FUEL_TOLERANCE = 0.1;
 
     public static class Dimensions {
-      public static final Distance BUMPER_THICKNESS = Inches.of(3); // frame to edge of bumper
+      public static final Distance BUMPER_THICKNESS = Inches.of(3.82); // frame to edge of bumper
       public static final Distance BUMPER_HEIGHT = Inches.of(7); // height from floor to top of bumper
       public static final Distance FRAME_SIZE_Y = Inches.of(27); // left to right (y-axis)
       public static final Distance FRAME_SIZE_X = Inches.of(27); // front to back (x-axis)

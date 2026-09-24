@@ -73,8 +73,8 @@ public final class Configs {
                     .cruiseVelocity(1000, ClosedLoopSlot.kSlot0)
                     .allowedProfileError(0.2, ClosedLoopSlot.kSlot0)
 
-                    .maxAcceleration(2000, ClosedLoopSlot.kSlot1)
-                    .cruiseVelocity(2000, ClosedLoopSlot.kSlot1)
+                    .maxAcceleration(5000, ClosedLoopSlot.kSlot1)
+                    .cruiseVelocity(5000, ClosedLoopSlot.kSlot1)
                     .allowedProfileError(0.2, ClosedLoopSlot.kSlot1);
 
         }
@@ -120,7 +120,7 @@ public final class Configs {
             ShooterMotorRight2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
                     .follow(ShooterConstants.SHOOTER_L1_ID, false);
             ShooterMotorLeft1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // Set PID values for position control. We don't need to pass a closed
+                    // Set PID values for posidion control. We don't need to pass a closed
                     // loop slot, as it will default to slot 0.
                     .p(ShooterConstants.p)
                     .i(ShooterConstants.i)

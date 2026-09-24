@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.570117965116954,
-        "y": 6.4637275758709025
+        "x": 2.568392978984716,
+        "y": 6.114902997634643
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1011017118744353,
-        "y": 7.1898650918928935
+        "x": 2.5879403770924307,
+        "y": 7.053876228165938
       },
       "isLocked": false,
-      "linkedName": "end test 2"
+      "linkedName": "shoot place"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 7.423182428129548
       },
       "prevControl": {
-        "x": 2.8106256548668287,
-        "y": 7.1885450703282
+        "x": 3.6088431359170308,
+        "y": 7.397800730076419
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "start2"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 131.274
+    "rotation": 134.567
   },
   "useDefaultConstraints": true
 }
