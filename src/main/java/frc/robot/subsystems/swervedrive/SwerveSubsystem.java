@@ -1223,8 +1223,30 @@ public class SwerveSubsystem extends SubsystemBase {
     return cachedDynamicFerry;
   }
 
+  private boolean hubMode = true;
+
+  /**
+   * Hub or ferry - the single decision every shooting path asks, kept apart from the plain
+   * "am I physically in my zone" test because it needs hysteresis. The zone line sits 0.6 m
+   * short of the hub, which is right where we shoot from, and the two targets are ~90 deg
+   * apart: without a dead band, pose jitter flips the aim every loop and the heading never
+   * settles inside the fire tolerance, so the robot simply never shoots.
+   */
   public boolean isHubShot() {
-    return isInAllianceZone();
+    double margin = Constants.ShooterConstants.HUB_ZONE_HYSTERESIS_M;
+    double depth = zoneDepth();
+    hubMode = hubMode ? depth > -margin : depth > margin;
+    Logger.recordOutput("Shooting/HubMode", hubMode);
+    Logger.recordOutput("Shooting/ZoneDepth", depth);
+    return hubMode;
+  }
+
+  /** How far inside our own alliance zone we are; negative once past the line. */
+  private double zoneDepth() {
+    double x = getPose().getX();
+    return getAlliance() == Alliance.Blue
+        ? FieldConstants.LinesVertical.allianceZone - x
+        : x - FieldConstants.LinesVertical.oppAllianceZone;
   }
 
   public Pose2d getCachedDynamicAimLocation() {

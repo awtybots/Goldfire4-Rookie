@@ -291,7 +291,7 @@ public class SimRobot {
     }
 
     fuelStored--;
-    if (drivebase.isInAllianceZone()) {
+    if (drivebase.isHubShot()) {
       hubShotsFired++;
     }
   }

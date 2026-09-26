@@ -92,7 +92,7 @@ public class ControlAllShooting extends Command {
         Translation2d robotPos = drivebase.getPose().getTranslation();
         inShootingZone = !drivebase.isInOpponentAllianceZone();
 
-        if (drivebase.isInAllianceZone()) { // shoot at hub
+        if (drivebase.isHubShot()) { // shoot at hub
             hubMode = true;
             Translation2d robotToHub = drivebase.getCachedDynamicHubLocation()
                     .getTranslation().minus(robotPos);

@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -29,21 +30,55 @@ public final class RobotComponents {
 
     /**
      * How far the slapdown has swung out once {@link Slapdown#extend()} has run to its setpoint.
-     * Every other number here came off the CAD; this one is an estimate of the gear ratio, so it
-     * is the one to change if the model deploys too far or not far enough.
+     * Solved from the model: at 145 deg its lowest edge sits 14 mm off the floor, having swept
+     * around the front bumper without touching it. Past about 148 deg it digs into the floor.
      */
-    public static final double SLAPDOWN_DEPLOYED_DEGREES = 90.0;
+    public static final double SLAPDOWN_DEPLOYED_DEGREES = 145.0;
 
     private static final double SLAPDOWN_EXTEND_ROTATIONS = 25.0;
+
+    /**
+     * The moving hopper slides straight forward as the slapdown goes out, and stays out to
+     * agitate even after the slapdown comes back in - so its extension latches at the furthest
+     * the slapdown has reached. The model was exported at full extension, so a retracted hopper
+     * is that geometry pulled back along -x.
+     */
+    public static final double HOPPER_TRAVEL_M = 0.15;
+
+    private static final double SLAPDOWN_ROTATIONS_TO_PUSH_HOPPER = 15.0;
+
+    private static double hopperExtension = 0.0;
 
     private RobotComponents() {}
 
     public static void log(Hood hood, Slapdown slapdown) {
-        Logger.recordOutput("Components", poses(hood.getAngleDegrees(), slapdown.getPosition()));
+        double out = hopperExtension(slapdown.getPosition());
+        Logger.recordOutput("Components",
+                poses(hood.getAngleDegrees(), slapdown.getPosition(), out));
+        Logger.recordOutput("Components/HopperExtension", out);
+    }
+
+    /**
+     * How far out the hopper is, 0 to 1. The slapdown drives it out and it latches there, so
+     * this only ever goes up until {@link #reset()}.
+     */
+    public static double hopperExtension(double slapdownRotations) {
+        hopperExtension = Math.max(hopperExtension,
+                MathUtil.clamp(slapdownRotations / SLAPDOWN_ROTATIONS_TO_PUSH_HOPPER, 0.0, 1.0));
+        return hopperExtension;
+    }
+
+    /** Forgets that the hopper was pushed out. For tests, and for a fresh run of the sim. */
+    public static void reset() {
+        hopperExtension = 0.0;
     }
 
     /** The component poses for a given hood angle in degrees and slapdown position in rotations. */
     public static Pose3d[] poses(double hoodDegrees, double slapdownRotations) {
+        return poses(hoodDegrees, slapdownRotations, hopperExtension);
+    }
+
+    public static Pose3d[] poses(double hoodDegrees, double slapdownRotations, double hopperOut) {
         double hoodPitch = Math.toRadians(HOOD_DIRECTION
                 * (hoodDegrees - HoodConstants.rotationsToDegrees(HoodConstants.HOOD_MIN)));
         double slapdownPitch = Math.toRadians(SLAPDOWN_DEPLOYED_DEGREES
@@ -51,7 +86,8 @@ public final class RobotComponents {
         return new Pose3d[] {
             new Pose3d(HOOD_PIVOT, new Rotation3d(0.0, hoodPitch, 0.0)),
             new Pose3d(SLAPDOWN_PIVOT, new Rotation3d(0.0, slapdownPitch, 0.0)),
-            new Pose3d(),
+            new Pose3d(new Translation3d(HOPPER_TRAVEL_M * (hopperOut - 1.0), 0.0, 0.0),
+                    new Rotation3d()),
         };
     }
 }

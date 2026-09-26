@@ -171,7 +171,7 @@ public class RobotContainer {
     return Commands.parallel(
         new AimAtTarget(drivebase, autoAimStream, () -> 0.0, () -> 0.0),
         Commands.defer(() -> {
-          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+          if (drivebase.isHubShot()) { // In alliance zone -> shoot at hub
             return Commands.parallel(
                 makeVariableShoot(),
                 makeAimHoodHub(),
@@ -330,7 +330,7 @@ public class RobotContainer {
 
     dc().rightTrigger().whileTrue(
         Commands.defer(() -> {
-          if (drivebase.isInAllianceZone()) { // In alliance zone -> shoot at hub
+          if (drivebase.isHubShot()) { // In alliance zone -> shoot at hub
             return Commands.parallel(
                 makeVariableShoot(),
                 makeAimHoodHub(),
@@ -594,6 +594,7 @@ public class RobotContainer {
           aimAtTarget.swerveInputStream.aimLock(Degrees.of(3.0)).getAsBoolean());
     }
     Logger.recordOutput("Shooting/InAllianceZone", drivebase.isInAllianceZone());
+    Logger.recordOutput("Shooting/HubShot", drivebase.isHubShot());
     Logger.recordOutput("Shooting/InNeutralZone", drivebase.isInNeutralZone());
   }
 

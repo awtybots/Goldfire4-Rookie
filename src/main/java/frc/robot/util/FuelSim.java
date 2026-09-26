@@ -32,6 +32,9 @@ public class FuelSim {
     protected static final double NET_COR = 0.2; // coefficient of restitution with the net
     protected static final double ROBOT_COR = 0.1; // coefficient of restitution with a robot
     protected static final double FUEL_RADIUS = 0.075;
+    protected static final double SLEEP_SPEED = 0.03;
+    protected static final double WAKE_IMPACT_SPEED = 0.35;
+    protected static final int SLEEP_TICKS = 10;
     protected static final double FIELD_LENGTH = 16.51;
     protected static final double FIELD_WIDTH = 8.04;
     protected static final double TRENCH_WIDTH = 1.265;
@@ -95,6 +98,8 @@ public class FuelSim {
         protected Translation3d pos;
         protected Translation3d vel;
         protected double spin;
+        protected boolean asleep = false;
+        protected int restTicks = 0;
         protected double hubReturn = 0.0;
         protected Translation3d hubEntry = new Translation3d();
         protected Translation3d hubExit = new Translation3d();
@@ -155,6 +160,20 @@ public class FuelSim {
                 // pos = new Translation3d(pos.getX(), pos.getY(), FUEL_RADIUS);
             }
             handleFieldCollisions(subticks);
+
+            // A fuel that has settled is put to sleep: it stops being integrated, and its
+            // position stops changing at all, so the resting pile no longer has to be
+            // republished every loop. Anything that touches it wakes it up again.
+            if (pos.getZ() <= FUEL_RADIUS + 0.01 && vel.getNorm() < SLEEP_SPEED) {
+                if (++restTicks >= SLEEP_TICKS) {
+                    pos = new Translation3d(pos.getX(), pos.getY(), FUEL_RADIUS);
+                    vel = new Translation3d();
+                    spin = 0.0;
+                    asleep = true;
+                }
+            } else {
+                restTicks = 0;
+            }
         }
 
         protected void handleXZLineCollision(Translation3d lineStart, Translation3d lineEnd) {
@@ -210,6 +229,11 @@ public class FuelSim {
             handleHubCollisions(Hub.RED_HUB, subticks);
 
             handleTrenchCollisions();
+        }
+
+        protected void wake() {
+            asleep = false;
+            restTicks = 0;
         }
 
         protected void handleHubCollisions(Hub hub, int subticks) {
@@ -294,6 +318,22 @@ public class FuelSim {
                 k * vh));
     }
 
+    /** Resolve against a settled fuel treated as immovable, leaving it asleep. */
+    protected static void bounceOffSleeper(Fuel mover, Fuel sleeper) {
+        Translation3d normal = mover.pos.minus(sleeper.pos);
+        double distance = normal.getNorm();
+        if (distance == 0) {
+            normal = new Translation3d(0, 0, 1);
+            distance = 1;
+        }
+        normal = normal.div(distance);
+        mover.pos = mover.pos.plus(normal.times(FUEL_RADIUS * 2 - distance));
+        double into = mover.vel.dot(normal);
+        if (into < 0) {
+            mover.addImpulse(normal.times(-(1 + FUEL_COR) * into));
+        }
+    }
+
     protected static void handleFuelCollision(Fuel a, Fuel b) {
         Translation3d normal = a.pos.minus(b.pos);
         double distance = normal.getNorm();
@@ -351,6 +391,24 @@ public class FuelSim {
                         for (Fuel other : grid[i][j]) {
                             if (fuel != other && fuel.pos.getDistance(other.pos) < FUEL_RADIUS * 2) {
                                 if (fuel.hashCode() < other.hashCode()) {
+                                    // Two settled fuel resting against each other are a pile,
+                                    // not a collision - waking them here churned the whole pile
+                                    // awake and back to sleep every loop.
+                                    if (fuel.asleep && other.asleep) continue;
+                                    if (fuel.asleep || other.asleep) {
+                                        Fuel sleeper = fuel.asleep ? fuel : other;
+                                        Fuel mover = fuel.asleep ? other : fuel;
+                                        if (mover.vel.getNorm() < WAKE_IMPACT_SPEED) {
+                                            // Nudging a settled heap does not disturb it: the
+                                            // sleeper acts like ground, so the arriving fuel
+                                            // rolls to a stop on it instead of starting a
+                                            // cascade that keeps the whole pile awake.
+                                            bounceOffSleeper(mover, sleeper);
+                                            continue;
+                                        }
+                                        sleeper.wake();
+                                        restingDirty = true;
+                                    }
                                     handleFuelCollision(fuel, other);
                                 }
                             }
@@ -362,6 +420,9 @@ public class FuelSim {
     }
 
     protected ArrayList<Fuel> fuels = new ArrayList<>();
+    protected boolean restingDirty = true;
+    protected int maxFuel = 500;
+    protected int restingPublishes = 0;
     protected boolean running = false;
     protected boolean simulateAirResistance = false;
     protected Supplier<Pose2d> robotPoseSupplier = null;
@@ -403,6 +464,7 @@ public class FuelSim {
      * Clears the field of fuel
      */
     public void clearFuel() {
+        restingDirty = true;
         fuels.clear();
     }
 
@@ -451,12 +513,47 @@ public class FuelSim {
      * both over NetworkTables and when replaying the .wpilog.
      */
     public void logFuels() {
-        // Every fuel, in flight or not, in one array at loop rate. Splitting it made balls pop
-        // between two keys as they landed, and the grounded half only refreshed at 15 Hz.
-        Logger.recordOutput(fuelLogKey, fuels.stream()
-                .map((fuel) -> fuel.pos)
-                .toArray(Translation3d[]::new));
+        // Fuel is split by whether it is awake, not by whether it is airborne. Moving fuel goes
+        // out every loop so shots stay smooth; the resting pile is republished only when it
+        // actually changes, because sending 400 unchanged positions 50 times a second is what
+        // makes a long session crawl. A fuel lands and settles in the same place it stopped, so
+        // handing it between the two keys shows no jump.
+        int awake = 0;
+        for (Fuel fuel : fuels) {
+            if (!fuel.asleep) awake++;
+        }
+        Translation3d[] moving = new Translation3d[awake];
+        int m = 0;
+        for (Fuel fuel : fuels) {
+            if (!fuel.asleep) moving[m++] = fuel.pos;
+        }
+        Logger.recordOutput(fuelLogKey + "Moving", moving);
+
+        if (restingDirty) {
+            Translation3d[] resting = new Translation3d[fuels.size() - awake];
+            int r = 0;
+            for (Fuel fuel : fuels) {
+                if (fuel.asleep) resting[r++] = fuel.pos;
+            }
+            Logger.recordOutput(fuelLogKey, resting);
+            restingDirty = false;
+            restingPublishes++;
+        }
         Logger.recordOutput(fuelLogKey + "Count", fuels.size());
+    }
+
+    /** @return how many times the resting pile has been republished since boot */
+    public int getRestingPublishes() {
+        return restingPublishes;
+    }
+
+    /** @return how many fuel are awake and therefore being simulated this loop */
+    public int getAwakeCount() {
+        int awake = 0;
+        for (Fuel fuel : fuels) {
+            if (!fuel.asleep) awake++;
+        }
+        return awake;
     }
 
     public void logFuelsInFlight() {
@@ -642,8 +739,10 @@ public class FuelSim {
     public void stepSim() {
         for (int i = 0; i < subticks; i++) {
             for (Fuel fuel : fuels) {
+                if (fuel.asleep) continue; // resting pile: nothing to integrate
                 fuel.update(this.simulateAirResistance, this.subticks,
                         this.dragK, this.liftK, this.groundFriction);
+                if (fuel.asleep) restingDirty = true; // it settled on this tick
             }
 
             handleFuelCollisions(fuels);
@@ -666,11 +765,35 @@ public class FuelSim {
      * @param vel Initial velocity vector
      */
     public void spawnFuel(Translation3d pos, Translation3d vel) {
+        makeRoom();
         fuels.add(new Fuel(pos, vel));
     }
 
     public void spawnFuel(Translation3d pos, Translation3d vel, double spinRadPerSec) {
+        makeRoom();
         fuels.add(new Fuel(pos, vel, spinRadPerSec));
+    }
+
+    /**
+     * The field holds a fixed amount of fuel, but nothing stops a preload or a reset from
+     * putting more on it, and every extra ball is simulated forever. Past the cap the oldest
+     * settled fuel is retired so a long session cannot keep getting slower.
+     */
+    protected void makeRoom() {
+        if (fuels.size() < maxFuel) return;
+        for (int i = 0; i < fuels.size(); i++) {
+            if (fuels.get(i).asleep) {
+                fuels.remove(i);
+                restingDirty = true;
+                return;
+            }
+        }
+        fuels.remove(0);
+    }
+
+    /** Sets the most fuel allowed on the field at once. */
+    public void setMaxFuel(int maxFuel) {
+        this.maxFuel = maxFuel;
     }
 
     /**
@@ -719,6 +842,12 @@ public class FuelSim {
         // not inside robot
         if (distanceToBottom > 0 || distanceToTop > 0 || distanceToRight > 0 || distanceToLeft > 0) return;
 
+        if (fuel.asleep) {
+            if (robotVel.getNorm() < 0.05) return; // parked against it: leave it where it lies
+            fuel.wake();
+            restingDirty = true;
+        }
+
         Translation2d posOffset;
         // find minimum distance to side and send corresponding collision response
         if ((distanceToBottom >= distanceToTop
@@ -761,6 +890,7 @@ public class FuelSim {
         for (SimIntake intake : intakes) {
             for (int i = 0; i < fuels.size(); i++) {
                 if (intake.shouldIntake(fuels.get(i), robot)) {
+                    restingDirty |= fuels.get(i).asleep;
                     fuels.remove(i);
                     i--;
                 }

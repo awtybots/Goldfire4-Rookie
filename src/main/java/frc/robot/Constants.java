@@ -323,6 +323,7 @@ public final class Constants {
       public static final double FERRY_ERROR_MARGIN = 250.0;
       public static final double FERRY_KEEP_FEEDING_MARGIN = 400.0;
       public static final double FERRY_SWITCH_MARGIN_M = 2.0;
+    public static final double HUB_ZONE_HYSTERESIS_M = 0.5;
 
       public static final double ALLIANCE_IDLE_RPM = 1500.0;
 
