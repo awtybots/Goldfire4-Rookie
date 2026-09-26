@@ -44,9 +44,11 @@ public final class RobotComponents {
      * the slapdown has reached. Travel measured on the robot by David. The model turned out to
      * be exported RETRACTED, not extended: the other reading put the stowed hopper behind the
      * frame rail, and this one has it stowed inside the frame and reaching 69 mm past the
-     * deployed slapdown, which is where he says it sits.
+     * deployed slapdown. 13.7 in is the travel David measured, but that put it 2 in too far
+     * forward on screen, so the rendered stroke is 11.7 in - the exported "retracted" state is
+     * evidently not quite the mechanical zero.
      */
-    public static final double HOPPER_TRAVEL_M = Units.inchesToMeters(13.7);
+    public static final double HOPPER_TRAVEL_M = Units.inchesToMeters(11.7);
 
     private static final double SLAPDOWN_ROTATIONS_TO_PUSH_HOPPER = 15.0;
 

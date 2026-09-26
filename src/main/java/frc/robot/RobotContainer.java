@@ -470,6 +470,14 @@ public class RobotContainer {
               new Constraints(Units.degreesToRadians(360),
                   Units.degreesToRadians(180))));
       dc().start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      // Back = put the fuel back: restock the field and reload the robot, sim only.
+      dc().back().onTrue(Commands.runOnce(() -> {
+        if (simRobot != null) {
+          simRobot.resetFuel();
+          simRobot.preloadFuel();
+          RobotComponents.reset();
+        }
+      }).ignoringDisable(true));
       // dc().button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
       dc().button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
           () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));

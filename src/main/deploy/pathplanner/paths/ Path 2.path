@@ -61,7 +61,12 @@
       "name": "extend",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "extend"
+        }
+      }
     },
     {
       "name": "intake",
