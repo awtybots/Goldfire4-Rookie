@@ -1,6 +1,8 @@
 package frc.robot.sim;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -28,6 +30,7 @@ public class SimRobot {
 
   public static final class SimConstants {
     public static final double BUMPER_LENGTH_M = 0.880;
+    public static final double BELLY_CLEARANCE_M = 0.08;
     public static final double BUMPER_WIDTH_M = 0.880;
     public static final double BUMPER_HEIGHT_M = Dimensions.BUMPER_HEIGHT.in(Meters);
 
@@ -202,9 +205,55 @@ public class SimRobot {
         ? FuelSim.Hub.RED_HUB : FuelSim.Hub.BLUE_HUB;
   }
 
+  /**
+   * The drive physics is flat, so a robot crossing a bump slides through it. Sampling the floor
+   * under the four bumper corners lifts and tilts the rendered robot instead: it climbs the
+   * ramp nose-up, crests, and drops away nose-down, and one wheel pair riding the edge rolls it.
+   */
+  public Pose3d getPose3d() {
+    Pose2d pose = drivebase.getPose();
+    double halfL = SimConstants.BUMPER_LENGTH_M / 2.0;
+    double halfW = SimConstants.BUMPER_WIDTH_M / 2.0;
+
+    // the wheels carry the robot, so they set the tilt
+    double frontLeft = cornerHeight(pose, MODULE_OFFSET_M, MODULE_OFFSET_M);
+    double frontRight = cornerHeight(pose, MODULE_OFFSET_M, -MODULE_OFFSET_M);
+    double rearLeft = cornerHeight(pose, -MODULE_OFFSET_M, MODULE_OFFSET_M);
+    double rearRight = cornerHeight(pose, -MODULE_OFFSET_M, -MODULE_OFFSET_M);
+    double wheelbase = 2 * MODULE_OFFSET_M;
+    double pitch = -Math.atan2((frontLeft + frontRight) - (rearLeft + rearRight), 2 * wheelbase);
+    double roll = Math.atan2((frontLeft + rearLeft) - (frontRight + rearRight), 2 * wheelbase);
+    double onWheels = (frontLeft + frontRight + rearLeft + rearRight) / 4.0;
+
+    // ...but a crest under the middle holds the belly up even when no wheel is on it
+    int n = 9;
+    double crest = 0.0;
+    for (int i = 0; i < n; i++) {
+      double t = -1.0 + 2.0 * i / (n - 1);
+      crest = Math.max(crest, Math.max(cornerHeight(pose, t * halfL, halfW),
+          cornerHeight(pose, t * halfL, -halfW)));
+      crest = Math.max(crest, cornerHeight(pose, t * halfL, 0));
+    }
+
+    return new Pose3d(
+        new Translation3d(pose.getX(), pose.getY(),
+            Math.max(onWheels, crest - SimConstants.BELLY_CLEARANCE_M)),
+        new Rotation3d(roll, pitch, pose.getRotation().getRadians()));
+  }
+
+  /** Swerve modules sit 11.75 in from centre in both axes. */
+  private static final double MODULE_OFFSET_M = edu.wpi.first.math.util.Units.inchesToMeters(11.75);
+
+  private static double cornerHeight(Pose2d pose, double ahead, double left) {
+    Translation2d corner = pose.getTranslation()
+        .plus(new Translation2d(ahead, left).rotateBy(pose.getRotation()));
+    return FuelSim.groundHeight(corner.getX(), corner.getY());
+  }
+
   public void periodic() {
     updateVolleys();
     fuelSim.updateSim();
+    Logger.recordOutput("Sim/RobotPose3d", getPose3d());
 
     int scored = ourHub().getScore();
     Logger.recordOutput("Sim/FuelStored", fuelStored);

@@ -118,6 +118,12 @@ public final class Constants {
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
 
+  public static class VisionConstants {
+    public static final double MAX_SINGLE_TAG_DIST_M = 4.0;
+    public static final double MAX_MULTI_TAG_DIST_M = 7.0;
+    public static final double MAX_MEGATAG2_DIST_M = 7.0;
+  }
+
   public static class LimelightConstants {
     public static final String LIMELIGHT_RIGHT = "limelight-right";//10.58.29.17
     public static final String LIMELIGHT_BACK = "limelight-back"; //10.58.29.16
@@ -274,7 +280,17 @@ public final class Constants {
           Pair.of(Meters.of(7.0), Degrees.of(45.33)),
           Pair.of(Meters.of(8.0), Degrees.of(45.33)),
           Pair.of(Meters.of(9.0), Degrees.of(45.33)),
-          Pair.of(Meters.of(10.0), Degrees.of(45.33)))) {
+          Pair.of(Meters.of(10.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(10.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(11.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(11.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(12.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(12.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(13.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(13.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(14.0), Degrees.of(45.33)),
+          Pair.of(Meters.of(14.5), Degrees.of(45.33)),
+          Pair.of(Meters.of(15.0), Degrees.of(45.33)))) {
           ferryHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
       }
@@ -282,8 +298,8 @@ public final class Constants {
       public static final double HOOD_DOWN = 0.0;
       public static final double HOOD_UP = 2.8;
 
-      public static final double TRENCH_BUFFER_M = 0.80;
-      public static final double TRENCH_LOOKAHEAD_S = 0.5;
+      public static final double TRENCH_BUFFER_M = 0.65;
+      public static final double TRENCH_LOOKAHEAD_S = 0.35;
 
       // PID Constants
       public static final double p = 1.4;
@@ -313,7 +329,7 @@ public final class Constants {
       public static final double MIN_HUB_DISTANCE_M = 1.4;
       public static final double MAX_HUB_DISTANCE_M = 9.0;
       public static final double MIN_FERRY_DISTANCE_M = 2.0;
-      public static final double MAX_FERRY_DISTANCE_M = 10.0;
+      public static final double MAX_FERRY_DISTANCE_M = 15.0;
 
       public static final double MIN_HUB_SHOT_DISTANCE_M = 1.15;
       public static final double HUB_AIM_TOLERANCE_M = 0.35;
@@ -375,7 +391,17 @@ public final class Constants {
           Pair.of(Meters.of(7.0), Seconds.of(1.287)),
           Pair.of(Meters.of(8.0), Seconds.of(1.386)),
           Pair.of(Meters.of(9.0), Seconds.of(1.481)),
-          Pair.of(Meters.of(10.0), Seconds.of(1.574)))) {
+          Pair.of(Meters.of(10.0), Seconds.of(1.574)),
+          Pair.of(Meters.of(10.5), Seconds.of(1.619)),
+          Pair.of(Meters.of(11.0), Seconds.of(1.663)),
+          Pair.of(Meters.of(11.5), Seconds.of(1.707)),
+          Pair.of(Meters.of(12.0), Seconds.of(1.751)),
+          Pair.of(Meters.of(12.5), Seconds.of(1.794)),
+          Pair.of(Meters.of(13.0), Seconds.of(1.837)),
+          Pair.of(Meters.of(13.5), Seconds.of(1.880)),
+          Pair.of(Meters.of(14.0), Seconds.of(1.923)),
+          Pair.of(Meters.of(14.5), Seconds.of(1.966)),
+          Pair.of(Meters.of(15.0), Seconds.of(2.008)))) {
           ferryTOF.put(entry.getFirst().in(Meters), entry.getSecond().in(Seconds));
         }
       }
@@ -417,7 +443,17 @@ public final class Constants {
           Pair.of(Meters.of(7.0), RPM.of(2375*RPM_SCALE)),
           Pair.of(Meters.of(8.0), RPM.of(2575*RPM_SCALE)),
           Pair.of(Meters.of(9.0), RPM.of(2770*RPM_SCALE)),
-          Pair.of(Meters.of(10.0), RPM.of(2955*RPM_SCALE)))) {
+          Pair.of(Meters.of(10.0), RPM.of(2955*RPM_SCALE)),
+          Pair.of(Meters.of(10.5), RPM.of(3045*RPM_SCALE)),
+          Pair.of(Meters.of(11.0), RPM.of(3134*RPM_SCALE)),
+          Pair.of(Meters.of(11.5), RPM.of(3222*RPM_SCALE)),
+          Pair.of(Meters.of(12.0), RPM.of(3310*RPM_SCALE)),
+          Pair.of(Meters.of(12.5), RPM.of(3396*RPM_SCALE)),
+          Pair.of(Meters.of(13.0), RPM.of(3483*RPM_SCALE)),
+          Pair.of(Meters.of(13.5), RPM.of(3568*RPM_SCALE)),
+          Pair.of(Meters.of(14.0), RPM.of(3654*RPM_SCALE)),
+          Pair.of(Meters.of(14.5), RPM.of(3739*RPM_SCALE)),
+          Pair.of(Meters.of(15.0), RPM.of(3823*RPM_SCALE)))) {
           ferryShooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));
         }
       }

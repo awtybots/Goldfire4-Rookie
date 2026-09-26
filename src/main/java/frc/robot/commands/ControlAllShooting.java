@@ -66,6 +66,16 @@ public class ControlAllShooting extends Command {
         return Math.abs(MathUtil.inputModulus(bearing - 180.0, -180.0, 180.0));
     }
 
+    /** Which gate is holding the shot, so a log answers "why didn't it fire" by itself. */
+    private String blockedBy() {
+        if (tooClose) return "TooClose";
+        if (!hubMode && m_hood.isTrenchLocked()) return "TrenchLock";
+        if (!isAtSpeed) return "Rpm";
+        if (!m_hood.isAtPosition()) return "Hood";
+        if (aimErrorDegrees > aimToleranceDegrees) return "Aim";
+        return "";
+    }
+
     private boolean isReadyToFire() {
         // The hub tables sit at the hood floor, which is exactly where the trench lock holds the
         // hood, so a hub shot next to the trench is unaffected. Only ferrying needs the hood up.
@@ -90,7 +100,9 @@ public class ControlAllShooting extends Command {
     @Override
     public void execute() {
         Translation2d robotPos = drivebase.getPose().getTranslation();
-        inShootingZone = !drivebase.isInOpponentAllianceZone();
+        // David wants full-field passing, so standing in the opponent's zone no longer blocks
+        // the shot. Hub shots are still gated by range and the zone line below.
+        inShootingZone = true;
 
         if (drivebase.isHubShot()) { // shoot at hub
             hubMode = true;
@@ -113,7 +125,7 @@ public class ControlAllShooting extends Command {
 
             Logger.recordOutput("Shooting/Mode", "Hub");
             Logger.recordOutput("Shooting/DistanceToHub", dist);
-        } else if (drivebase.isInNeutralZone()) { // ferry
+        } else { // ferry - from the neutral zone AND from the opponent's, for full-field passing
             hubMode = false;
             Translation2d robotToFerry = drivebase.getCachedDynamicFerryLocation()
                     .getTranslation().minus(robotPos);
@@ -135,15 +147,6 @@ public class ControlAllShooting extends Command {
 
             Logger.recordOutput("Shooting/Mode", "Ferry");
             Logger.recordOutput("Shooting/DistanceToFerry", dist);
-        } else { // opponent alliance zone - we never shoot or ferry from here
-            hubMode = false;
-            recordedTargetRPM = ShooterConstants.ALLIANCE_IDLE_RPM;
-            m_shooter.setTargetRPM(ShooterConstants.ALLIANCE_IDLE_RPM);
-            isAtSpeed = false;
-            tooClose = false;
-            aimErrorDegrees = 180.0;
-            aimToleranceDegrees = 0.0;
-            Logger.recordOutput("Shooting/Mode", "HoldOpponentZone");
         }
 
         if (isReadyToFire()) {
@@ -165,6 +168,7 @@ public class ControlAllShooting extends Command {
         Logger.recordOutput("Shooting/AimErrorDeg", aimErrorDegrees);
         Logger.recordOutput("Shooting/AimToleranceDeg", aimToleranceDegrees);
         Logger.recordOutput("Shooting/TooClose", tooClose);
+        Logger.recordOutput("Shooting/BlockedBy", blockedBy());
         Logger.recordOutput("Shooting/HoodTrenchLocked", m_hood.isTrenchLocked());
         Logger.recordOutput("Shooting/HoodAtPosition", m_hood.isAtPosition());
         Logger.recordOutput("Shooting/Distance", distance);

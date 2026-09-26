@@ -901,7 +901,7 @@ public class SwerveSubsystem extends SubsystemBase {
         {
           doRejectUpdate = true;
         }
-        if(mt1.rawFiducials[0].distToCamera > 3)
+        if(mt1.rawFiducials[0].distToCamera > Constants.VisionConstants.MAX_SINGLE_TAG_DIST_M)
         {
           doRejectUpdate = true;
         }
@@ -909,7 +909,7 @@ public class SwerveSubsystem extends SubsystemBase {
       else
       {
         // Multi-tag: reject if average distance is too far
-        if(mt1.avgTagDist > 3)
+        if(mt1.avgTagDist > Constants.VisionConstants.MAX_MULTI_TAG_DIST_M)
         {
           doRejectUpdate = true;
         }
@@ -959,7 +959,7 @@ public class SwerveSubsystem extends SubsystemBase {
         doRejectUpdate = true;
       }
       // Reject if average tag distance is too far for reliable MT2
-      if(mt2.avgTagDist > 3)
+      if(mt2.avgTagDist > Constants.VisionConstants.MAX_MEGATAG2_DIST_M)
       {
         doRejectUpdate = true;
       }
@@ -1235,7 +1235,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public boolean isHubShot() {
     double margin = Constants.ShooterConstants.HUB_ZONE_HYSTERESIS_M;
     double depth = zoneDepth();
-    hubMode = hubMode ? depth > -margin : depth > margin;
+    // Asymmetric on purpose: the hub is what we want whenever we are home, so coming back
+    // inside the line picks it up straight away, while leaving needs a committed margin. A
+    // symmetric band left the robot still ferrying for half a metre after driving back in.
+    hubMode = hubMode ? depth > -margin : depth > 0.0;
     Logger.recordOutput("Shooting/HubMode", hubMode);
     Logger.recordOutput("Shooting/ZoneDepth", depth);
     return hubMode;

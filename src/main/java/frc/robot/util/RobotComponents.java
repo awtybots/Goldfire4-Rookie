@@ -52,10 +52,8 @@ public final class RobotComponents {
     private RobotComponents() {}
 
     public static void log(Hood hood, Slapdown slapdown) {
-        double out = hopperExtension(slapdown.getPosition());
-        Logger.recordOutput("Components",
-                poses(hood.getAngleDegrees(), slapdown.getPosition(), out));
-        Logger.recordOutput("Components/HopperExtension", out);
+        Logger.recordOutput("Components", poses(hood.getAngleDegrees(), slapdown.getPosition()));
+        Logger.recordOutput("Components/HopperExtension", hopperExtension);
     }
 
     /**
@@ -73,9 +71,12 @@ public final class RobotComponents {
         hopperExtension = 0.0;
     }
 
-    /** The component poses for a given hood angle in degrees and slapdown position in rotations. */
+    /**
+     * The component poses for a given hood angle in degrees and slapdown position in rotations.
+     * This advances the hopper latch, so it is the call every consumer should use.
+     */
     public static Pose3d[] poses(double hoodDegrees, double slapdownRotations) {
-        return poses(hoodDegrees, slapdownRotations, hopperExtension);
+        return poses(hoodDegrees, slapdownRotations, hopperExtension(slapdownRotations));
     }
 
     public static Pose3d[] poses(double hoodDegrees, double slapdownRotations, double hopperOut) {

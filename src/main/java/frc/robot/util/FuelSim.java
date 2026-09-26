@@ -898,6 +898,35 @@ public class FuelSim {
         }
     }
 
+    protected static final double BUMP_RAMP_START = 3.96;
+    protected static final double BUMP_PEAK = 4.61;
+    protected static final double BUMP_RAMP_END = 5.18;
+    protected static final double BUMP_HEIGHT = 0.165;
+
+    /**
+     * Height of the floor at a point on the field: zero everywhere except the four bumps, which
+     * are 15 degree ridges. Same geometry the fuel bounces off, so anything driving on it and
+     * anything rolling over it agree.
+     *
+     * @param x field x in metres
+     * @param y field y in metres
+     * @return floor height in metres
+     */
+    public static double groundHeight(double x, double y) {
+        boolean onBump = (y >= 1.57 && y <= FIELD_WIDTH / 2 - 0.60)
+                || (y >= FIELD_WIDTH / 2 + 0.60 && y <= FIELD_WIDTH - 1.57);
+        if (!onBump) return 0.0;
+        double near = ridgeHeight(x);
+        return near > 0.0 ? near : ridgeHeight(FIELD_LENGTH - x);
+    }
+
+    private static double ridgeHeight(double x) {
+        if (x <= BUMP_RAMP_START || x >= BUMP_RAMP_END) return 0.0;
+        return x < BUMP_PEAK
+                ? BUMP_HEIGHT * (x - BUMP_RAMP_START) / (BUMP_PEAK - BUMP_RAMP_START)
+                : BUMP_HEIGHT * (BUMP_RAMP_END - x) / (BUMP_RAMP_END - BUMP_PEAK);
+    }
+
     protected static void fuelCollideRectangle(Fuel fuel, Translation3d start, Translation3d end) {
         if (fuel.pos.getZ() > end.getZ() + FUEL_RADIUS || fuel.pos.getZ() < start.getZ() - FUEL_RADIUS)
             return; // above rectangle
