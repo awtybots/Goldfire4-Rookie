@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Slapdown;
@@ -40,10 +41,12 @@ public final class RobotComponents {
     /**
      * The moving hopper slides straight forward as the slapdown goes out, and stays out to
      * agitate even after the slapdown comes back in - so its extension latches at the furthest
-     * the slapdown has reached. The model was exported at full extension, so a retracted hopper
-     * is that geometry pulled back along -x.
+     * the slapdown has reached. Travel measured on the robot by David. The model turned out to
+     * be exported RETRACTED, not extended: the other reading put the stowed hopper behind the
+     * frame rail, and this one has it stowed inside the frame and reaching 69 mm past the
+     * deployed slapdown, which is where he says it sits.
      */
-    public static final double HOPPER_TRAVEL_M = 0.15;
+    public static final double HOPPER_TRAVEL_M = Units.inchesToMeters(13.7);
 
     private static final double SLAPDOWN_ROTATIONS_TO_PUSH_HOPPER = 15.0;
 
@@ -53,7 +56,9 @@ public final class RobotComponents {
 
     public static void log(Hood hood, Slapdown slapdown) {
         Logger.recordOutput("Components", poses(hood.getAngleDegrees(), slapdown.getPosition()));
-        Logger.recordOutput("Components/HopperExtension", hopperExtension);
+        // NOT "Components/..." - a value and a folder at the same path makes AdvantageScope
+        // show Components as a folder, and the pose array stops being draggable onto the robot.
+        Logger.recordOutput("RobotComponents/HopperExtension", hopperExtension);
     }
 
     /**
@@ -87,7 +92,7 @@ public final class RobotComponents {
         return new Pose3d[] {
             new Pose3d(HOOD_PIVOT, new Rotation3d(0.0, hoodPitch, 0.0)),
             new Pose3d(SLAPDOWN_PIVOT, new Rotation3d(0.0, slapdownPitch, 0.0)),
-            new Pose3d(new Translation3d(HOPPER_TRAVEL_M * (hopperOut - 1.0), 0.0, 0.0),
+            new Pose3d(new Translation3d(HOPPER_TRAVEL_M * hopperOut, 0.0, 0.0),
                     new Rotation3d()),
         };
     }

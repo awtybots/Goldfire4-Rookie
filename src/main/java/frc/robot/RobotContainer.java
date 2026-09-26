@@ -365,17 +365,14 @@ public class RobotContainer {
       )
     );
 
+    // Wait for the slapdown to actually be out rather than a blind 0.7 s. The old version
+    // chose between "run now" and "wait 0.7 s" by reading the slapdown's SETPOINT, so the very
+    // first press always took the slow branch and the intake looked dead for most of a second.
     dc().leftTrigger().whileTrue(
-      Commands.either(
-        Commands.parallel(
-            m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand())
-        ,
-        Commands.parallel(
-            m_slapdown.extendCommand(),
-            m_intake.runIntakeCommand().beforeStarting(Commands.waitSeconds(0.7)))
-        ,
-        m_slapdown::isSlapdownOut
+      Commands.parallel(
+        m_slapdown.extendCommand(),
+        m_intake.runIntakeCommand().beforeStarting(
+            Commands.waitUntil(m_slapdown::isSlapdownOut).withTimeout(0.7))
     ));
 
     dc().leftBumper().whileTrue(

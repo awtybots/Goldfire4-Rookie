@@ -75,7 +75,7 @@ public class Slapdown extends SubsystemBase {
     }
 
     public Boolean isSlapdownOut () {
-        return slapdownController.getSetpoint() > 15;
+        return slapdownEncoder.getPosition() > 15;
     }
     public Boolean isSlapdownIn () {
         return slapdownEncoder.getPosition() < 5;
