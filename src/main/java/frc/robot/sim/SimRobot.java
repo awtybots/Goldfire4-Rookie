@@ -34,7 +34,7 @@ public class SimRobot {
     public static final double BUMPER_WIDTH_M = 0.880;
     public static final double BUMPER_HEIGHT_M = Dimensions.BUMPER_HEIGHT.in(Meters);
 
-    public static final int FUEL_CAPACITY = 50;
+    public static final int FUEL_CAPACITY = 60;
     public static final double FUEL_RADIUS_M = FieldConstants.fuelDiameter / 2.0;
 
     public static final double INTAKE_REACH_M = 0.15;
@@ -59,7 +59,9 @@ public class SimRobot {
     public static final double FUEL_MOI_FACTOR = 0.4;
     public static final long RANDOM_SEED = 5829L;
 
-    public static final double HOPPER_X_MIN = -0.17;
+    // Held fuel starts ahead of the shooter, not inside it: the hood assembly reaches back
+    // from x = -0.001, so a ball centred any further back pokes through it.
+    public static final double HOPPER_X_MIN = 0.0;
     public static final double HOPPER_X_MAX = 0.336;
     public static final double HOPPER_Y_HALF = 0.346;
     public static final double HOPPER_Z_MIN = 0.070;
