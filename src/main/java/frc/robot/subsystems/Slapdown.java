@@ -8,6 +8,10 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.sim.SparkFlexSim;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import com.revrobotics.ResetMode;
 import frc.robot.Configs;
 import com.revrobotics.PersistMode;
@@ -23,26 +27,35 @@ public class Slapdown extends SubsystemBase {
 
     private final RelativeEncoder slapdownEncoder = SlapdownMotor.getEncoder();
 
+    private static final double SIM_ROTATIONS_PER_SEC = 25.0;
+    private final SparkFlexSim slapdownSim = RobotBase.isSimulation()
+            ? new SparkFlexSim(SlapdownMotor, DCMotor.getNeoVortex(1))
+            : null;
+    private double targetPosition = 0.0;
+    private double simPosition = 0.0;
+
 
     public Slapdown() {
         SlapdownMotor.configure(Configs.SlapdownSubsystem.SlapdownMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     public void setHoodPosition(double position) {
+        targetPosition = position;
         slapdownController.setSetpoint(position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
     
     public void retract() {
+        targetPosition = 0;
         slapdownController.setSetpoint(0, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
 
     public void slowretract() {
-
+        targetPosition = 0;
         slapdownController.setSetpoint(0,  ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
     }
 
     public void extend() {
-
+        targetPosition = 25;
         slapdownController.setSetpoint(25, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
 
@@ -68,10 +81,21 @@ public class Slapdown extends SubsystemBase {
         return slapdownEncoder.getPosition() < 5;
     }
 
+    public double getPosition() {
+        return slapdownEncoder.getPosition();
+    }
+
     @Override
     public void periodic() {
         // position = slapdownEncoder.getPosition();
         isSlapdownOut();
         isSlapdownIn();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        double step = SIM_ROTATIONS_PER_SEC * 0.020;
+        simPosition += MathUtil.clamp(targetPosition - simPosition, -step, step);
+        slapdownSim.getRelativeEncoderSim().setPosition(simPosition);
     }
 }

@@ -8,5 +8,27 @@
   ],
   "position": [0.043, 0, 0.000],
   "cameras": [],
-  "components": []
+  "components": [
+    {
+      "zeroedRotations": [
+        { "axis": "x", "degrees": 90 },
+        { "axis": "z", "degrees": 90 }
+      ],
+      "zeroedPosition": [0.2675, 0, -0.4578]
+    },
+    {
+      "zeroedRotations": [
+        { "axis": "x", "degrees": 90 },
+        { "axis": "z", "degrees": 90 }
+      ],
+      "zeroedPosition": [-0.2586, 0, -0.2413]
+    },
+    {
+      "zeroedRotations": [
+        { "axis": "x", "degrees": 90 },
+        { "axis": "z", "degrees": 90 }
+      ],
+      "zeroedPosition": [0.043, 0, 0.000]
+    }
+  ]
 }

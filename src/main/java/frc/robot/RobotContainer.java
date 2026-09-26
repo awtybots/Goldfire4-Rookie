@@ -55,6 +55,7 @@ import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.util.FieldConstants;
 import frc.robot.util.HubTracker;
+import frc.robot.util.RobotComponents;
 // import frc.robot.utils.FuelSim;
 
 import static edu.wpi.first.units.Units.Seconds;
@@ -548,6 +549,10 @@ public class RobotContainer {
 
   public void setUseMegaTag2(boolean use) {
     drivebase.useMegaTag2 = use;
+  }
+
+  public void logRobotComponents() {
+    RobotComponents.log(m_Hood, m_slapdown);
   }
 
   public void logControllerInputs() {

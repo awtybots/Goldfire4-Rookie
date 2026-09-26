@@ -136,6 +136,7 @@ public class Robot extends LoggedRobot {
     // Publish hub tracker status for all the robotPeriodics
     // the hubtracker will pass to elastic.
       m_robotContainer.logControllerInputs();
+      m_robotContainer.logRobotComponents();
     
 
   }
