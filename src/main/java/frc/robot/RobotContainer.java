@@ -336,16 +336,16 @@ public class RobotContainer {
 
     // ======== Operator ========
     // // shooter
-    // dc().rightTrigger().whileTrue(
-    //     Commands.parallel(
-    //         m_shooter.setShooterSpeedCommand(1000),
-    //         m_Hood.setHoodPositionCommand(0.6),
-    //         Commands.sequence(
-    //             Commands.waitUntil(() -> m_shooter.isShooterFast()),
-    //             Commands.parallel(
-    //                 m_kicker.kickCommand(),
-    //                 m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
-    //                 m_hopper.runBeltsToConveyorCommand()))));
+    oc().rightTrigger().whileTrue(
+        Commands.parallel(
+            m_shooter.setShooterSpeedCommand(1000),
+            m_Hood.setHoodPositionCommand(0.6),
+            Commands.sequence(
+                Commands.waitUntil(() -> m_shooter.isShooterFast()),
+                Commands.parallel(
+                    m_kicker.kickCommand(),
+                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
+                    m_hopper.runBeltsToConveyorCommand()))));
 
     dc().rightBumper().whileTrue(
       Commands.parallel(
