@@ -59,19 +59,14 @@
   "eventMarkers": [
     {
       "name": "extend",
-      "waypointRelativePos": 0.8094641080901857,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "extend"
-        }
-      }
+      "command": null
     },
     {
       "name": "intake",
-      "waypointRelativePos": 0.8094641080901857,
-      "endWaypointRelativePos": 2.0,
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
