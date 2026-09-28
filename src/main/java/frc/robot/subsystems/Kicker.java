@@ -31,14 +31,14 @@ public class Kicker extends SubsystemBase {
 
     public void Kick() {
         // kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
-        KickerLeftMotor.set(0.8);
-        KickerRightMotor.set(-0.8);
+        KickerLeftMotor.set(1);
+        KickerRightMotor.set(-1);
     }
 
     public void backwardsKick() {
         // kickerLeftController.setSetpoint(KickerConstants.KICKER_RPM, ControlType.kMAXMotionVelocityControl);
-        KickerLeftMotor.set(-0.8);
-        KickerRightMotor.set(0.8);
+        KickerLeftMotor.set(-1);
+        KickerRightMotor.set(1);
     }
 
     public Command kickCommand() {

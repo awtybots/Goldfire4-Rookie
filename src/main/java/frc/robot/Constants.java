@@ -186,7 +186,7 @@ public final class Constants {
   }
     public static class HoodConstants {
       public static final int HOOD_ID = 15;
-
+// 1.62 - 2.29 12 
       public static final double HOOD_MIN = 0.0;
       public static final double HOOD_MAX = 2.907;
 
@@ -421,8 +421,8 @@ public final class Constants {
       public static final int BELTS_LEFT_ID = 16;
       public static final int BELTS_RIGHT_ID = 17;
 
-      public static final double BELTS_SPEED = 0.75;
-      public static final double REVERSE_BELTS_SPEED = -0.75;
+      public static final double BELTS_SPEED = 1;
+      public static final double REVERSE_BELTS_SPEED = -1;
     
       // PID Constants
       public static final double p = 0.0;
