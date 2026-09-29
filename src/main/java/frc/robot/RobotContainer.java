@@ -338,7 +338,7 @@ public class RobotContainer {
     // // shooter
     oc().rightTrigger().whileTrue(
         Commands.parallel(
-            m_shooter.setShooterSpeedCommand(1000),
+            m_shooter.setShooterSpeedCommand(4000),
             m_Hood.setHoodPositionCommand(0.6),
             Commands.sequence(
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
