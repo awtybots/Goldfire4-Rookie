@@ -347,6 +347,9 @@ public class RobotContainer {
                     m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(3)),
                     m_hopper.runBeltsToConveyorCommand()))));
 
+    oc().leftTrigger().whileTrue(
+        Commands.parallel(m_intake.runIntakeCommand(), m_slapdown.extendCommand()));
+
     dc().rightBumper().whileTrue(
       Commands.parallel(
         m_intake.runOuttakeCommand(),
