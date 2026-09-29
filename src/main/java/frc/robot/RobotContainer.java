@@ -344,7 +344,7 @@ public class RobotContainer {
                 Commands.waitUntil(() -> m_shooter.isShooterFast()),
                 Commands.parallel(
                     m_kicker.kickCommand(),
-                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1.5)),
+                    m_slapdown.slowretractCommand().beforeStarting(Commands.waitSeconds(1)),
                     m_hopper.runBeltsToConveyorCommand()))));
 
     oc().leftTrigger().whileTrue(
