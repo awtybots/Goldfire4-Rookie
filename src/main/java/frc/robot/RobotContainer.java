@@ -348,7 +348,7 @@ public class RobotContainer {
                     m_hopper.runBeltsToConveyorCommand()))));
 
     oc().leftTrigger().whileTrue(
-        Commands.parallel(m_intake.runIntakeCommand(), m_slapdown.extendCommand()));
+        Commands.parallel(m_intake.runOuttakeCommand(), m_slapdown.extendCommand()));
 
     dc().rightBumper().whileTrue(
       Commands.parallel(
