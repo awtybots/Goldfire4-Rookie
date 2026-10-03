@@ -29,6 +29,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         IntakeMotor.configure(Configs.IntakeSubsystem.IntakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        IntakeMotor.getEncoder().setPosition(0);
     }
 
 
