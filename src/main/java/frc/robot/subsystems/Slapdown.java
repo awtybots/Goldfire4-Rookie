@@ -26,6 +26,7 @@ public class Slapdown extends SubsystemBase {
 
     public Slapdown() {
         SlapdownMotor.configure(Configs.SlapdownSubsystem.SlapdownMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        slapdownEncoder.setPosition(0);
     }
 
     public void setHoodPosition(double position) {
