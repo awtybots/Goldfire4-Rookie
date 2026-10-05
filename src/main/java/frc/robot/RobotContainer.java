@@ -336,6 +336,7 @@ public class RobotContainer {
 
     // ======== Operator ========
     // // shooter
+    // //code=work=make robot like cheesy poofs
     oc().rightTrigger().whileTrue(
         Commands.parallel(
             m_shooter.setShooterSpeedCommand(4000),
@@ -435,7 +436,7 @@ public class RobotContainer {
     // m_kicker.setDefaultCommand(m_kicker.runDefaultCommand());
     // // m_slapdown.setDefaultCommand(m_slapdown.runDefaultCommand());
     // m_hopper.setDefaultCommand(m_hopper.runDefaultCommand());
-
+// neven made this code
  
     m_Hood.setDefaultCommand(m_Hood.tuckCommand());
 
