@@ -23,6 +23,7 @@ public class ControlAllShooting extends Command {
     public double recordedTargetRPM = 0.0;
     private boolean isFiring = false;
     private boolean isAtSpeed = false;
+    private boolean isAboveFiringFloor = false;
     private boolean inShootingZone = true; // false in the opponent alliance zone
     private boolean tooClose = false;
     private double aimErrorDegrees = 180.0;
@@ -61,7 +62,7 @@ public class ControlAllShooting extends Command {
         return inShootingZone
                 && !tooClose
                 && !m_hood.isTrenchLocked()
-                && isAtSpeed
+                && (isFiring ? isAboveFiringFloor : isAtSpeed)
                 && m_hood.isAtPosition()
                 && aimErrorDegrees <= aimToleranceDegrees;
     }
@@ -71,6 +72,7 @@ public class ControlAllShooting extends Command {
         isFiring = false;
         isAtSpeed = false;
         tooClose = false;
+        isAboveFiringFloor = false;
         aimErrorDegrees = 180.0;
         aimToleranceDegrees = 0.0;
     }
@@ -97,6 +99,7 @@ public class ControlAllShooting extends Command {
             m_shooter.setTargetRPM(targetRPM);
             isAtSpeed = Math.abs(m_shooter.getRPM() - targetRPM)
                     <= ShooterConstants.ERROR_MARGIN;
+            isAboveFiringFloor = m_shooter.getRPM() >= targetRPM * ShooterConstants.FIRING_FLOOR_FRACTION;
 
             Logger.recordOutput("Shooting/Mode", "Hub");
             Logger.recordOutput("Shooting/DistanceToHub", dist);
@@ -136,6 +139,7 @@ public class ControlAllShooting extends Command {
             m_hopper.BeltsToConveyor();
         } else {
             isFiring = false;
+            isAboveFiringFloor = false;
             m_hopper.stopBelts();
             m_kicker.stopKicking();
         }
