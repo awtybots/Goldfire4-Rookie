@@ -147,7 +147,7 @@ public final class Constants {
     public static final double a = 0.0;
 
     public static final double INTAKE_DUTY = -0.8;
-    public static final double OUTTAKE_DUTY = 0.8;
+    public static final double OUTTAKE_DUTY =  0.8;
 
   }
   public static class SlapdownConstants {
@@ -301,13 +301,13 @@ public final class Constants {
       
        
       // PID Constants
-      public static final double p = 0.001;
+      public static final double p = 0.0094;
       public static final double i = 0.0;
       public static final double d = 0.0;
 
       // Feed-Forward Constants
       public static final double s = 0.0;
-      public static final double v = 0.001935;
+      public static final double v = 0.002;
       public static final double a = 0.0;
 
       public static final double MIN_HUB_DISTANCE_M = 1.4;
