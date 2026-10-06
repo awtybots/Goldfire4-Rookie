@@ -356,7 +356,7 @@ public final class Constants {
         }
       }
 
-      public final static double RPM_SCALE = 1.03; 
+      public final static double RPM_SCALE = 1.0; 
 
       public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
       static {
