@@ -297,7 +297,7 @@ public final class Constants {
       public static final int SHOOTER_R2_ID = 11; 
       public static final int SHOOTER_L2_ID = 12;
 
-      public static final double ERROR_MARGIN = 100.0;
+      public static final double ERROR_MARGIN = 0.0;
       public static final double FIRING_FLOOR_FRACTION = 0.7;
       
        
@@ -356,7 +356,7 @@ public final class Constants {
         }
       }
 
-      public final static double RPM_SCALE = 0.98; 
+      public final static double RPM_SCALE = 1.05; 
 
       public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
       static {
