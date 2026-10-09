@@ -112,12 +112,12 @@ public final class Configs {
 
         static {
 
-            ShooterMotorLeft1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(35).voltageCompensation(12);
-            ShooterMotorRight1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(35).voltageCompensation(12)
+            ShooterMotorLeft1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12);
+            ShooterMotorRight1Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
                     .follow(ShooterConstants.SHOOTER_L1_ID, true);
-            ShooterMotorLeft2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(35).voltageCompensation(12)
+            ShooterMotorLeft2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
                     .follow(ShooterConstants.SHOOTER_L1_ID, true);
-            ShooterMotorRight2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(35).voltageCompensation(12)
+            ShooterMotorRight2Config.idleMode(IdleMode.kCoast).smartCurrentLimit(40).voltageCompensation(12)
                     .follow(ShooterConstants.SHOOTER_L1_ID, false);
             ShooterMotorLeft1Config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // Set PID values for posidion control. We don't need to pass a closed
