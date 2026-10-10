@@ -357,6 +357,7 @@ public final class Constants {
       }
 
       public final static double RPM_SCALE = 1.05; 
+      public final static double RPM_OFFSET = 95; 
 
       public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
       static {
@@ -380,25 +381,25 @@ public final class Constants {
       static {
 
         for (var entry : List.of(
-          Pair.of(Meters.of(1.4), RPM.of(1605*RPM_SCALE)),
-          Pair.of(Meters.of(1.6), RPM.of(1645*RPM_SCALE)),
-          Pair.of(Meters.of(1.8), RPM.of(1700*RPM_SCALE)),
-          Pair.of(Meters.of(2.0), RPM.of(1760*RPM_SCALE)),
-          Pair.of(Meters.of(2.25), RPM.of(1840*RPM_SCALE)),
-          Pair.of(Meters.of(2.5), RPM.of(1925*RPM_SCALE)),
-          Pair.of(Meters.of(3.0), RPM.of(2085*RPM_SCALE)),
-          Pair.of(Meters.of(3.5), RPM.of(2250*RPM_SCALE)),
-          Pair.of(Meters.of(4.0), RPM.of(2410*RPM_SCALE)),
-          Pair.of(Meters.of(4.5), RPM.of(2565*RPM_SCALE)),
-          Pair.of(Meters.of(5.0), RPM.of(2720*RPM_SCALE)),
-          Pair.of(Meters.of(5.5), RPM.of(2875*RPM_SCALE)),
-          Pair.of(Meters.of(6.0), RPM.of(3030*RPM_SCALE)),
-          Pair.of(Meters.of(6.5), RPM.of(3185*RPM_SCALE)),
-          Pair.of(Meters.of(7.0), RPM.of(3340*RPM_SCALE)),
-          Pair.of(Meters.of(7.5), RPM.of(3495*RPM_SCALE)),
-          Pair.of(Meters.of(8.0), RPM.of(3650*RPM_SCALE)),
-          Pair.of(Meters.of(8.5), RPM.of(3810*RPM_SCALE)),
-          Pair.of(Meters.of(9.0), RPM.of(3975*RPM_SCALE)))) {
+          Pair.of(Meters.of(1.4), RPM.of((1605+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(1.6), RPM.of((1645+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(1.8), RPM.of((1700+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(2.0), RPM.of((1760+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(2.25),RPM.of((1840+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(2.5), RPM.of((1925+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(3.0), RPM.of((2085+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(3.5), RPM.of((2250+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(4.0), RPM.of((2410+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(4.5), RPM.of((2565+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(5.0), RPM.of((2720+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(5.5), RPM.of((2875+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(6.0), RPM.of((3030+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(6.5), RPM.of((3185+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(7.0), RPM.of((3340+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(7.5), RPM.of((3495+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(8.0), RPM.of((3650+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(8.5), RPM.of((3810+RPM_OFFSET)*RPM_SCALE)),
+          Pair.of(Meters.of(9.0), RPM.of((3975+RPM_OFFSET)*RPM_SCALE)))) {
           hubShooterTable.put(entry.getFirst().in(Meters), entry.getSecond().in(RPM));
         }
 
