@@ -29,7 +29,7 @@ public class AimAtTarget extends Command {
     this.leftY = leftY;
     this.swerveInputStream = swerveInputStream.copy()
         .aim(swerveSubsystem::getCachedDynamicAimLocation)
-        .aimFeedforward(0.00045, 0.0001, 0.00022)
+        .aimFeedforward(0.0003, 0.0001, 0.00025)
         .aimHeadingOffset(Rotation2d.fromDegrees(180))
         .aimHeadingOffset(true)
         .aimLookahead(Time.ofBaseUnits(0.2, Seconds));
