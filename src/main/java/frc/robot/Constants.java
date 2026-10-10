@@ -240,27 +240,27 @@ public final class Constants {
         //     hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         // }
         
-        double tuningAngle = 0;
+        double tuningAngle = 3.0;
         for (var entry : List.of(
-          Pair.of(Meters.of(1.4), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(1.6), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(1.8), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(2.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(2.25), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(2.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(3.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(3.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(4.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(4.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(5.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(5.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(6.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(6.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(7.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(7.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(8.0), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(8.5), Degrees.of(22.53-tuningAngle)),
-          Pair.of(Meters.of(9.0), Degrees.of(22.53-tuningAngle)))) {
+          Pair.of(Meters.of(1.4), Degrees.of(22.53)),
+          Pair.of(Meters.of(1.6), Degrees.of(22.53)),
+          Pair.of(Meters.of(1.8), Degrees.of(22.53)),
+          Pair.of(Meters.of(2.0), Degrees.of(25.58-tuningAngle)),
+          Pair.of(Meters.of(2.25), Degrees.of(29.13-tuningAngle)),
+          Pair.of(Meters.of(2.5), Degrees.of(31.23-tuningAngle)),
+          Pair.of(Meters.of(3.0), Degrees.of(33.73-tuningAngle)),
+          Pair.of(Meters.of(3.5), Degrees.of(35.63-tuningAngle)),
+          Pair.of(Meters.of(4.0), Degrees.of(37.18-tuningAngle)),
+          Pair.of(Meters.of(4.5), Degrees.of(38.43-tuningAngle)),
+          Pair.of(Meters.of(5.0), Degrees.of(39.43-tuningAngle)),
+          Pair.of(Meters.of(5.5), Degrees.of(40.33-tuningAngle)),
+          Pair.of(Meters.of(6.0), Degrees.of(41.13-tuningAngle)),
+          Pair.of(Meters.of(6.5), Degrees.of(41.78-tuningAngle)),
+          Pair.of(Meters.of(7.0), Degrees.of(42.43-tuningAngle)),
+          Pair.of(Meters.of(7.5), Degrees.of(42.98-tuningAngle)),
+          Pair.of(Meters.of(8.0), Degrees.of(43.48-tuningAngle)),
+          Pair.of(Meters.of(8.5), Degrees.of(43.98-tuningAngle)),
+          Pair.of(Meters.of(9.0), Degrees.of(44.43-tuningAngle)))) {
           hubHoodTable.put(entry.getFirst().in(Meters), entry.getSecond().in(Degrees));
         }
 
