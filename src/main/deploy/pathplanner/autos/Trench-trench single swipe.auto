@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Sebastien",
+  "folder": null,
   "choreoAuto": false
 }
