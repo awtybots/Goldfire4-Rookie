@@ -97,8 +97,7 @@ public class ControlAllShooting extends Command {
             recordedTargetRPM = targetRPM;
 
             m_shooter.setTargetRPM(targetRPM);
-            isAtSpeed = (m_shooter.getRPM() - targetRPM)
-                    > ShooterConstants.ERROR_MARGIN;
+            isAtSpeed = m_shooter.getRPM() >= targetRPM - ShooterConstants.ERROR_MARGIN;
             isAboveFiringFloor = m_shooter.getRPM() >= targetRPM * ShooterConstants.FIRING_FLOOR_FRACTION;
 
             Logger.recordOutput("Shooting/Mode", "Hub");
@@ -118,8 +117,8 @@ public class ControlAllShooting extends Command {
             recordedTargetRPM = targetRPM;
 
             m_shooter.setTargetRPM(targetRPM);
-            isAtSpeed = Math.abs(m_shooter.getRPM() - targetRPM)
-                    <= ShooterConstants.ERROR_MARGIN;
+            isAtSpeed = m_shooter.getRPM() >= targetRPM - ShooterConstants.ERROR_MARGIN;
+            isAboveFiringFloor = m_shooter.getRPM() >= targetRPM * ShooterConstants.FIRING_FLOOR_FRACTION;
 
             Logger.recordOutput("Shooting/Mode", "Ferry");
             Logger.recordOutput("Shooting/DistanceToFerry", dist);
