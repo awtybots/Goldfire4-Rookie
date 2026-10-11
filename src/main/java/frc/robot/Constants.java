@@ -146,8 +146,8 @@ public final class Constants {
     public static final double v = 0.0;
     public static final double a = 0.0;
 
-    public static final double INTAKE_DUTY = -0.8;
-    public static final double OUTTAKE_DUTY =  0.8;
+    public static final double INTAKE_DUTY = -1;
+    public static final double OUTTAKE_DUTY =  1;
 
   }
   public static class SlapdownConstants {
@@ -356,8 +356,8 @@ public final class Constants {
         }
       }
 
-      public final static double RPM_SCALE = 1.05; 
-      public final static double RPM_OFFSET = 95; 
+      public final static double RPM_SCALE = 1.0;
+      public final static double RPM_OFFSET = -95; 
 
       public final static InterpolatingDoubleTreeMap ferryTOF = new InterpolatingDoubleTreeMap();
       static {
